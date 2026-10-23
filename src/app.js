@@ -148,16 +148,18 @@ function vMaand(){
   const fd=dateOfDoy(S.y,S.frost*7-3);
   let h=`<div class="stack"><div class="monthnav"><button class="icon-btn" data-a="mprev" aria-label="Vorige maand">‹</button><h2>${cap(MND[S.m])} ${S.y}</h2><button class="icon-btn" data-a="mnext" aria-label="Volgende maand">›</button></div>`;
   h+=`<div class="frost"><div class="grow1"><b>Laatste nachtvorst: week ${S.frost}</b> <span class="muted">(rond ${fmt(fd)})</span><div class="small muted">Vorstgevoelige gewassen schuiven mee.</div></div><button class="icon-btn" data-a="fminus" aria-label="Een week eerder">−</button><button class="icon-btn" data-a="fplus" aria-label="Een week later">+</button></div>`;
-  if(COMMERCE&&S.y==Y0&&S.m==TODAY.getMonth())h+=zaadCard();
+  const cur=S.y==Y0&&S.m==TODAY.getMonth();
+  if(COMMERCE&&cur)h+=zaadCard();
   let n=0;
   order.forEach(k=>{
     const L=g[k];if(!L)return;n+=L.length;
     h+=`<section class="card"><div class="sec-h"><span class="pill" style="--pc:var(${ACT[k].c})">${ACT[k].n}</span><span class="muted small">${L.length} ${L.length==1?'gewas':'gewassen'}</span></div>`;
-    L.forEach(({c,st,wA})=>{
-      const sd=dateOfDoy(S.y,(st.a-1)*7+1),ed=dateOfDoy(S.y,st.b*7);
-      const note=(st.l?st.l+' · ':'')+(st.a>=wA?`vanaf ${fmt(sd)}`:`t/m ${fmt(ed)}`);
+    /* In de huidige maand: wat vóór vandaag is afgelopen grijs en onderaan */
+    L.map(x=>{const ed=dateOfDoy(S.y,x.st.b*7);return {...x,ed,past:cur&&mid(ed)<mid(TODAY)}}).sort((p,q)=>p.past-q.past).forEach(({c,st,wA,ed,past})=>{
+      const sd=dateOfDoy(S.y,(st.a-1)*7+1);
+      const note=(past?'voorbij · ':'')+(st.l?st.l+' · ':'')+(st.a>=wA?`vanaf ${fmt(sd)}`:`t/m ${fmt(ed)}`);
       const sow=k=='binnen'||k=='glas'||k=='buiten';
-      h+=`<div class="task"><button class="task-main" data-a="crop" data-id="${c.id}">${taskPlant(c,sow?4:ACT[k].st)}<span><b>${c.n}</b><span class="muted small">${note}</span>${yearChart(c,1)}</span></button>${sow?`<button class="btn sm ghost" data-a="add" data-id="${c.id}" data-m="${k}">Planten</button>`:''}</div>`;
+      h+=`<div class="task${past?' past':''}"><button class="task-main" data-a="crop" data-id="${c.id}">${taskPlant(c,sow?4:ACT[k].st)}<span><b>${c.n}</b><span class="muted small">${note}</span>${yearChart(c,1)}</span></button>${sow?`<button class="btn sm ghost" data-a="add" data-id="${c.id}" data-m="${k}">Planten</button>`:''}</div>`;
     });
     h+='</section>';
   });

@@ -10,6 +10,7 @@ Bijgewerkt: vrijdag 23 oktober 2026. Naam: **Sowly** (internationaal, van "to so
   - [ ] repository op GitHub, daarna GitHub Pages (map `/docs`) om te testen, later Netlify of Cloudflare
   - [ ] let op: GitHub Pages is gratis alleen voor openbare repo's en niet bedoeld voor commerciële sites
 - [ ] **Voorwaarden hosting lezen** voor affiliate-links en advertenties (Cloudflare noemt de gratis variant "voor persoonlijke of hobbyprojecten"; de algemene voorwaarden zijn niet gelezen).
+- [ ] **Privacyverklaring** met daarin Cloudflare Web Analytics (staat sinds 23 oktober 2026 in de webversie, via `build.js`). Volgens Cloudflare zonder cookies en zonder persoonsgegevens; zelf nalezen in hun privacyvoorwaarden. Later uitbreiden voor advertenties en accounts.
 
 ## Accounts en samen tuinieren
 - [ ] **Backend kiezen en opzetten.** Voorstel: Firebase (gratis project, jij maakt het aan, sleutels aan Claude). Supabase pauzeert gratis projecten na een week.

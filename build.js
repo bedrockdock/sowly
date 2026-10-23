@@ -40,7 +40,9 @@ if (artifact) {
 ${fonts}</style>
 `;
   const body = template.replace('</style>', '</style>\n</head>\n<body>');
-  out = head + body + '\n' + js + '\n</script>\n</body>\n</html>\n';
+  // Cloudflare Web Analytics (zonder cookies), alleen in de webversie
+  const analytics = `<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "9709e79577b94ee99c112d1778535f40"}'></script><!-- End Cloudflare Web Analytics -->`;
+  out = head + body + '\n' + js + '\n</script>\n' + analytics + '\n</body>\n</html>\n';
   fs.mkdirSync(path.join(__dirname, 'docs'), { recursive: true });
   fs.writeFileSync(path.join(__dirname, 'docs', 'index.html'), out);
   console.log('docs/index.html', out.length, 'bytes');

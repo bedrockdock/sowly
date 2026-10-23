@@ -13,12 +13,15 @@ Bijgewerkt: vrijdag 23 oktober 2026. Naam: **Sowly** (internationaal, van "to so
 - [ ] **Privacyverklaring** met daarin Cloudflare Web Analytics (staat sinds 23 oktober 2026 in de webversie, via `build.js`). Volgens Cloudflare zonder cookies en zonder persoonsgegevens; zelf nalezen in hun privacyvoorwaarden. Later uitbreiden voor advertenties en accounts.
 
 ## Accounts en samen tuinieren
-- [ ] **Backend kiezen en opzetten.** Voorstel: Firebase (gratis project, jij maakt het aan, sleutels aan Claude). Supabase pauzeert gratis projecten na een week.
-- [ ] **Inlogstroom:** eerst anoniem (lokaal opslaan), inloggen pas bij overal-synchroniseren, iemand uitnodigen of herinneringen. "Doorgaan met Google" en e-mail zonder wachtwoord.
-- [ ] **Uitnodigen met link of code** in de app zelf (in de Claude-versie loopt het via Delen en moet de ander een Claude-account hebben). Keuze: meekijken of ook bewerken.
-- [ ] **Lokale tuin meenemen naar het account** na het inloggen.
-- [ ] **Herinnering "Zet je tuin veilig"** voor wie niet inlogt (bijvoorbeeld na het derde gewas).
-- [ ] **Samen tuinieren testen met twee echte accounts.** Tot nu toe alleen getest met een nagebootste database.
+- [x] **Backend:** Firebase (project `sowly-f5be6`, Spark). Config in `src/cloud.js`, alleen in de webversie.
+- [x] **Inlogstroom:** zonder account lokaal; inloggen met Google of e-mail en wachtwoord (besluit 23 oktober: met wachtwoord, niet met inloglink). Wachtwoord vergeten via herstelmail.
+- [x] **Uitnodigen met link** in de app, per uitnodiging meekijken of meewerken. Weghalen trekt ook de link in waarmee iemand binnenkwam.
+- [x] **Lokale tuin meenemen naar het account** bij de eerste keer inloggen; later via een knop.
+- [x] **Herinnering "Zet je tuin veilig"** bovenaan Mijn tuin vanaf drie eigen gewassen.
+- [ ] **Regels publiceren:** `firestore.rules` in Firebase plakken (Firestore Database > Rules > Publish). Zonder die regels werkt de online tuin niet.
+- [ ] **Testen met twee echte accounts:** inloggen, uitnodigen (meekijken en meewerken), weghalen, verlaten, wisselen tussen tuinen. De regels zijn niet in een emulator getest (geen Java).
+- [ ] **Account verwijderen** in de app (AVG: recht op verwijdering). Nu alleen via de Firebase-console.
+- [ ] **Uitnodigingen beheren:** lijst van openstaande links en intrekken zonder iemand weg te halen.
 
 ## Inkomsten
 - [ ] **KvK-inschrijving afronden.** Tot die tijd staan zaad-knoppen en advertenties uit (`COMMERCE=false` in `src/app.js`). Daarna op `true` zetten, samen met echte links in `SHOPS` en, voor advertenties, cookiebanner en privacyverklaring.

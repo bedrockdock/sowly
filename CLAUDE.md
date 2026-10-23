@@ -7,6 +7,7 @@ Moestuinplanner (NL/BE, later internationaal). Eigenaar: Titus, Nederlandstalig,
 - `src/app.js` is één IIFE. `data.js`, `lang-nl.js` en `plants.js` staan buiten de IIFE.
 - Teksten van gewassen (naam, tip, verzorging), activiteiten, methodes en stadia staan in `src/lang-nl.js`, niet in `data.js`. `applyLang()` vult ze bij het opstarten in. Interfaceteksten in `app.js` staan nog ingebakken (zie `notes/openstaande-punten.md`).
 - Bewaar je tuin met `save()` en `localStorage` (sleutel `moestuin.v1`). In Claude draait ook een gedeelde database (`startShared()`); buiten Claude is `claude` niet gedefinieerd en valt alles terug op lokaal.
+- Webversie: inloggen en online tuin via Firebase (`src/cloud.js`, alleen in `docs/index.html`; `startCloud()` in `app.js`). Beide routes gebruiken `attach()` met dezelfde `doc()`/`collection()`-vorm. Wie wat mag staat in `firestore.rules`; die plak je in de Firebase-console, ze worden niet automatisch uitgerold.
 - Controleer na elke wijziging: `npm run build && npm test`. Open de pagina ook echt in een browser; tests dekken geen uiterlijk.
 
 ## Regels voor de gegevens

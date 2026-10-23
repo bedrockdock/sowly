@@ -147,6 +147,9 @@ button{cursor:pointer}
 .yc.mini .yt{height:10px;border-radius:5px}
 .yc.mini .yt .bar{top:1px;bottom:1px;border-radius:4px;border-width:1px}
 @media (min-width:600px){.yc.mini .yc-h,.yc.mini .yr{grid-template-columns:78px minmax(0,1fr);gap:6px}.yc.mini .yc-h>span,.yc.mini .yr>span{display:block;font-size:.7rem}}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:max-content;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:2px solid var(--edge);border-radius:14px;padding:10px 14px;box-shadow:0 3px 0 var(--edge);z-index:80;font-size:.9rem}
+.sheet a,.card a{color:inherit;text-decoration:underline}
+.linkbtn{background:none;border:0;padding:0 2px;font:inherit;color:inherit;cursor:pointer;text-decoration:underline}
 .care{display:flex;flex-direction:column;gap:8px}
 .cr{display:grid;grid-template-columns:72px minmax(0,1fr);gap:2px 10px;align-items:baseline;padding:8px 12px;background:var(--surface);border:2px solid var(--edge);border-radius:14px}
 .cl{font:600 .95rem var(--head)}
@@ -1137,6 +1140,25 @@ function plantSVG(c,stage){
   return `<svg class="pl" viewBox="0 0 120 140" role="img" aria-label="${c.n}: ${STAGE_NAMES[stage].toLowerCase()}">${SOIL}<g class="sway" style="animation-delay:${sd}s"><g class="grow">${g}</g></g></svg>`;
 }
 
+/* ---- Firebase: inloggen en online tuin (alleen in de webversie; build.js voegt dit bestand toe) ---- */
+/* Deze config is niet geheim: hij staat altijd in de pagina. Wie wat mag, regelt firestore.rules. */
+const FB_CONFIG={
+  apiKey:'AIzaSyAx-XhflGNHaYw_U7detLC-VAY1dPwwlH8',
+  authDomain:'sowly-f5be6.firebaseapp.com',
+  projectId:'sowly-f5be6',
+  storageBucket:'sowly-f5be6.firebasestorage.app',
+  messagingSenderId:'1039020935298',
+  appId:'1:1039020935298:web:e06c331aa2f2a13b72cc9b'
+};
+const FB_V='12.19.0';
+async function fbLoad(){
+  const u=m=>`https://www.gstatic.com/firebasejs/${FB_V}/firebase-${m}.js`;
+  const [A,Au,F]=await Promise.all([import(u('app')),import(u('auth')),import(u('firestore'))]);
+  const app=A.initializeApp(FB_CONFIG),auth=Au.getAuth(app);
+  auth.languageCode='nl';
+  return {Au,F,auth,db:F.getFirestore(app)};
+}
+
 /* ---- App ---- */
 (function(){
 'use strict';
@@ -1190,17 +1212,171 @@ async function loadNames(){
   try{const u=await claude.use('user');if(!u)return;const ids=[...new Set(S.plantings.map(p=>p.by).filter(Boolean))];if(!ids.length)return;
     const ps=await u.profiles(ids);ids.forEach(i=>{if(ps[i]&&ps[i].name)S.names[i]=ps[i].name});render()}catch(e){}
 }
+function attach(db,onLost){
+  if(!S.shared)S.local=S.plantings.filter(p=>!p.ex);
+  S.db=db;S.shared=true;
+  return [
+    db.collection('plantings').onSnapshot(snap=>{
+      S.plantings=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(p=>CROP[p.crop]);
+      render();if(!C.fb)loadNames();
+    },onLost||(()=>{})),
+    db.doc('garden/settings').onSnapshot(sn=>{const d=sn.data();if(d&&d.frost){S.frost=d.frost;render()}},()=>{})
+  ];
+}
 async function startShared(){
   try{
     const db=await claude.use('db');if(!db)return;
     const u=await claude.use('user');S.me=u&&u.id?await u.id():null;
-    S.db=db;S.shared=true;S.local=S.plantings.filter(p=>!p.ex);
-    db.collection('plantings').onSnapshot(snap=>{
-      S.plantings=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(p=>CROP[p.crop]);
-      render();loadNames();
-    },()=>{});
-    db.doc('garden/settings').onSnapshot(sn=>{const d=sn.data();if(d&&d.frost){S.frost=d.frost;render()}},()=>{});
+    attach(db);
   }catch(e){}
+}
+
+/* ---- Account en samen tuinieren in de webversie (Firebase) ----
+   Firestore: users/{uid} {garden, gardens:{gid:naam}, name}
+              gardens/{gid} {owner, name, frost} met plantings/{id} en members/{uid} {role: owner|edit|view, name, invite?}
+              invites/{code} {garden, gname, role, by}
+   Wie wat mag: zie firestore.rules. */
+const C={fb:null,user:null,gid:null,gname:'',role:null,members:[],gardens:{},unsub:[],err:'',newName:''};
+const INV_KEY='sowly.uitnodiging';
+const hasFB=()=>typeof FB_CONFIG!='undefined'&&typeof claude=='undefined';
+const canEdit=()=>!C.fb||!S.shared||C.role!='view';
+const myName=()=>(C.newName||(C.user&&(C.user.displayName||(C.user.email||'').split('@')[0]))||'iemand').slice(0,40);
+const ROLE={owner:'eigenaar',edit:'werkt mee',view:'kijkt mee'};
+const getInv=()=>{try{return sessionStorage.getItem(INV_KEY)}catch(e){return null}};
+const dropInv=()=>{try{sessionStorage.removeItem(INV_KEY)}catch(e){}};
+function toast(t){const el=document.createElement('div');el.className='toast';el.setAttribute('role','status');el.textContent=t;document.body.appendChild(el);setTimeout(()=>el.remove(),4500)}
+function cloudDb(gid){
+  /* Zelfde vorm als claude.use('db'), zodat dbSet, dbDel en dbFrost niets hoeven te weten */
+  const {F,db}=C.fb,base='gardens/'+gid,isSet=p=>p=='garden/settings';
+  const ref=p=>isSet(p)?F.doc(db,base):F.doc(db,base+'/'+p);
+  return {
+    doc:p=>({set:d=>isSet(p)?F.setDoc(ref(p),d,{merge:true}):F.setDoc(ref(p),d),delete:()=>F.deleteDoc(ref(p)),onSnapshot:(cb,er)=>F.onSnapshot(ref(p),cb,er)}),
+    collection:n=>({onSnapshot:(cb,er)=>F.onSnapshot(F.collection(db,base+'/'+n),cb,er)})
+  };
+}
+async function startCloud(){
+  if(!hasFB())return;
+  const inv=new URLSearchParams(location.search).get('uitnodiging');
+  if(inv){try{sessionStorage.setItem(INV_KEY,inv)}catch(e){}history.replaceState(null,'',location.pathname)}
+  try{C.fb=await fbLoad()}catch(e){C.err='Inloggen is nu niet bereikbaar. Je tuin blijft op dit apparaat.';render();return}
+  let first=true;
+  C.fb.Au.onAuthStateChanged(C.fb.auth,u=>{
+    C.user=u;
+    if(u)enterCloud().catch(e=>{C.err='Je online tuin kon niet worden geopend. Probeer het later opnieuw.';console.error(e);render()});
+    else if(S.shared)location.reload();
+    else if(first&&getInv())openLogin('in','Je bent uitgenodigd voor een tuin. Log in of maak een account om mee te doen.');
+    first=false;render();
+  });
+}
+async function isMember(gid){
+  const {F,db}=C.fb;
+  try{return (await F.getDoc(F.doc(db,`gardens/${gid}/members/${C.user.uid}`))).exists()}catch(e){return false}
+}
+async function enterCloud(){
+  const {F,db}=C.fb,u=C.user,uref=F.doc(db,'users/'+u.uid);
+  const prof=(await F.getDoc(uref)).data()||{};
+  const gardens=prof.gardens||{};let gid=prof.garden;
+  const inv=getInv();
+  if(inv){dropInv();const j=await joinInvite(inv);if(j){gardens[j.gid]=j.name;gid=j.gid;toast('Je doet nu mee in '+j.name+'.');S.view='tuin'}}
+  for(const g of Object.keys(gardens))if(!(await isMember(g)))delete gardens[g];
+  if(!gid||!gardens[gid])gid=Object.keys(gardens)[0];
+  let moved=false;
+  if(!gid){
+    /* Eerste keer: eigen tuin aanmaken en de planten van dit apparaat meenemen */
+    gid=F.doc(F.collection(db,'gardens')).id;
+    await F.setDoc(F.doc(db,'gardens/'+gid),{owner:u.uid,name:'Tuin van '+myName(),frost:S.frost});
+    await F.setDoc(F.doc(db,`gardens/${gid}/members/${u.uid}`),{role:'owner',name:myName()});
+    const b=F.writeBatch(db);
+    S.plantings.filter(p=>!p.ex).forEach(p=>b.set(F.doc(db,`gardens/${gid}/plantings/${p.id}`),{crop:p.crop,method:p.method,date:p.date,label:p.label||'',bed:p.bed||'',by:u.uid}));
+    await b.commit();gardens[gid]='Mijn tuin';moved=true;
+  }
+  await F.setDoc(uref,{garden:gid,gardens,name:myName()});
+  C.gardens=gardens;C.newName='';C.err='';
+  await openGarden(gid);
+  if(moved)S.local=[];
+  render();
+}
+async function joinInvite(code){
+  const {F,db}=C.fb;
+  let iv;try{iv=(await F.getDoc(F.doc(db,'invites/'+code))).data()}catch(e){}
+  if(!iv){toast('Deze uitnodiging bestaat niet meer.');return null}
+  if(!(await isMember(iv.garden)))await F.setDoc(F.doc(db,`gardens/${iv.garden}/members/${C.user.uid}`),{role:iv.role,name:myName(),invite:code});
+  return {gid:iv.garden,name:iv.gname||'Gedeelde tuin'};
+}
+async function openGarden(gid){
+  const {F,db}=C.fb;
+  C.unsub.forEach(f=>f());C.unsub=[];
+  const [me,g]=await Promise.all([F.getDoc(F.doc(db,`gardens/${gid}/members/${C.user.uid}`)),F.getDoc(F.doc(db,'gardens/'+gid))]);
+  C.gid=gid;C.role=me.data().role;C.gname=(g.data()||{}).name||'';S.me=C.user.uid;
+  const lost=()=>{toast('Je hebt geen toegang meer tot deze tuin.');enterCloud().catch(()=>{})};
+  C.unsub=attach(cloudDb(gid),lost);
+  C.unsub.push(F.onSnapshot(F.collection(db,`gardens/${gid}/members`),sn=>{
+    C.members=sn.docs.map(d=>Object.assign({uid:d.id},d.data()));C.members.forEach(m=>S.names[m.uid]=m.name);render();
+  },()=>{}));
+}
+async function switchGarden(gid){
+  const {F,db}=C.fb;
+  await F.setDoc(F.doc(db,'users/'+C.user.uid),{garden:gid},{merge:true});
+  await openGarden(gid);render();
+}
+async function leaveGarden(){
+  const {F,db}=C.fb,gid=C.gid;
+  await F.deleteDoc(F.doc(db,`gardens/${gid}/members/${C.user.uid}`));
+  delete C.gardens[gid];
+  await F.setDoc(F.doc(db,'users/'+C.user.uid),{garden:Object.keys(C.gardens)[0]||null,gardens:C.gardens});
+  await enterCloud();
+}
+async function kick(uid){
+  /* Ook de uitnodiging intrekken waarmee die persoon binnenkwam, anders kan die zo weer terug */
+  const {F,db}=C.fb,m=C.members.find(x=>x.uid==uid);
+  await F.deleteDoc(F.doc(db,`gardens/${C.gid}/members/${uid}`));
+  if(m&&m.invite)await F.deleteDoc(F.doc(db,'invites/'+m.invite)).catch(()=>{});
+}
+function inviteCode(){const a=new Uint8Array(16);crypto.getRandomValues(a);return [...a].map(x=>'abcdefghijkmnpqrstuvwxyz23456789'[x%32]).join('')}
+async function makeInvite(role){
+  const {F,db}=C.fb,code=inviteCode();
+  await F.setDoc(F.doc(db,'invites/'+code),{garden:C.gid,gname:C.gname||'Gedeelde tuin',role,by:C.user.uid});
+  const url=location.origin+location.pathname+'?uitnodiging='+code;
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">Uitnodiging gemaakt</h2><p>Wie deze link opent en inlogt, ${role=='edit'?'kan meewerken in je tuin: planten toevoegen, aanpassen en verwijderen':'kan meekijken in je tuin, maar niets aanpassen'}.</p><div class="field"><label for="inv-url">Link</label><input id="inv-url" readonly value="${esc(url)}"></div><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="copyinv">Kopiëren</button>${navigator.share?'<button class="btn ghost" data-a="shareinv">Delen</button>':''}</div><p class="small muted" style="margin-top:12px">Iedereen met deze link kan meedoen zolang de link bestaat. Deel hem alleen met wie je vertrouwt. Haal je iemand weg met het kruisje bij de naam, dan werkt de link waarmee die persoon binnenkwam ook niet meer.</p>`);
+}
+function openInvite(){
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">Iemand uitnodigen</h2><p>Wat mag de ander in je tuin?</p><div class="stack" style="gap:8px"><button class="btn" data-a="mkinv" data-m="edit">Meewerken: planten toevoegen, aanpassen en verwijderen</button><button class="btn ghost" data-a="mkinv" data-m="view">Meekijken: alleen bekijken</button></div><p class="small muted" style="margin-top:12px">Je krijgt een link die je zelf doorstuurt, bijvoorbeeld via WhatsApp of mail. De ander moet inloggen of een account maken.</p>`);
+}
+const AUTH_ERR={'auth/invalid-credential':'E-mailadres of wachtwoord klopt niet.','auth/wrong-password':'E-mailadres of wachtwoord klopt niet.','auth/user-not-found':'E-mailadres of wachtwoord klopt niet.','auth/invalid-email':'Dit e-mailadres klopt niet.','auth/email-already-in-use':'Er is al een account met dit e-mailadres. Log in of vraag een nieuw wachtwoord aan.','auth/weak-password':'Kies een wachtwoord van minstens 6 tekens.','auth/too-many-requests':'Te veel pogingen. Wacht even en probeer het opnieuw.','auth/network-request-failed':'Geen verbinding. Controleer je internet.','auth/operation-not-allowed':'Deze manier van inloggen staat nog niet aan.','auth/unauthorized-domain':'Inloggen is op dit adres nog niet toegestaan.','auth/popup-blocked':'Je browser blokkeerde het inlogvenster. Sta pop-ups toe voor deze site.'};
+const authErr=x=>x&&(x.code=='auth/popup-closed-by-user'||x.code=='auth/cancelled-popup-request')?'':(AUTH_ERR[x&&x.code]||'Er ging iets mis. Probeer het opnieuw.');
+function openLogin(mode,intro){
+  const nieuw=mode=='nieuw',verg=mode=='vergeten';
+  openSheet(`<h2 id="sh-title" style="padding-right:48px;margin-bottom:10px">${verg?'Wachtwoord vergeten':nieuw?'Account maken':'Inloggen'}</h2>${intro?`<p>${intro}</p>`:''}${verg?'':`<button class="btn" style="width:100%" data-a="google">Doorgaan met Google</button><p class="small muted" style="text-align:center;margin:12px 0">of met je e-mailadres</p>`}<form id="loginf">${nieuw?'<div class="field"><label for="l-name">Je naam</label><input id="l-name" maxlength="40" autocomplete="name" required><span class="small muted">Anderen in een gedeelde tuin zien deze naam.</span></div>':''}<div class="field"><label for="l-mail">E-mailadres</label><input type="email" id="l-mail" autocomplete="email" required></div>${verg?'':`<div class="field"><label for="l-pw">Wachtwoord${nieuw?' (minstens 6 tekens)':''}</label><input type="password" id="l-pw" minlength="6" autocomplete="${nieuw?'new-password':'current-password'}" required></div>`}<p class="small" id="l-err" role="alert" style="margin:0 0 10px"></p><button class="btn" type="submit">${verg?'Stuur herstelmail':nieuw?'Account maken':'Inloggen'}</button></form><p class="small" style="margin-top:14px">${mode=='in'?'<a href="#" data-a="login" data-m="nieuw">Nog geen account? Maak er een</a><br><a href="#" data-a="login" data-m="vergeten">Wachtwoord vergeten?</a>':'<a href="#" data-a="login" data-m="in">Terug naar inloggen</a>'}</p>`);
+  $('#loginf').onsubmit=async e=>{
+    e.preventDefault();
+    const {Au,auth}=C.fb,mail=$('#l-mail').value.trim(),out=$('#l-err'),btn=e.target.querySelector('[type=submit]');
+    out.textContent='';btn.disabled=true;
+    try{
+      if(verg){await Au.sendPasswordResetEmail(auth,mail);out.textContent='Als er een account met dit adres is, staat er nu een mail klaar om je wachtwoord opnieuw in te stellen. Kijk ook in je spam.';btn.disabled=false;return}
+      if(nieuw){C.newName=$('#l-name').value.trim();const r=await Au.createUserWithEmailAndPassword(auth,mail,$('#l-pw').value);await Au.updateProfile(r.user,{displayName:C.newName})}
+      else await Au.signInWithEmailAndPassword(auth,mail,$('#l-pw').value);
+      closeSheet();
+    }catch(x){C.newName='';out.textContent=authErr(x);btn.disabled=false}
+  };
+}
+function google(){
+  const {Au,auth}=C.fb;
+  Au.signInWithPopup(auth,new Au.GoogleAuthProvider()).then(closeSheet).catch(x=>{const m=authErr(x),o=$('#l-err');if(m&&o)o.textContent=m});
+}
+function accountCard(){
+  if(!C.fb)return `<section class="card"><div class="sec-h"><h3>Account</h3></div><p class="muted small" style="margin:0">${C.err||'Even laden…'}</p></section>`;
+  if(!C.user){
+    const n=S.plantings.filter(p=>!p.ex).length;
+    return `<section class="card"><div class="sec-h"><h3>${n>=3?'Zet je tuin veilig':'Account'}</h3></div><p class="small" style="margin:0 0 10px">Je tuin staat nu alleen op dit apparaat. Log in om hem op al je apparaten te gebruiken en samen te tuinieren. Wat je al hebt geplant, gaat mee.</p><button class="btn sm" data-a="login" data-m="in">Inloggen of account maken</button></section>`;
+  }
+  if(!S.shared)return `<section class="card"><div class="sec-h"><h3>Account</h3></div><p class="small" style="margin:0 0 10px">${C.err||'Je online tuin wordt geopend…'}</p><a href="#" class="small" data-a="logout">Uitloggen</a></section>`;
+  const own=C.role=='owner',gs=Object.entries(C.gardens);
+  const sel=gs.length>1?`<div class="field"><label for="g-sel">Tuin</label><select id="g-sel">${gs.map(([g,n])=>`<option value="${g}"${g==C.gid?' selected':''}>${esc(n)}</option>`).join('')}</select></div>`:'';
+  const who=C.members.map(m=>`<span class="pill" style="--pc:var(--muted)">${esc(m.name||'iemand')}${m.uid==S.me?' (jij)':''} · ${ROLE[m.role]||''}${own&&m.uid!=S.me?` <button class="linkbtn" data-a="kick" data-id="${m.uid}" aria-label="${esc(m.name||'iemand')} uit je tuin halen">${S.confirm=='kick:'+m.uid?'zeker?':'×'}</button>`:''}</span>`).join(' ');
+  const extra=(S.local||[]).filter(p=>!S.plantings.some(q=>q.id==p.id));
+  const mig=extra.length&&canEdit()?`<button class="btn sm" data-a="migrate">${extra.length} ${extra.length==1?'plant':'planten'} van dit apparaat meenemen</button>`:'';
+  const intro=own?'Dit is jouw tuin. Nodig iemand uit om mee te kijken of mee te werken.':C.role=='edit'?`Je werkt mee in <b>${esc(C.gname)}</b>.`:`Je kijkt mee in <b>${esc(C.gname)}</b>. Aanpassen kan alleen de eigenaar of wie meewerkt.`;
+  return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div>${sel}<p class="small" style="margin:0 0 8px">${intro}</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:10px">${who}</div>`:''}<div class="row" style="gap:8px;flex-wrap:wrap">${own?'<button class="btn sm" data-a="invite">Iemand uitnodigen</button>':`<button class="btn sm ghost" data-a="leave">${S.confirm=='leave'?'Zeker weten?':'Deze tuin verlaten'}</button>`}${mig}</div><p class="small muted" style="margin:12px 0 0">Ingelogd als ${esc(myName())}${C.user.email?' ('+esc(C.user.email)+')':''}. <a href="#" data-a="logout">Uitloggen</a></p></section>`;
 }
 
 /* ---- Kalenderlogica ---- */
@@ -1370,6 +1546,7 @@ function upcoming(){
   return `<section class="card"><div class="sec-h"><h3>Komende 30 dagen</h3></div>${rows||'<p class="muted" style="margin:0">Geen taken de komende 30 dagen.</p>'}</section>`;
 }
 function samenCard(){
+  if(hasFB())return accountCard();
   if(!S.shared)return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="muted small" style="margin:0">Samen tuinieren werkt hier nog niet. Je tuin staat alleen op dit apparaat.</p></section>`;
   const ids=[...new Set(S.plantings.map(p=>p.by).filter(Boolean))];
   const who=ids.length?ids.map(i=>`<span class="pill" style="--pc:var(--muted)">${esc(S.names[i]||'iemand')}${i==S.me?' (jij)':''}</span>`).join(' '):'';
@@ -1377,9 +1554,12 @@ function samenCard(){
   return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="small" style="margin:0 0 8px">Deze tuin wordt gedeeld: wie je uitnodigt ziet en bewerkt dezelfde planten, direct.</p><p class="muted small" style="margin:0 0 8px"><b>Uitnodigen:</b> kies bovenaan in Claude <b>Delen</b>, voeg de ander toe en geef bewerkrechten. Met alleen kijkrechten kan iemand meekijken maar niets wijzigen.</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap">${who}</div>`:''}${mig}</section>`;
 }
 function vTuin(){
-  let h=`<div class="stack"><div class="row"><h2 class="grow1">Mijn tuin</h2><button class="btn" data-a="add">+ Gewas planten</button></div>`;
+  let h=`<div class="stack"><div class="row"><h2 class="grow1">Mijn tuin</h2>${canEdit()?'<button class="btn" data-a="add">+ Gewas planten</button>':''}</div>`;
+  /* Herinnering: wie niet inlogt en al 3 planten heeft, ziet het account bovenaan */
+  const top=hasFB()&&C.fb&&!C.user&&S.plantings.filter(p=>!p.ex).length>=3;
+  if(top)h+=samenCard();
   if(!S.plantings.length)return h+`<div class="card empty"><b>Je tuin is nog leeg.</b><p class="muted">Voeg een gewas toe en zie direct wanneer je moet verpotten, uitplanten en oogsten.</p></div>${samenCard()}</div>`;
-  h+=upcoming()+neighbourCard()+samenCard();
+  h+=upcoming()+neighbourCard()+(top?'':samenCard());
   const sorted=[...S.plantings].sort((a,b)=>a.date<b.date?1:-1);
   sorted.forEach(p=>h+=plantCard(p));
   return h+`${adSlot()}</div>`;
@@ -1439,6 +1619,8 @@ document.addEventListener('click',e=>{
   if(tab){S.view=tab.dataset.view;S.confirm=null;render();scrollTo(0,0);return}
   const t=e.target.closest('[data-a]');if(!t)return;
   const a=t.dataset.a,id=t.dataset.id;
+  if(t.tagName=='A')e.preventDefault();
+  if(!canEdit()&&['add','edit','del','migrate','fminus','fplus'].includes(a)){toast('Je kijkt mee in deze tuin. Aanpassen kan alleen de eigenaar of wie meewerkt.');return}
   if(a=='close')closeSheet();
   else if(a=='mprev'){S.m--;if(S.m<0){S.m=11;S.y--}render()}
   else if(a=='mnext'){S.m++;if(S.m>11){S.m=0;S.y++}render()}
@@ -1453,11 +1635,27 @@ document.addEventListener('click',e=>{
     playT=setInterval(()=>{s++;if(s>4){clearInterval(playT);return}setStage(id,s)},1100);
   }
   else if(a=='migrate'){(S.local||[]).forEach(p=>{const q=Object.assign({},p,{by:S.me||''});dbSet(q)});S.local=[]}
+  else if(a=='login')openLogin(t.dataset.m||'in');
+  else if(a=='google')google();
+  else if(a=='logout')C.fb.Au.signOut(C.fb.auth);
+  else if(a=='invite')openInvite();
+  else if(a=='mkinv')makeInvite(t.dataset.m).catch(()=>toast('De uitnodiging kon niet worden gemaakt. Probeer het opnieuw.'));
+  else if(a=='copyinv'){const u=$('#inv-url');u.select();(navigator.clipboard?navigator.clipboard.writeText(u.value):Promise.reject()).then(()=>toast('Link gekopieerd.'),()=>{try{document.execCommand('copy');toast('Link gekopieerd.')}catch(x){}})}
+  else if(a=='shareinv')navigator.share({title:'Sowly',text:'Doe mee in mijn moestuin op Sowly',url:$('#inv-url').value}).catch(()=>{});
+  else if(a=='kick'){
+    if(S.confirm=='kick:'+id){S.confirm=null;kick(id).catch(()=>toast('Dat lukte niet. Probeer het opnieuw.'))}else S.confirm='kick:'+id;
+    render();
+  }
+  else if(a=='leave'){
+    if(S.confirm=='leave'){S.confirm=null;leaveGarden().catch(()=>toast('Dat lukte niet. Probeer het opnieuw.'))}else S.confirm='leave';
+    render();
+  }
   else if(a=='del'){
     if(S.confirm==id){S.plantings=S.plantings.filter(p=>p.id!=id);S.confirm=null;save();dbDel(id)}else S.confirm=id;
     render();
   }
 });
+document.addEventListener('change',e=>{if(e.target.id=='g-sel')switchGarden(e.target.value).catch(()=>toast('Die tuin kon niet worden geopend.'))});
 document.addEventListener('input',e=>{if(e.target.id=='q'){S.q=e.target.value;$('#grid').innerHTML=gridHTML()}});
 $('#sh-close').onclick=closeSheet;
 document.addEventListener('keydown',e=>{if(e.key=='Escape'&&!$('#ov').hidden)closeSheet()});
@@ -1467,7 +1665,7 @@ $('#today').textContent=`${cap(DAGN[TODAY.getDay()])} ${TODAY.getDate()} ${MND[T
 const MASCOT=`<svg class="pl" viewBox="0 0 120 124" role="img" aria-label="Kiempje, de mascotte van Sowly"><ellipse class="mshadow" cx="60" cy="114" rx="30" ry="6" style="fill:#000;stroke:none;opacity:.28"/><g class="mbody mz"><path class="marmL" d="M38 84 C26 86 20 78 22 70 C30 70 36 74 40 80Z" style="fill:var(--leaf)"/><path class="marmR" d="M82 84 C94 86 100 78 98 70 C90 70 84 74 80 80Z" style="fill:var(--leaf)"/><path d="M26 112 C22 92 34 60 60 60 C86 60 98 92 94 112 C80 118 40 118 26 112Z" style="fill:var(--leaf3)"/><path d="M30 106 C40 112 80 112 90 106" style="fill:none;stroke:var(--soil);stroke-width:7"/><path d="M24 114 C34 106 86 106 96 114 C86 120 34 120 24 114Z" style="fill:var(--soil)"/><g class="mhead"><path d="M60 62 C60 52 59 46 60 38" style="fill:none;stroke-width:4"/><path class="mleafL" d="M60 42 C46 44 32 36 30 22 C46 20 58 28 60 42Z" style="fill:var(--leaf)"/><path class="mleafR" d="M60 42 C74 40 90 32 92 18 C76 16 62 26 60 42Z" style="fill:var(--leaf2)"/><path class="vein" d="M58 40 C50 34 42 28 36 24"/><path class="vein" d="M62 40 C70 32 80 26 88 20"/></g><circle cx="48" cy="80" r="9" style="fill:#fff"/><circle cx="72" cy="80" r="9" style="fill:#fff"/><g class="mpupil"><circle cx="50" cy="81" r="4.6" style="fill:var(--line);stroke:none"/><circle cx="51.6" cy="79.2" r="1.5" style="fill:#fff;stroke:none"/><g class="mwink"><circle cx="74" cy="81" r="4.6" style="fill:var(--line);stroke:none"/><circle cx="75.6" cy="79.2" r="1.5" style="fill:#fff;stroke:none"/></g></g><ellipse cx="38" cy="93" rx="5" ry="3.2" style="fill:#F4958C;stroke:none;opacity:.8"/><ellipse cx="82" cy="93" rx="5" ry="3.2" style="fill:#F4958C;stroke:none;opacity:.8"/><path d="M52 93 Q60 102 68 93Z" style="fill:#B3392F;stroke-width:2.2"/></g><path class="mheart" d="M92 42 C86 36 80 42 92 52 C104 42 98 36 92 42Z" style="fill:var(--radish);stroke-width:2"/></svg>`;
 $('#mascot').innerHTML=MASCOT;
 $('#mascot').addEventListener('click',function(){this.classList.remove('jump');void this.offsetWidth;this.classList.add('jump');setTimeout(()=>this.classList.remove('jump'),950)});
-render();startShared();
+render();startShared();startCloud();
 })();
 
 </script>

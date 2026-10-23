@@ -5,7 +5,7 @@
 - **Gestopt met:** Sowmate (bezet), moestuin-namen (meest bezet), Moonsprout (te lang), Harvia (saunamerk), Harvest Moon/FarmVille (merken).
 - **Terugvalnamen, niet gecontroleerd:** Growie, Plotty, Harvo, Orto, Veggo, Harvie, Tendrio, Verdo, Plotmate, Patchmate, First Frost.
 - **Eerst web, daarna Android** (Capacitor + AdMob). Web maakt het ook bruikbaar op iPhone.
-- **Accounts:** eerst anoniem (lokaal opslaan). Inloggen pas voor synchroniseren, uitnodigen en herinneringen. Voorstel: Firebase. Supabase pauzeert gratis projecten na een week zonder gebruik.
+- **Accounts:** eerst anoniem (lokaal opslaan). Inloggen pas voor synchroniseren, uitnodigen en herinneringen. **Backend: Firebase** (besloten 23 oktober 2026; Authentication + Firestore in europe-west4). Afgevallen: Supabase (pauzeert gratis projecten na een week zonder gebruik) en MariaDB/MySQL bij Strato (alleen een database: inloggen en beveiliging zelf bouwen in PHP, en geen directe updates voor samen tuinieren).
 - **Samen tuinieren:** in de Claude-versie loopt het via Delen en de database van Claude. In de eigen webversie is een eigen backend nodig, met uitnodigen via link of code.
 - **Geld verdienen:** advertenties (AdSense web, AdMob Android) plus affiliate-links naar zaadwinkels. Elke link duidelijk markeren. Teeltgegevens blijven onafhankelijk.
 - **Affiliate:** Daisycon heeft kantoren in NL, BE, DE, DK, SE, FI en RO. Niet bevestigd voor PL, CZ, SK en AT; daar een ander netwerk of directe partnerprogramma's zoeken. Per land een eigen lijst winkels (`SHOPS` in `src/app.js`).

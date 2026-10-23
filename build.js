@@ -8,7 +8,9 @@ const src = f => fs.readFileSync(path.join(__dirname, 'src', f), 'utf8');
 const artifact = process.argv.includes('--artifact');
 
 const template = src('template.html');
-const js = ['data.js', 'lang-nl.js', 'plants.js', 'app.js'].map(src).join('\n');
+// cloud.js (Firebase) alleen in de webversie; in Claude loopt samen tuinieren via de database van Claude.
+// Vóór app.js, anders valt FB_CONFIG nog in de "temporal dead zone" als app.js start.
+const js = ['data.js', 'lang-nl.js', 'plants.js', ...(artifact ? [] : ['cloud.js']), 'app.js'].map(src).join('\n');
 
 const face = (family, weight, file, range) =>
   `@font-face{font-family:'${family}';font-style:normal;font-weight:${weight};font-display:swap;src:url(fonts/${file}.woff2) format('woff2');${range ? 'unicode-range:' + range + ';' : ''}}`;

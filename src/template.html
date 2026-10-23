@@ -124,6 +124,9 @@ button{cursor:pointer}
 .yc.mini .yt{height:10px;border-radius:5px}
 .yc.mini .yt .bar{top:1px;bottom:1px;border-radius:4px;border-width:1px}
 @media (min-width:600px){.yc.mini .yc-h,.yc.mini .yr{grid-template-columns:78px minmax(0,1fr);gap:6px}.yc.mini .yc-h>span,.yc.mini .yr>span{display:block;font-size:.7rem}}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:max-content;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:2px solid var(--edge);border-radius:14px;padding:10px 14px;box-shadow:0 3px 0 var(--edge);z-index:80;font-size:.9rem}
+.sheet a,.card a{color:inherit;text-decoration:underline}
+.linkbtn{background:none;border:0;padding:0 2px;font:inherit;color:inherit;cursor:pointer;text-decoration:underline}
 .care{display:flex;flex-direction:column;gap:8px}
 .cr{display:grid;grid-template-columns:72px minmax(0,1fr);gap:2px 10px;align-items:baseline;padding:8px 12px;background:var(--surface);border:2px solid var(--edge);border-radius:14px}
 .cl{font:600 .95rem var(--head)}

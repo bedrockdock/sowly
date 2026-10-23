@@ -1,0 +1,84 @@
+rules_version = '2';
+// Beveiligingsregels voor Sowly. Plak dit in Firebase: Firestore Database > Rules > Publish.
+// Rollen per tuin (gardens/{g}/members/{uid}.role): owner (eigenaar), edit (werkt mee), view (kijkt mee).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function memberDoc(g) { return /databases/$(database)/documents/gardens/$(g)/members/$(request.auth.uid); }
+    function invite(code) { return /databases/$(database)/documents/invites/$(code); }
+    function isMember(g) { return signedIn() && exists(memberDoc(g)); }
+    function role(g) { return get(memberDoc(g)).data.role; }
+    function canEdit(g) { return isMember(g) && role(g) in ['owner', 'edit']; }
+    function isOwner(g) { return isMember(g) && role(g) == 'owner'; }
+    function str(v, max) { return v is string && v.size() <= max; }
+
+    // Eigen profiel: welke tuinen, welke tuin open staat
+    match /users/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /gardens/{g} {
+      allow get: if isMember(g);
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['owner', 'name', 'frost'])
+        && request.resource.data.owner == request.auth.uid
+        && str(request.resource.data.name, 80)
+        && request.resource.data.frost is int;
+      // Vorstweek: iedereen die mag bewerken. Naam: alleen de eigenaar. Eigenaar wisselt nooit.
+      allow update: if request.resource.data.frost is int
+        && request.resource.data.frost >= 14 && request.resource.data.frost <= 26
+        && (canEdit(g) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['frost'])
+          || isOwner(g) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['frost', 'name']));
+      allow delete: if isOwner(g);
+
+      match /plantings/{p} {
+        function valid() {
+          let d = request.resource.data;
+          return d.keys().hasOnly(['crop', 'method', 'date', 'label', 'bed', 'by'])
+            && str(d.crop, 40) && str(d.method, 20) && str(d.date, 10)
+            && str(d.label, 30) && str(d.bed, 30) && str(d.by, 128);
+        }
+        allow read: if isMember(g);
+        allow create: if canEdit(g) && valid() && request.resource.data.by == request.auth.uid;
+        allow update: if canEdit(g) && valid() && request.resource.data.by == resource.data.by;
+        allow delete: if canEdit(g);
+      }
+
+      match /members/{uid} {
+        // Je eigen lidmaatschap mag je altijd opvragen (ook om te zien of je lid bent)
+        allow get: if signedIn() && (request.auth.uid == uid || isMember(g));
+        allow list: if isMember(g);
+        allow create: if signedIn() && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['role', 'name', 'invite'])
+          && str(request.resource.data.name, 60)
+          && (
+            // Eigenaar, direct na het aanmaken van de eigen tuin
+            request.resource.data.role == 'owner'
+              && get(/databases/$(database)/documents/gardens/$(g)).data.owner == uid
+            // Of: lid worden met een bestaande uitnodiging voor deze tuin, met de rol uit die uitnodiging
+            || request.resource.data.invite is string
+              && exists(invite(request.resource.data.invite))
+              && get(invite(request.resource.data.invite)).data.garden == g
+              && get(invite(request.resource.data.invite)).data.role == request.resource.data.role
+          );
+        allow update: if false;
+        // Zelf vertrekken (niet als eigenaar), of de eigenaar haalt iemand anders weg
+        allow delete: if signedIn() && (
+          request.auth.uid == uid && resource.data.role != 'owner'
+          || uid != request.auth.uid && isOwner(g));
+      }
+    }
+
+    // Uitnodigingen: de code is lang en willekeurig; opvragen kan alleen met de code zelf (geen lijst)
+    match /invites/{code} {
+      allow get: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['garden', 'gname', 'role', 'by'])
+        && request.resource.data.by == request.auth.uid
+        && request.resource.data.role in ['edit', 'view']
+        && str(request.resource.data.gname, 80)
+        && isOwner(request.resource.data.garden);
+      allow delete: if signedIn() && resource.data.by == request.auth.uid;
+    }
+  }
+}

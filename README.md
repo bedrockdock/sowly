@@ -2,7 +2,7 @@
 
 Moestuinplanner voor Nederland en België (later internationaal). Je ziet per maand wat je moet zaaien, verpotten, uitplanten en oogsten, houdt je eigen tuin bij met een tijdlijn per gewas, en er zijn tekenfilmplanten met animaties.
 
-Zonder server: één HTML-bestand met lokale opslag (`localStorage`). Mascotte: Kiempje.
+Zonder eigen server: één HTML-bestand met lokale opslag (`localStorage`). Wie inlogt, krijgt een online tuin via Firebase (zie `src/cloud.js` en `firestore.rules`). Mascotte: Kiempje.
 
 ## Snel starten
 

@@ -25,6 +25,11 @@ const kaleLeaf=(x0,y0,x1,y1,col)=>{const dx=x1-x0,dy=y1-y0,L=Math.hypot(dx,dy),n
   [[.4,6.5],[.55,7],[.7,6.5],[.84,5.6],[.96,4.4]].forEach(([t,r])=>{const x=x0+dx*t,y=y0+dy*t;P.push([x,y,r],[x+nx*r*.8,y+ny*r*.8,r*.6],[x-nx*r*.8,y-ny*r*.8,r*.6])});
   return `<g class="lb" style="animation-delay:-${((x1+y1)%30/10).toFixed(1)}s">`+stemP(`M${x0} ${y0}L${(x0+dx*.45).toFixed(1)} ${(y0+dy*.45).toFixed(1)}`,2.6,'#6E9F80')+cloud(P,col)+`<path class="vein" d="M${(x0+dx*.4).toFixed(1)} ${(y0+dy*.4).toFixed(1)}L${(x0+dx*.92).toFixed(1)} ${(y0+dy*.92).toFixed(1)}"/></g>`};
 const curl=(x,y,r,col)=>{const ring=(n,d,rr,off)=>[...Array(n)].map((_,i)=>{const a=(i*360/n+off)*Math.PI/180;return [x+Math.cos(a)*r*d,y+Math.sin(a)*r*d,r*rr]});return cloud([[x,y,r*.9],...ring(8,.8,.45,0),...ring(10,1.12,.28,18)],col)};
+/* Samengesteld blad (aardappel): blaadjes in paren langs een nerf, met een topblaadje */
+const potLeaf=(x0,y0,x1,y1,i)=>{const a=Math.atan2(y1-y0,x1-x0)*180/Math.PI,C=['var(--leafd)','var(--leaf)'];let o=stemP(`M${x0} ${y0}Q${(x0+x1)/2+(x1>60?-4:4)} ${(y0+y1)/2} ${x1} ${y1}`,2.2);
+  [[.45,.42],[.72,.48]].forEach(([t,k],j)=>{const x=x0+(x1-x0)*t,y=y0+(y1-y0)*t;o+=lf(+x.toFixed(1),+y.toFixed(1),Math.round(a-58),k,C[(i+j)%2],30,14)+lf(+x.toFixed(1),+y.toFixed(1),Math.round(a+58),k,C[(i+j+1)%2],30,14)});
+  return o+lf(x1,y1,Math.round(a),.55,C[i%2],30,15)};
+const potFlower=(x,y)=>[0,72,144,216,288].map(d=>`<circle cx="${(x+Math.cos(d*Math.PI/180)*3.4).toFixed(1)}" cy="${(y+Math.sin(d*Math.PI/180)*3.4).toFixed(1)}" r="3" style="fill:#F4F1F8"/>`).join('')+`<circle cx="${x}" cy="${y}" r="1.9" style="fill:var(--yel);stroke:none"/>`;
 const basilLeaf=(x,y,r,s,col)=>`<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})"><g class="lf" style="animation-delay:-${((((x*7+y*13+r)%30)+30)%30/10).toFixed(1)}s"><path d="M0 0C3 -13 22 -16 33 -1C24 12 5 11 0 0Z" ${FL(col)}/><path class="vein" d="M3 0Q16 -3 30 -1"/><path d="M12 -7q6 -3 12 -1" style="fill:none;stroke:#fff;stroke-width:1.8;opacity:.55"/></g></g>`;
 
 const TN={sla:['var(--leaf3)','var(--leaf)'],spinazie:['var(--spin)','var(--leafd)'],veldsla:['var(--veld)','var(--leaf)'],rucola:['var(--leaf3)','var(--leaf)'],pluksla:['var(--leaf3)','#B5523B'],postelein:['#7BCB6A','#4FA55A'],andijvie:['#B9E27F','#8FD35C'],snijbiet:['var(--leafd)','var(--leaf)'],};
@@ -85,6 +90,12 @@ const PLANTS={
    return o;
   }
   const [col,r]=ROOTS[f];
+  if(f=='aardappel'&&s>=2){
+   let o=[[24,84],[96,82],[36,60],[86,58],[60,42]].map(([x,y],i)=>potLeaf(60,121,x,y,i)).join('');
+   if(s==3)o+=potFlower(46,40)+potFlower(54,34)+potFlower(78,38);
+   if(s==4)o+=`<ellipse cx="44" cy="120" rx="11" ry="8" transform="rotate(-10 44 120)" ${FL(col)}/><ellipse cx="78" cy="121" rx="10" ry="7.5" transform="rotate(8 78 121)" ${FL(col)}/><ellipse cx="61" cy="124" rx="8" ry="6" ${FL(col)}/>`+eyes(44,120,.7);
+   return scl([0,0,.55,.85,1][s],o);
+  }
   const A=s==1?[-135,-45]:s==2?[-140,-90,-40]:[-160,-130,-100,-80,-50,-20];
   const k=[0,.5,.7,.9,.9][s];
   let o=A.map((a,i)=>lf(60,120,a,k,i%2?'var(--leaf)':'var(--leafd)',26,12)).join('');

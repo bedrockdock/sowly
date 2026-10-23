@@ -157,7 +157,7 @@ function vMaand(){
       const sd=dateOfDoy(S.y,(st.a-1)*7+1),ed=dateOfDoy(S.y,st.b*7);
       const note=(st.l?st.l+' · ':'')+(st.a>=wA?`vanaf ${fmt(sd)}`:`t/m ${fmt(ed)}`);
       const sow=k=='binnen'||k=='glas'||k=='buiten';
-      h+=`<div class="task"><button class="task-main" data-a="crop" data-id="${c.id}">${taskPlant(c,ACT[k].st)}<span><b>${c.n}</b><span class="muted small">${note}</span></span></button>${sow?`<button class="btn sm ghost" data-a="add" data-id="${c.id}" data-m="${k}">Planten</button>`:''}</div>`;
+      h+=`<div class="task"><button class="task-main" data-a="crop" data-id="${c.id}">${taskPlant(c,sow?4:ACT[k].st)}<span><b>${c.n}</b><span class="muted small">${note}</span></span></button>${sow?`<button class="btn sm ghost" data-a="add" data-id="${c.id}" data-m="${k}">Planten</button>`:''}</div>`;
     });
     h+='</section>';
   });

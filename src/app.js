@@ -255,7 +255,7 @@ function closeSheet(){$('#ov').hidden=true;clearInterval(playT);playT=null}
 function yearChart(c,mini){
   const st=stepsOf(c),types=Object.keys(ACT).filter(t=>st.some(x=>x.t==t)).sort((a,b)=>ACT[a].o-ACT[b].o);
   const dim=[31,28,31,30,31,30,31,31,30,31,30,31],np=((doy(TODAY)-.5)/365*100).toFixed(1);
-  return `<div class="yc${mini?' mini':''}"><div class="yc-h"><span></span><div class="months">${dim.map((d,i)=>`<span style="--d:${d}">${'JFMAMJJASOND'[i]}</span>`).join('')}</div></div>`+types.map(t=>`<div class="yr" title="${ACT[t].s}"><span>${ACT[t].s}</span><div class="yt">${st.filter(x=>x.t==t).map(x=>`<i class="bar" style="left:${((x.a-1)/52*100).toFixed(1)}%;width:${((x.b-x.a+1)/52*100).toFixed(1)}%;--bc:var(${ACT[t].c})"></i>`).join('')}<i class="now" style="left:${np}%"></i></div></div>`).join('')+`</div>`;
+  return `<div class="yc${mini?' mini':''}"><div class="yc-h"><span></span><div class="months">${dim.map((d,i)=>`<span style="--d:${d}">${'JFMAMJJASOND'[i]}</span>`).join('')}</div></div>`+types.map(t=>{const lb=c.poten&&t=='buiten'?'Poten':ACT[t].s;return `<div class="yr" title="${lb}"><span>${lb}</span><div class="yt">${st.filter(x=>x.t==t).map(x=>`<i class="bar" style="left:${((x.a-1)/52*100).toFixed(1)}%;width:${((x.b-x.a+1)/52*100).toFixed(1)}%;--bc:var(${ACT[t].c})"></i>`).join('')}<i class="now" style="left:${np}%"></i></div></div>`}).join('')+`</div>`;
 }
 function openCrop(id){
   const c=CROP[id];

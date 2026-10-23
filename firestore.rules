@@ -4,6 +4,8 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
+    // Schrijven alleen met een bevestigd e-mailadres (Google-accounts zijn dat altijd), tegen nep-accounts die het quotum opmaken
+    function verified() { return signedIn() && request.auth.token.email_verified == true; }
     function memberDoc(g) { return /databases/$(database)/documents/gardens/$(g)/members/$(request.auth.uid); }
     function invite(code) { return /databases/$(database)/documents/invites/$(code); }
     function isMember(g) { return signedIn() && exists(memberDoc(g)); }
@@ -14,22 +16,23 @@ service cloud.firestore {
 
     // Eigen profiel: welke tuinen, welke tuin open staat
     match /users/{uid} {
-      allow read, write: if signedIn() && request.auth.uid == uid;
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if verified() && request.auth.uid == uid;
     }
 
     match /gardens/{g} {
       allow get: if isMember(g);
-      allow create: if signedIn()
+      allow create: if verified()
         && request.resource.data.keys().hasOnly(['owner', 'name', 'frost'])
         && request.resource.data.owner == request.auth.uid
         && str(request.resource.data.name, 80)
         && request.resource.data.frost is int;
       // Vorstweek: iedereen die mag bewerken. Naam: alleen de eigenaar. Eigenaar wisselt nooit.
-      allow update: if request.resource.data.frost is int
+      allow update: if verified() && request.resource.data.frost is int
         && request.resource.data.frost >= 14 && request.resource.data.frost <= 26
         && (canEdit(g) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['frost'])
           || isOwner(g) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['frost', 'name']));
-      allow delete: if isOwner(g);
+      allow delete: if verified() && isOwner(g);
 
       match /plantings/{p} {
         function valid() {
@@ -39,16 +42,16 @@ service cloud.firestore {
             && str(d.label, 30) && str(d.bed, 30) && str(d.by, 128);
         }
         allow read: if isMember(g);
-        allow create: if canEdit(g) && valid() && request.resource.data.by == request.auth.uid;
-        allow update: if canEdit(g) && valid() && request.resource.data.by == resource.data.by;
-        allow delete: if canEdit(g);
+        allow create: if verified() && canEdit(g) && valid() && request.resource.data.by == request.auth.uid;
+        allow update: if verified() && canEdit(g) && valid() && request.resource.data.by == resource.data.by;
+        allow delete: if verified() && canEdit(g);
       }
 
       match /members/{uid} {
         // Je eigen lidmaatschap mag je altijd opvragen (ook om te zien of je lid bent)
         allow get: if signedIn() && (request.auth.uid == uid || isMember(g));
         allow list: if isMember(g);
-        allow create: if signedIn() && request.auth.uid == uid
+        allow create: if verified() && request.auth.uid == uid
           && request.resource.data.keys().hasOnly(['role', 'name', 'invite'])
           && str(request.resource.data.name, 60)
           && (
@@ -63,7 +66,7 @@ service cloud.firestore {
           );
         allow update: if false;
         // Zelf vertrekken (niet als eigenaar), of de eigenaar haalt iemand anders weg
-        allow delete: if signedIn() && (
+        allow delete: if verified() && (
           request.auth.uid == uid && resource.data.role != 'owner'
           || uid != request.auth.uid && isOwner(g));
       }
@@ -72,13 +75,13 @@ service cloud.firestore {
     // Uitnodigingen: de code is lang en willekeurig; opvragen kan alleen met de code zelf (geen lijst)
     match /invites/{code} {
       allow get: if signedIn();
-      allow create: if signedIn()
+      allow create: if verified()
         && request.resource.data.keys().hasOnly(['garden', 'gname', 'role', 'by'])
         && request.resource.data.by == request.auth.uid
         && request.resource.data.role in ['edit', 'view']
         && str(request.resource.data.gname, 80)
         && isOwner(request.resource.data.garden);
-      allow delete: if signedIn() && resource.data.by == request.auth.uid;
+      allow delete: if verified() && resource.data.by == request.auth.uid;
     }
   }
 }

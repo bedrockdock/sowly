@@ -18,6 +18,9 @@ Bijgewerkt: vrijdag 23 oktober 2026. Naam: **Sowly** (internationaal, van "to so
 - [x] **Uitnodigen met link** in de app, per uitnodiging meekijken of meewerken. Weghalen trekt ook de link in waarmee iemand binnenkwam.
 - [x] **Lokale tuin meenemen naar het account** bij de eerste keer inloggen; later via een knop.
 - [x] **Herinnering "Zet je tuin veilig"** bovenaan Mijn tuin vanaf drie eigen gewassen.
+- [x] **E-mailadres bevestigen** voordat iemand iets online opslaat (regels: `email_verified`). Remt nep-accounts die het Firestore-quotum opmaken; houdt aanmelden zelf niet tegen.
+- [ ] **App Check (reCAPTCHA)** als echte bescherming tegen bots, zodra er gebruikers zijn of misbruik zichtbaar is.
+- [ ] **API-sleutel beperken** in Google Cloud Console (websites en API's).
 - [ ] **Regels publiceren:** `firestore.rules` in Firebase plakken (Firestore Database > Rules > Publish). Zonder die regels werkt de online tuin niet.
 - [ ] **Testen met twee echte accounts:** inloggen, uitnodigen (meekijken en meewerken), weghalen, verlaten, wisselen tussen tuinen. De regels zijn niet in een emulator getest (geen Java).
 - [ ] **Account verwijderen** in de app (AVG: recht op verwijdering). Nu alleen via de Firebase-console.

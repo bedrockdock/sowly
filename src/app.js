@@ -157,7 +157,7 @@ function vMaand(){
       const sd=dateOfDoy(S.y,(st.a-1)*7+1),ed=dateOfDoy(S.y,st.b*7);
       const note=(st.l?st.l+' · ':'')+(st.a>=wA?`vanaf ${fmt(sd)}`:`t/m ${fmt(ed)}`);
       const sow=k=='binnen'||k=='glas'||k=='buiten';
-      h+=`<div class="task"><button class="task-main" data-a="crop" data-id="${c.id}">${taskPlant(c,sow?4:ACT[k].st)}<span><b>${c.n}</b><span class="muted small">${note}</span></span></button>${sow?`<button class="btn sm ghost" data-a="add" data-id="${c.id}" data-m="${k}">Planten</button>`:''}</div>`;
+      h+=`<div class="task"><button class="task-main" data-a="crop" data-id="${c.id}">${taskPlant(c,sow?4:ACT[k].st)}<span><b>${c.n}</b><span class="muted small">${note}</span>${yearChart(c,1)}</span></button>${sow?`<button class="btn sm ghost" data-a="add" data-id="${c.id}" data-m="${k}">Planten</button>`:''}</div>`;
     });
     h+='</section>';
   });
@@ -252,10 +252,10 @@ function render(){
 let playT=null;
 function openSheet(html){$('#sh-body').innerHTML=html;$('#ov').hidden=false;$('#sh-close').focus();$('.sheet').scrollTop=0}
 function closeSheet(){$('#ov').hidden=true;clearInterval(playT);playT=null}
-function yearChart(c){
+function yearChart(c,mini){
   const st=stepsOf(c),types=Object.keys(ACT).filter(t=>st.some(x=>x.t==t)).sort((a,b)=>ACT[a].o-ACT[b].o);
   const dim=[31,28,31,30,31,30,31,31,30,31,30,31],np=((doy(TODAY)-.5)/365*100).toFixed(1);
-  return `<div class="yc"><div class="yc-h"><span></span><div class="months">${dim.map((d,i)=>`<span style="--d:${d}">${'JFMAMJJASOND'[i]}</span>`).join('')}</div></div>`+types.map(t=>`<div class="yr"><span>${ACT[t].s}</span><div class="yt">${st.filter(x=>x.t==t).map(x=>`<i class="bar" style="left:${((x.a-1)/52*100).toFixed(1)}%;width:${((x.b-x.a+1)/52*100).toFixed(1)}%;--bc:var(${ACT[t].c})"></i>`).join('')}<i class="now" style="left:${np}%"></i></div></div>`).join('')+`</div>`;
+  return `<div class="yc${mini?' mini':''}"><div class="yc-h"><span></span><div class="months">${dim.map((d,i)=>`<span style="--d:${d}">${'JFMAMJJASOND'[i]}</span>`).join('')}</div></div>`+types.map(t=>`<div class="yr" title="${ACT[t].s}"><span>${ACT[t].s}</span><div class="yt">${st.filter(x=>x.t==t).map(x=>`<i class="bar" style="left:${((x.a-1)/52*100).toFixed(1)}%;width:${((x.b-x.a+1)/52*100).toFixed(1)}%;--bc:var(${ACT[t].c})"></i>`).join('')}<i class="now" style="left:${np}%"></i></div></div>`).join('')+`</div>`;
 }
 function openCrop(id){
   const c=CROP[id];

@@ -1273,7 +1273,7 @@ function neighbourCard(){
 const byName=(a,b)=>a.n.localeCompare(b.n,'nl');
 function gridHTML(){
   const q=(S.q||'').trim().toLowerCase(),L=[...CROPS].sort(byName).filter(c=>c.n.toLowerCase().includes(q));
-  return L.length?L.map(c=>`<button class="crop" data-a="crop" data-id="${c.id}"><div class="pp" data-auto="${c.id}">${plantSVG(c,4)}</div><h3>${c.n}</h3><span class="small muted">Zaaien: ${ranges(c,['binnen','glas','buiten'])}<br>Oogst: ${ranges(c,['oogst'])}</span><span class="seedrow">${COMMERCE?`<span class="seedlink" role="button" data-a="seed" data-id="${c.id}">Zaad zoeken</span>`:''}<span class="seedlink plant" role="button" data-a="add" data-id="${c.id}">+ Planten</span></span></button>`).join(''):`<p class="muted">Geen gewas gevonden voor "${esc(S.q)}".</p>`;
+  return L.length?L.map(c=>`<button class="crop" data-a="crop" data-id="${c.id}"><div class="pp">${plantSVG(c,4)}</div><h3>${c.n}</h3><span class="small muted">Zaaien: ${ranges(c,['binnen','glas','buiten'])}<br>Oogst: ${ranges(c,['oogst'])}</span><span class="seedrow">${COMMERCE?`<span class="seedlink" role="button" data-a="seed" data-id="${c.id}">Zaad zoeken</span>`:''}<span class="seedlink plant" role="button" data-a="add" data-id="${c.id}">+ Planten</span></span></button>`).join(''):`<p class="muted">Geen gewas gevonden voor "${esc(S.q)}".</p>`;
 }
 function vGewassen(){
   return `<div class="stack"><div class="row"><h2 class="grow1">Gewassen</h2><span class="muted small">${CROPS.length} gewassen</span></div><div class="field" style="margin:0"><label for="q">Zoek een gewas</label><input id="q" type="search" value="${esc(S.q||'')}" placeholder="Bijvoorbeeld tomaat" autocomplete="off"></div><div class="grid" id="grid">${gridHTML()}</div></div>`;
@@ -1407,10 +1407,6 @@ const MASCOT=`<svg class="pl" viewBox="0 0 120 124" role="img" aria-label="Kiemp
 $('#mascot').innerHTML=MASCOT;
 $('#mascot').addEventListener('click',function(){this.classList.remove('jump');void this.offsetWidth;this.classList.add('jump');setTimeout(()=>this.classList.remove('jump'),950)});
 render();startShared();
-if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
-  let tick=0;
-  setInterval(()=>{tick++;$$('[data-auto]').forEach((el,i)=>{el.innerHTML=plantSVG(CROP[el.dataset.auto],(tick+i)%5)})},2400);
-}
 })();
 
 </script>

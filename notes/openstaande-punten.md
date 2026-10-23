@@ -20,6 +20,7 @@ Bijgewerkt: vrijdag 23 oktober 2026. Naam: **Sowly** (internationaal, van "to so
 - [ ] **Samen tuinieren testen met twee echte accounts.** Tot nu toe alleen getest met een nagebootste database.
 
 ## Inkomsten
+- [ ] **KvK-inschrijving afronden.** Tot die tijd staan zaad-knoppen en advertenties uit (`COMMERCE=false` in `src/app.js`). Daarna op `true` zetten, samen met echte links in `SHOPS` en, voor advertenties, cookiebanner en privacyverklaring.
 - [ ] **Daisycon:** aanmelden bij de zaadwinkels van je keuze, wachten op goedkeuring (meestal is een live website nodig).
 - [ ] **Affiliate per land uitzoeken.** Daisycon heeft kantoren in NL, BE, DE, DK, SE, FI en RO (niet bevestigd voor PL, CZ, SK, AT). Voor die landen een ander netwerk of directe partnerprogramma's zoeken. Per land een eigen lijst `SHOPS`, met winkels in de eigen taal.
 - [ ] **Werkvolgorde per land:** eerst NL en BE (Daisycon), daarna DE, DK en SE (Daisycon, alleen als er zaadwinkels in hun lijst staan). Voor elk volgend land (PL, CZ, SK, AT): eerst vaststellen of er een netwerk met zaadwinkels is, daarna pas taal en planning toevoegen. Zonder werkende affiliate start dat land zonder zaad-knoppen of met advertenties.

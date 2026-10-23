@@ -60,6 +60,8 @@ Alle weken in `src/data.js` staan relatief aan week 20, de gebruikelijke laatste
 
 ## Affiliate-links
 
+Zaad-knoppen en advertentievakken staan uit tot de KvK-inschrijving rond is: `COMMERCE=false` in `src/app.js`. Zet die op `true` om ze weer te tonen.
+
 In `src/app.js` staat de lijst `SHOPS` met drie voorbeeldwinkels zonder link. Zodra je goedgekeurde links hebt, vul je daar naam en link per winkel in. De knoppen worden dan actief. Markeer elke link duidelijk als affiliate-link.
 
 ## Lettertypes

@@ -122,6 +122,9 @@ const dot=p=>{const same=S.plantings.filter(x=>x.crop==p.crop);return same.lengt
 const nm=p=>CROP[p.crop].n+(p.label?' · '+esc(p.label):'');
 const taskPlant=(c,st)=>`<div class="pp">${plantSVG(c,st)}</div>`;
 /* ---- Zaad kopen (voorbeeld: affiliate-links nog niet actief) ---- */
+/* Zaad-knoppen en advertenties uit tot de KvK-inschrijving rond is (zie notes/openstaande-punten.md) */
+const COMMERCE=false;
+const adSlot=()=>COMMERCE?'<div class="ad">Hier komt later een advertentie (AdMob in de Android-app).</div>':'';
 const SHOPS=[{n:'Zaadwinkel 1',u:''},{n:'Zaadwinkel 2',u:''},{n:'Zaadwinkel 3',u:''}];
 function seedList(){
   const w=weekOf(TODAY),L=[];
@@ -145,7 +148,7 @@ function vMaand(){
   const fd=dateOfDoy(S.y,S.frost*7-3);
   let h=`<div class="stack"><div class="monthnav"><button class="icon-btn" data-a="mprev" aria-label="Vorige maand">‹</button><h2>${cap(MND[S.m])} ${S.y}</h2><button class="icon-btn" data-a="mnext" aria-label="Volgende maand">›</button></div>`;
   h+=`<div class="frost"><div class="grow1"><b>Laatste nachtvorst: week ${S.frost}</b> <span class="muted">(rond ${fmt(fd)})</span><div class="small muted">Vorstgevoelige gewassen schuiven mee.</div></div><button class="icon-btn" data-a="fminus" aria-label="Een week eerder">−</button><button class="icon-btn" data-a="fplus" aria-label="Een week later">+</button></div>`;
-  if(S.y==Y0&&S.m==TODAY.getMonth())h+=zaadCard();
+  if(COMMERCE&&S.y==Y0&&S.m==TODAY.getMonth())h+=zaadCard();
   let n=0;
   order.forEach(k=>{
     const L=g[k];if(!L)return;n+=L.length;
@@ -159,7 +162,7 @@ function vMaand(){
     h+='</section>';
   });
   if(!n)h+=`<div class="card empty"><b>Deze maand valt er weinig te doen.</b><p class="muted">Kijk bij Gewassen wat je alvast kunt voorbereiden.</p></div>`;
-  h+=`<div class="ad">Hier komt later een advertentie (AdMob in de Android-app).</div></div>`;
+  h+=`${adSlot()}</div>`;
   return h;
 }
 const KOOL=KOOLID;
@@ -190,7 +193,7 @@ function neighbourCard(){
 const byName=(a,b)=>a.n.localeCompare(b.n,'nl');
 function gridHTML(){
   const q=(S.q||'').trim().toLowerCase(),L=[...CROPS].sort(byName).filter(c=>c.n.toLowerCase().includes(q));
-  return L.length?L.map(c=>`<button class="crop" data-a="crop" data-id="${c.id}"><div class="pp" data-auto="${c.id}">${plantSVG(c,4)}</div><h3>${c.n}</h3><span class="small muted">Zaaien: ${ranges(c,['binnen','glas','buiten'])}<br>Oogst: ${ranges(c,['oogst'])}</span><span class="seedrow"><span class="seedlink" role="button" data-a="seed" data-id="${c.id}">Zaad zoeken</span><span class="seedlink plant" role="button" data-a="add" data-id="${c.id}">+ Planten</span></span></button>`).join(''):`<p class="muted">Geen gewas gevonden voor "${esc(S.q)}".</p>`;
+  return L.length?L.map(c=>`<button class="crop" data-a="crop" data-id="${c.id}"><div class="pp" data-auto="${c.id}">${plantSVG(c,4)}</div><h3>${c.n}</h3><span class="small muted">Zaaien: ${ranges(c,['binnen','glas','buiten'])}<br>Oogst: ${ranges(c,['oogst'])}</span><span class="seedrow">${COMMERCE?`<span class="seedlink" role="button" data-a="seed" data-id="${c.id}">Zaad zoeken</span>`:''}<span class="seedlink plant" role="button" data-a="add" data-id="${c.id}">+ Planten</span></span></button>`).join(''):`<p class="muted">Geen gewas gevonden voor "${esc(S.q)}".</p>`;
 }
 function vGewassen(){
   return `<div class="stack"><div class="row"><h2 class="grow1">Gewassen</h2><span class="muted small">${CROPS.length} gewassen</span></div><div class="field" style="margin:0"><label for="q">Zoek een gewas</label><input id="q" type="search" value="${esc(S.q||'')}" placeholder="Bijvoorbeeld tomaat" autocomplete="off"></div><div class="grid" id="grid">${gridHTML()}</div></div>`;
@@ -238,7 +241,7 @@ function vTuin(){
   h+=upcoming()+neighbourCard()+samenCard();
   const sorted=[...S.plantings].sort((a,b)=>a.date<b.date?1:-1);
   sorted.forEach(p=>h+=plantCard(p));
-  return h+`<div class="ad">Hier komt later een advertentie (AdMob in de Android-app).</div></div>`;
+  return h+`${adSlot()}</div>`;
 }
 function render(){
   $('#main').innerHTML=S.view=='maand'?vMaand():S.view=='gewassen'?vGewassen():vTuin();
@@ -256,7 +259,7 @@ function yearChart(c){
 }
 function openCrop(id){
   const c=CROP[id];
-  openSheet(`<h2 id="sh-title" style="padding-right:48px">${c.n}</h2><div class="bigplant"><div class="pp" id="bigp">${plantSVG(c,4)}</div></div><div class="stages" role="group" aria-label="Groeistadium">${STAGE_NAMES.map((n,i)=>`<button data-a="stage" data-s="${i}" data-id="${id}" aria-pressed="${i==4}">${n}</button>`).join('')}<button data-a="play" data-id="${id}">▶ Afspelen</button></div><p>${c.tip}</p>${careHTML(id)}<h3 style="margin-top:14px">Het hele jaar</h3>${yearChart(c)}<p class="small muted">De streep geeft vandaag aan.</p><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="add" data-id="${id}">Planten in mijn tuin</button><button class="btn ghost" data-a="seed" data-id="${id}">Zaad zoeken</button></div>`);
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">${c.n}</h2><div class="bigplant"><div class="pp" id="bigp">${plantSVG(c,4)}</div></div><div class="stages" role="group" aria-label="Groeistadium">${STAGE_NAMES.map((n,i)=>`<button data-a="stage" data-s="${i}" data-id="${id}" aria-pressed="${i==4}">${n}</button>`).join('')}<button data-a="play" data-id="${id}">▶ Afspelen</button></div><p>${c.tip}</p>${careHTML(id)}<h3 style="margin-top:14px">Het hele jaar</h3>${yearChart(c)}<p class="small muted">De streep geeft vandaag aan.</p><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="add" data-id="${id}">Planten in mijn tuin</button>${COMMERCE?`<button class="btn ghost" data-a="seed" data-id="${id}">Zaad zoeken</button>`:''}</div>`);
 }
 function setStage(id,s){
   $('#bigp').innerHTML=plantSVG(CROP[id],s);
@@ -300,7 +303,7 @@ document.addEventListener('click',e=>{
   else if(a=='mnext'){S.m++;if(S.m>11){S.m=0;S.y++}render()}
   else if(a=='fminus'||a=='fplus'){S.frost=Math.max(14,Math.min(26,S.frost+(a=='fplus'?1:-1)));save();dbFrost();render()}
   else if(a=='crop')openCrop(id);
-  else if(a=='seed')openSeed(id);
+  else if(a=='seed'&&COMMERCE)openSeed(id);
   else if(a=='add')openAdd(id,t.dataset.m);
   else if(a=='edit')openEdit(id);
   else if(a=='stage'){clearInterval(playT);setStage(id,+t.dataset.s)}

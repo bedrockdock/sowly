@@ -1,0 +1,1415 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2F8F46">
+<meta name="description" content="Sowly: plan wanneer je zaait, verpot, uitplant en oogst, met je eigen tuin en tekenfilmplanten.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>body{margin:0}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/fredoka-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/fredoka-latin-ext-500-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/fredoka-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/fredoka-latin-ext-600-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/fredoka-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/fredoka-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/nunito-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/nunito-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/nunito-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/nunito-latin-ext-600-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/nunito-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/nunito-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}</style>
+<title>Sowly</title>
+<style>
+/* Layout: één kolom (max 760px), kaarten met dikke stickerrand, vaste tabbalk onderaan, tekenfilmplanten in lichte vensterpanelen */
+:root{
+--bg:#E7F4E8;--surface:#F9FEF8;--surface2:#D8EDD9;--ink:#1D3221;--muted:#47664C;--edge:#2A3B2C;--border:#B5D6B8;--accent:#2F8F46;--accent-ink:#fff;
+--c-binnen:#6B49C8;--c-glas:#16809E;--c-verpot:#9C5A1C;--c-buiten:#2C7D3A;--c-uit:#C0600E;--c-oogst:#C73A26;
+--panel-a:#CFEAF4;--panel-b:#E6F6E4;
+--line:#2B2119;--soil:#7A5238;--soil2:#94694B;--leaf:#57B84F;--leaf2:#2F8F46;--leaf3:#8FD35C;--leafd:#2F7D3B;--tomato:#E5452E;--zuc:#3E9B4A;--pump:#F2761F;--carrot:#F28A22;--radish:#E0486E;--garlic:#F3EAF6;--bean:#6DBF4B;--yel:#FFC83D;--spin:#2E8A3E;--veld:#6FBF5E;
+--head:'Fredoka','Trebuchet MS',system-ui,sans-serif;--body:'Nunito',system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1A12;--surface:#182619;--surface2:#223524;--ink:#E3F1E2;--muted:#9BB89F;--edge:#5B8762;--border:#2E4631;--accent:#58C26B;--accent-ink:#0F1A12;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1A12;--surface:#182619;--surface2:#223524;--ink:#E3F1E2;--muted:#9BB89F;--edge:#5B8762;--border:#2E4631;--accent:#58C26B;--accent-ink:#0F1A12;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font:400 1rem/1.5 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 110px}
+h1,h2,h3{font-family:var(--head);margin:0;text-wrap:balance;line-height:1.15}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.app{max-width:760px;margin:0 auto}
+.top{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.top h1{font-size:1.9rem;font-weight:700}
+.sub{margin:2px 0 0;color:var(--muted);font-weight:600}
+.mascot{width:84px;flex:none}
+.seedrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.seedlink.plant{background:var(--accent);color:var(--accent-ink)}
+.seedlink{display:inline-block;margin-top:0;padding:4px 12px;border:2px solid var(--edge);border-radius:999px;font:600 .85rem var(--head);background:var(--surface2)}
+.mascot{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mz{transform-box:fill-box;transform-origin:50% 100%}
+.mbody{animation:mhop 4.4s ease-in-out infinite}
+.mhead{transform-origin:60px 52px;animation:mtop 2.2s ease-in-out infinite}
+.mleafL{transform-origin:60px 40px;animation:mwigL 2.2s ease-in-out infinite}
+.mleafR{transform-origin:60px 40px;animation:mwigR 2.2s ease-in-out infinite .25s}
+.marmL{transform-origin:36px 82px;animation:mwave 4.4s ease-in-out infinite}
+.marmR{transform-origin:84px 82px;animation:mwaveR 4.4s ease-in-out infinite}
+.mwink{transform-origin:68px 68px;animation:mwink 6.5s infinite}
+.mpupil{animation:mlook 7s ease-in-out infinite}
+.mheart{opacity:0;transform-origin:92px 40px;animation:mheart 4.4s ease-out infinite}
+.mshadow{transform-origin:60px 112px;animation:mshad 4.4s ease-in-out infinite}
+.mascot.jump .mbody{animation:mjump .8s cubic-bezier(.3,1.4,.5,1)}
+.mascot.jump .mheart{animation:mheart2 .9s ease-out}
+@keyframes mhop{0%,52%,100%{transform:translateY(0) scale(1,1)}58%{transform:translateY(1px) scale(1.07,.92)}68%{transform:translateY(-9px) scale(.95,1.07)}78%{transform:translateY(0) scale(1.08,.9)}86%{transform:translateY(0) scale(.98,1.03)}}
+@keyframes mshad{0%,52%,100%{transform:scale(1);opacity:.28}68%{transform:scale(.75);opacity:.16}78%{transform:scale(1.08);opacity:.3}}
+@keyframes mtop{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2.5deg)}}
+@keyframes mwigL{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(6deg)}}
+@keyframes mwigR{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-7deg)}}
+@keyframes mwave{0%,60%,100%{transform:rotate(0)}66%{transform:rotate(18deg)}72%{transform:rotate(-8deg)}78%{transform:rotate(14deg)}84%{transform:rotate(0)}}
+@keyframes mwaveR{0%,12%,100%{transform:rotate(0)}18%{transform:rotate(-30deg)}24%{transform:rotate(-8deg)}30%{transform:rotate(-30deg)}36%{transform:rotate(-8deg)}42%{transform:rotate(-26deg)}50%{transform:rotate(0)}}
+@keyframes mwink{0%,86%,100%{transform:scaleY(1)}90%{transform:scaleY(.1)}94%{transform:scaleY(1)}}
+@keyframes mlook{0%,18%,100%{transform:translate(0,0)}26%,46%{transform:translate(1.6px,-.6px)}56%,76%{transform:translate(-1.6px,.4px)}}
+@keyframes mheart{0%,70%{opacity:0;transform:translateY(8px) scale(.4)}80%{opacity:1;transform:translateY(-2px) scale(1)}100%{opacity:0;transform:translateY(-16px) scale(.9)}}
+@keyframes mheart2{0%{opacity:0;transform:translateY(8px) scale(.4)}25%{opacity:1;transform:scale(1.1)}100%{opacity:0;transform:translateY(-22px) scale(.9)}}
+@keyframes mjump{0%{transform:scale(1)}18%{transform:translateY(2px) scale(1.12,.84)}45%{transform:translateY(-18px) scale(.9,1.14)}70%{transform:translateY(0) scale(1.1,.88)}100%{transform:scale(1)}}
+.pl{display:block;width:100%;height:auto;overflow:visible}
+.pl path,.pl circle,.pl ellipse,.pl rect{stroke:var(--line);stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round}
+.pl .vein{fill:none;stroke-width:1.5;opacity:.45}
+.pl .eyes circle{stroke-width:1.2}
+.sway{transform-origin:60px 124px;animation:sway 5.2s ease-in-out infinite}
+.grow{transform-origin:60px 124px;animation:grow .7s cubic-bezier(.3,1.5,.5,1) both}
+.eyes{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite}
+@keyframes sway{0%,100%{transform:rotate(-.5deg)}28%{transform:rotate(3.6deg)}50%{transform:rotate(1.2deg)}76%{transform:rotate(3.2deg)}}
+@keyframes flutter{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(5deg)}}
+@keyframes flutter2{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(2.2deg)}}
+.lf{transform-origin:0 0;animation:flutter 2.4s ease-in-out infinite}
+.lb{transform-origin:60px 124px;animation:flutter2 3.1s ease-in-out infinite}
+@keyframes grow{from{transform:scale(.35);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 60%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.grid .lf,.grid .lb,.task .lf,.task .lb{animation:none}
+.pp{background:linear-gradient(var(--panel-a),var(--panel-b));border:2px solid var(--edge);border-radius:18px;overflow:hidden}
+.card{background:var(--surface);border:2px solid var(--edge);border-radius:18px;box-shadow:0 3px 0 var(--edge);padding:14px}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.grow1{flex:1;min-width:0}
+.muted{color:var(--muted)}
+.small{font-size:.86rem}
+.btn{background:var(--accent);color:var(--accent-ink);border:2px solid var(--edge);border-radius:999px;padding:8px 16px;font:600 .95rem var(--head);box-shadow:0 2px 0 var(--edge)}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn.ghost{background:var(--surface);color:var(--ink)}
+.btn.sm{padding:4px 12px;font-size:.85rem}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:2px solid var(--edge);background:var(--surface);font:700 1.3rem var(--head);line-height:1;display:grid;place-items:center}
+.pill{display:inline-block;background:var(--pc,var(--accent));color:#fff;border-radius:999px;padding:2px 10px;font:600 .78rem var(--head);white-space:nowrap}
+.monthnav{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.monthnav h2{font-size:1.5rem;text-align:center}
+.frost{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--surface2);border-radius:14px;padding:8px 12px}
+.sec-h{display:flex;align-items:center;gap:8px;margin:2px 0 8px}
+.sec-h h3{font-size:1.1rem}
+.task{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;border-top:1px solid var(--border);padding:8px 0}
+.sec-h+.task{border-top:0}
+.task-main{display:grid;grid-template-columns:84px minmax(0,1fr);align-items:center;gap:12px;text-align:left;background:none;border:0;padding:0;min-width:0}
+.task .pp{width:84px;border-radius:18px}
+.task b{font-family:var(--head);font-weight:600;font-size:1.05rem;display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.crop{display:flex;flex-direction:column;gap:8px;text-align:left;padding:10px;background:var(--surface);border:2px solid var(--edge);border-radius:18px;box-shadow:0 3px 0 var(--edge)}
+.crop h3{font-size:1.1rem}
+.crop .pp{aspect-ratio:1/1.05}
+.ad{border:2px dashed var(--border);border-radius:14px;text-align:center;padding:14px;color:var(--muted);font-size:.85rem}
+.tabbar{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:6px;padding:8px max(16px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:var(--surface);border-top:2px solid var(--edge);z-index:5}
+.tab{flex:1;max-width:240px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;border-radius:14px;padding:6px 4px;font:600 .8rem var(--head);color:var(--muted)}
+.tab svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tab[aria-current="page"]{background:var(--surface2);color:var(--ink)}
+.ov{position:fixed;inset:0;background:rgba(10,20,12,.55);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.ov[hidden]{display:none}
+.sheet{position:relative;width:100%;max-width:640px;max-height:92%;overflow:auto;background:var(--bg);border:2px solid var(--edge);border-bottom:0;border-radius:24px 24px 0 0;padding:20px max(16px,env(safe-area-inset-left,0px)) calc(24px + env(safe-area-inset-bottom,0px));animation:up .3s ease-out}
+.x{position:absolute;top:10px;right:max(12px,env(safe-area-inset-right,0px));width:38px;height:38px;border-radius:50%;border:2px solid var(--edge);background:var(--surface);font:700 1.3rem var(--head);line-height:1}
+.bigplant{max-width:230px;margin:6px auto 10px}
+.stages{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+.stages button{border:2px solid var(--edge);background:var(--surface);border-radius:999px;padding:3px 12px;font:600 .85rem var(--head)}
+.stages button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.yc{margin-top:6px}
+.yc-h,.yr{display:grid;grid-template-columns:88px minmax(0,1fr);align-items:center;gap:8px}
+.months{display:flex;font:600 .7rem var(--head);color:var(--muted)}
+.months span{flex:var(--d) 1 0%;text-align:center}
+.yr{margin-top:6px;font-size:.78rem;font-weight:700}
+.yt{position:relative;height:20px;border-radius:10px;background:var(--surface2)}
+.yt .bar{position:absolute;top:2px;bottom:2px;border-radius:8px;background:var(--bc);border:1.5px solid var(--edge)}
+.yt .now{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.7}
+.care{display:flex;flex-direction:column;gap:8px}
+.cr{display:grid;grid-template-columns:72px minmax(0,1fr);gap:2px 10px;align-items:baseline;padding:8px 12px;background:var(--surface);border:2px solid var(--edge);border-radius:14px}
+.cl{font:600 .95rem var(--head)}
+.cv{font-weight:700}
+.cd{grid-column:2;font-size:.88rem;color:var(--muted)}
+.bv,.nb{grid-column:2;font:700 .74rem var(--head);letter-spacing:.02em;margin-top:2px}
+.bv{color:var(--accent)}
+.bv::before{content:"✓ "}
+.nb{color:var(--muted)}
+.chips.unc .chip{border-style:dashed;background:var(--surface)}
+.more{margin-top:10px;border:2px dashed var(--border);border-radius:14px;padding:8px 12px}
+.more summary{cursor:pointer;font:600 .85rem var(--head);color:var(--muted)}
+.dots{letter-spacing:2px;color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:2px solid var(--edge);border-radius:999px;padding:2px 11px;font:600 .85rem var(--head);background:var(--surface);color:var(--ink)}
+.chips.good .chip{background:color-mix(in srgb,var(--accent) 22%,var(--surface))}
+.chips.bad .chip{background:color-mix(in srgb,var(--c-oogst) 20%,var(--surface))}
+.chips.good .chip::before{content:"✓ "}
+.chips.bad .chip::before{content:"✕ "}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.field label{font:600 .9rem var(--head)}
+.field input,.field select{border:2px solid var(--edge);border-radius:12px;background:var(--surface);padding:9px 12px;width:100%}
+.plant-card{display:flex;flex-direction:column;gap:12px}
+.plant-head{display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:12px;align-items:center}
+.plant-head h3{font-size:1.2rem}
+.gantt{position:relative;display:flex;height:16px;border:2px solid var(--edge);border-radius:10px;overflow:hidden;background:var(--surface2)}
+.gantt i{display:block;background:var(--sc)}
+.gantt .t{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--ink);border-radius:2px}
+.tagdot{display:inline-block;width:13px;height:13px;border-radius:50%;border:2px solid var(--edge);background:var(--tg);vertical-align:-1px;margin-right:6px}
+.steps{list-style:none;margin:0;padding:0}
+.steps li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;position:relative;padding-bottom:12px}
+.steps li:last-child{padding-bottom:0}
+.steps li::before{content:"";position:absolute;left:10px;top:20px;bottom:-2px;width:2px;background:var(--border)}
+.steps li:last-child::before{display:none}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--edge);background:var(--surface);display:grid;place-items:center;font-size:.7rem;font-weight:800}
+.done .dot{background:var(--accent);color:var(--accent-ink)}
+.now .dot{background:var(--yel);animation:pulse 1.6s infinite}
+.steps .done{opacity:.7}
+.steps b{font-family:var(--head);font-weight:600}
+.empty{text-align:center;padding:26px 10px}
+.note{font-size:.82rem;color:var(--muted);margin-top:16px}
+.fx{position:fixed;inset:0;z-index:30;display:grid;place-content:center;justify-items:center;gap:6px;background:color-mix(in srgb,var(--bg) 84%,transparent);animation:fxin .25s both;transition:opacity .4s}
+.fx.out{opacity:0}
+@keyframes fxin{from{opacity:0}to{opacity:1}}
+.fx-box{position:relative;width:min(260px,68vw);aspect-ratio:1/1.1}
+.fx-clip{position:absolute;inset:0;clip-path:inset(-260% -30% 17% -30%)}
+.fx-plant{width:100%;transform-origin:50% 90%;animation:fxplant 3.6s cubic-bezier(.4,0,.6,1) both}
+@keyframes fxplant{0%{transform:translateY(-200%) rotate(-10deg) scale(1.1)}39%{transform:translateY(0) rotate(0) scale(1.1,1.1)}43%{transform:translateY(2%) scale(1.22,.86)}51%{transform:translateY(-14%) scale(.96,1.08)}59%{transform:translateY(0) scale(1.06,.95)}66%{transform:translateY(0) scale(1)}100%{transform:translateY(104%) scale(.8)}}
+.fx-soil{position:absolute;left:0;right:0;bottom:2%;width:100%;height:auto;overflow:visible}
+.fx-sprout{position:absolute;left:50%;bottom:19%;width:36%;transform:translateX(-50%) scale(0);transform-origin:50% 92%;animation:fxsprout 1s 3.5s cubic-bezier(.3,1.7,.5,1) both}
+@keyframes fxsprout{to{transform:translateX(-50%) scale(1)}}
+.dirt{position:absolute;left:50%;bottom:24%;width:10px;height:10px;border-radius:50%;background:var(--soil);border:2px solid var(--line);opacity:0;animation:fxdirt 1.2s ease-out both}
+@keyframes fxdirt{0%{opacity:1;transform:translate(0,0)}60%{opacity:1;transform:translate(calc(var(--dx)*.8),var(--dy))}100%{opacity:0;transform:translate(var(--dx),calc(var(--dy) + 50px))}}
+.heart{position:absolute;bottom:50%;color:var(--c-oogst);font-size:1.3rem;opacity:0;animation:fxheart 1.7s ease-out both}
+@keyframes fxheart{0%{opacity:0;transform:translateY(20px) scale(.4)}25%{opacity:1}100%{opacity:0;transform:translateY(-70px) scale(1)}}
+.fx-t{margin:0;font:700 1.4rem var(--head);text-align:center;opacity:0;animation:fxtext .7s 3.7s ease-out both}
+@keyframes fxtext{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.plant-card.pop{animation:pulse 1s ease-out 4.9s 3}
+@media (prefers-reduced-motion:reduce){.mbody,.mhead,.mleafL,.mleafR,.marmL,.marmR,.mwink,.mpupil,.mheart,.mshadow,.mascot.jump .mbody{animation:none}.fx{display:none}.sway,.grow,.eyes,.lf,.lb,.now .dot,.sheet{animation:none}}
+@media (max-width:420px){.plant-head{grid-template-columns:72px minmax(0,1fr)}.plant-head .del{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="mascot" id="mascot" aria-hidden="true"></div><div><h1>Sowly</h1><p class="sub" id="today"></p></div></header>
+<main id="main"></main>
+<p class="note">Zaaitijden zijn indicatief voor Nederland en België. Het zaadzakje blijft leidend.</p>
+</div>
+<nav class="tabbar" aria-label="Hoofdmenu">
+<button class="tab" data-view="maand"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg><span>Deze maand</span></button>
+<button class="tab" data-view="gewassen"><svg viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6zM12 14c0-3 2-5 6-5 0 3-2 5-6 5z"/></svg><span>Gewassen</span></button>
+<button class="tab" data-view="tuin"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="7.5" height="7.5" rx="2"/><rect x="13" y="4" width="7.5" height="7.5" rx="2"/><rect x="3.5" y="13.5" width="7.5" height="7.5" rx="2"/><path d="M16.8 14v6.5M13.6 17.2h6.4"/></svg><span>Mijn tuin</span></button>
+</nav>
+<div class="ov" id="ov" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title"><button class="x" id="sh-close" aria-label="Sluiten">×</button><div id="sh-body"></div></div></div>
+<script>
+
+/* ---- Gegevens: weeknummers (1-52), indicatief voor NL/BE, laatste nachtvorst standaard week 20 (half mei) ---- */
+const ACT = {
+  binnen:{c:'--c-binnen',o:1,st:1},
+  glas:{c:'--c-glas',o:2,st:1},
+  verpot:{c:'--c-verpot',o:3,st:2},
+  buiten:{c:'--c-buiten',o:4,st:1},
+  uitplant:{c:'--c-uit',o:5,st:3},
+  oogst:{c:'--c-oogst',o:6,st:4}
+};
+/* s: [type, beginweek, eindweek, (label)]; d: dagen na zaaien/poten. verpot en uit alleen voor binnen/glas. oogst: [eerste, laatste] */
+const CROPS = [
+  {id:'tomaat',kind:'bush',tender:true,
+   s:[['binnen',6,19],['glas',12,16],['uitplant',21,26],['oogst',31,42]],
+   d:{kiem:7,verpot:28,uit:56,oogst:[100,160]},
+   tip:''},
+  {id:'courgette',kind:'vine',fruit:'courgette',tender:true,
+   s:[['binnen',15,19],['buiten',18,26],['uitplant',20,27],['oogst',27,40]],
+   d:{kiem:6,verpot:21,uit:35,oogst:[60,120]},
+   tip:''},
+  {id:'sla',kind:'rosette',tone:'sla',
+   s:[['binnen',6,12],['glas',6,12],['buiten',10,34],['uitplant',12,38],['oogst',19,43]],
+   d:{kiem:5,uit:28,oogst:[55,85]},
+   tip:''},
+  {id:'wortel',kind:'root',fruit:'wortel',
+   s:[['glas',7,10],['buiten',10,28],['oogst',23,46]],
+   d:{kiem:14,oogst:[80,140]},
+   tip:''},
+  {id:'radijs',kind:'root',fruit:'radijs',
+   s:[['glas',7,17],['buiten',11,35],['oogst',14,43]],
+   d:{kiem:4,oogst:[25,45]},
+   tip:''},
+  {id:'pompoen',kind:'vine',fruit:'pompoen',tender:true,
+   s:[['binnen',15,19],['buiten',20,22],['uitplant',20,26],['oogst',36,43]],
+   d:{kiem:6,verpot:21,uit:35,oogst:[110,150]},
+   tip:''},
+  {id:'stamslaboon',kind:'bean',tender:true,
+   s:[['binnen',16,19],['buiten',20,28],['uitplant',20,24],['oogst',27,39]],
+   d:{kiem:7,uit:28,oogst:[55,95]},
+   tip:''},
+  {id:'spinazie',kind:'rosette',tone:'spinazie',
+   s:[['glas',1,9],['buiten',5,15],['buiten',33,41],['oogst',14,25],['oogst',40,50]],
+   d:{kiem:8,oogst:[40,70]},
+   tip:''},
+  {id:'veldsla',kind:'rosette',tone:'veldsla',
+   s:[['buiten',31,43],['oogst',40,52]],
+   d:{kiem:10,oogst:[60,140]},
+   tip:''},
+  {id:'knoflook',kind:'bulb',poten:true,
+   s:[['buiten',40,48,'Poten (teentjes)'],['oogst',27,31]],
+   d:{kiem:21,oogst:[240,270]},
+   tip:''},
+  {id:'komkommer',kind:'vine',fruit:'komkommer',tender:true,
+   s:[['binnen',16,22],['buiten',18,30],['uitplant',21,25],['oogst',27,38]],
+   d:{kiem:6,verpot:21,uit:35,oogst:[55,100]},
+   tip:''},
+  {id:'paprika',kind:'bush',fruit:'paprika',tender:true,
+   s:[['binnen',9,22],['uitplant',22,26],['oogst',33,42]],
+   d:{kiem:12,verpot:28,uit:45,oogst:[100,160]},
+   tip:''},
+  {id:'aubergine',kind:'bush',fruit:'aubergine',tender:true,
+   s:[['binnen',9,13],['uitplant',20,23],['oogst',30,40]],
+   d:{kiem:12,verpot:35,uit:75,oogst:[125,190]},
+   tip:''},
+  {id:'biet',kind:'root',fruit:'biet',
+   s:[['buiten',11,27],['oogst',27,44]],
+   d:{kiem:10,oogst:[60,110]},
+   tip:''},
+  {id:'prei',kind:'bulb',fruit:'prei',
+   s:[['binnen',6,13],['buiten',16,26],['uitplant',14,28],['oogst',27,52]],
+   d:{kiem:12,uit:80,oogst:[150,260]},
+   tip:''},
+  {id:'ui',kind:'bulb',fruit:'ui',
+   s:[['buiten',6,15],['uitplant',11,16,'Plantuitjes poten'],['oogst',29,38]],
+   d:{kiem:14,oogst:[130,180]},
+   tip:''},
+  {id:'doperwt',kind:'bean',fruit:'doperwt',
+   s:[['buiten',10,19],['oogst',26,31]],
+   d:{kiem:10,oogst:[70,100]},
+   tip:''},
+  {id:'tuinboon',kind:'bean',fruit:'tuinboon',
+   s:[['buiten',5,20],['oogst',23,34]],
+   d:{kiem:14,oogst:[110,140]},
+   tip:''},
+  {id:'bloemkool',kind:'kool',fruit:'bloemkool',
+   s:[['glas',3,12],['buiten',14,24],['uitplant',14,30],['oogst',20,30],['oogst',39,48]],
+   d:{kiem:7,uit:42,oogst:[90,140]},
+   tip:''},
+  {id:'broccoli',kind:'kool',fruit:'broccoli',
+   s:[['glas',10,14],['buiten',16,23],['uitplant',16,30],['oogst',24,44]],
+   d:{kiem:7,uit:42,oogst:[75,120]},
+   tip:''},
+  {id:'rodekool',kind:'kool',fruit:'rodekool',
+   s:[['glas',10,14],['buiten',13,18],['uitplant',19,24],['oogst',36,47]],
+   d:{kiem:7,uit:50,oogst:[150,230]},
+   tip:''},
+  {id:'boerenkool',kind:'rosette',tone:'boerenkool',
+   s:[['buiten',14,24],['uitplant',24,30],['oogst',44,52]],
+   d:{kiem:7,uit:42,oogst:[120,200]},
+   tip:''},
+  {id:'rucola',kind:'rosette',tone:'rucola',
+   s:[['glas',8,11],['buiten',9,37],['oogst',15,43]],
+   d:{kiem:5,oogst:[21,45]},
+   tip:''},
+  {id:'snijbiet',kind:'rosette',tone:'snijbiet',
+   s:[['buiten',14,26],['oogst',24,44]],
+   d:{kiem:10,oogst:[55,150]},
+   tip:''},
+  {id:'pastinaak',kind:'root',fruit:'pastinaak',
+   s:[['buiten',16,20],['buiten',27,30],['oogst',37,52]],
+   d:{kiem:21,oogst:[150,250]},
+   tip:''},
+  {id:'peterselie',kind:'rosette',tone:'peterselie',
+   s:[['glas',9,13],['buiten',14,35],['oogst',23,46]],
+   d:{kiem:21,oogst:[70,200]},
+   tip:''},
+  {id:'basilicum',kind:'rosette',tone:'basilicum',tender:true,
+   s:[['binnen',14,19],['uitplant',20,24],['oogst',26,40]],
+   d:{kiem:7,uit:35,oogst:[50,110]},
+   tip:''},
+  {id:'koolrabi',kind:'root',fruit:'koolrabi',
+   s:[['glas',10,17],['buiten',16,24],['uitplant',14,30],['oogst',22,44]],
+   d:{kiem:6,uit:35,oogst:[55,90]},
+   tip:''},
+  {id:'aardappel-vroeg',kind:'root',fruit:'aardappel',poten:true,
+   s:[['buiten',11,14,'Poten (pootaardappelen)'],['oogst',23,30]],
+   d:{kiem:21,oogst:[75,100]},
+   tip:''},
+  {id:'aardappel-laat',kind:'root',fruit:'aardappel',poten:true,
+   s:[['buiten',14,17,'Poten (pootaardappelen)'],['oogst',36,40]],
+   d:{kiem:21,oogst:[120,150]},
+   tip:''},
+  {id:'andijvie',kind:'rosette',tone:'andijvie',
+   s:[['buiten',24,33],['uitplant',28,37],['oogst',34,46]],
+   d:{kiem:7,uit:28,oogst:[70,110]},
+   tip:''},
+  {id:'spruitkool',kind:'kool',fruit:'spruitkool',
+   s:[['buiten',12,20],['uitplant',19,26],['oogst',44,52]],
+   d:{kiem:7,uit:42,oogst:[190,250]},
+   tip:''},
+  {id:'wittekool',kind:'kool',fruit:'wittekool',
+   s:[['glas',6,13],['buiten',13,18],['uitplant',19,24],['oogst',36,47]],
+   d:{kiem:7,uit:50,oogst:[150,230]},
+   tip:''},
+  {id:'savooiekool',kind:'kool',fruit:'savooiekool',
+   s:[['glas',6,13],['buiten',15,20],['uitplant',19,26],['oogst',38,47]],
+   d:{kiem:7,uit:42,oogst:[150,220]},
+   tip:''},
+  {id:'chinesekool',kind:'kool',fruit:'chinesekool',
+   s:[['buiten',27,35],['oogst',38,46]],
+   d:{kiem:5,oogst:[60,90]},
+   tip:''},
+  {id:'stokboon',kind:'bean',fruit:'stokboon',tender:true,
+   s:[['buiten',19,28],['oogst',27,39]],
+   d:{kiem:7,oogst:[60,100]},
+   tip:''},
+  {id:'mais',kind:'mais',tender:true,
+   s:[['binnen',16,19],['buiten',20,22],['uitplant',20,24],['oogst',35,40]],
+   d:{kiem:8,uit:21,oogst:[100,140]},
+   tip:''},
+  {id:'peper',kind:'bush',fruit:'peper',tender:true,
+   s:[['binnen',16,22],['uitplant',22,26],['oogst',33,42]],
+   d:{kiem:12,verpot:28,uit:45,oogst:[100,160]},
+   tip:''},
+  {id:'augurk',kind:'vine',fruit:'augurk',tender:true,
+   s:[['binnen',14,18],['buiten',20,24],['uitplant',21,24],['oogst',29,38]],
+   d:{kiem:6,verpot:21,uit:35,oogst:[50,90]},
+   tip:''},
+  {id:'sjalot',kind:'bulb',fruit:'sjalot',poten:true,
+   s:[['buiten',11,16,'Poten (plantsjalotten)'],['oogst',28,34]],
+   d:{kiem:14,oogst:[110,150]},
+   tip:''},
+  {id:'bosui',kind:'bulb',fruit:'bosui',
+   s:[['buiten',10,18],['oogst',22,36]],
+   d:{kiem:14,oogst:[70,120]},
+   tip:''},
+  {id:'pluksla',kind:'rosette',tone:'pluksla',
+   s:[['glas',5,13],['buiten',11,30],['oogst',20,40]],
+   d:{kiem:5,oogst:[30,60]},
+   tip:''},
+  {id:'winterpostelein',kind:'rosette',tone:'postelein',
+   s:[['buiten',35,38],['oogst',43,52]],
+   d:{kiem:8,oogst:[50,170]},
+   tip:''},
+  {id:'venkel',kind:'root',fruit:'venkel',
+   s:[['buiten',26,28],['oogst',35,39]],
+   d:{kiem:10,oogst:[60,90]},
+   tip:''},
+  {id:'selderij',kind:'root',fruit:'selderij',
+   s:[['glas',10,17],['uitplant',19,24],['oogst',39,48]],
+   d:{kiem:14,uit:60,oogst:[180,230]},
+   tip:''}
+];
+const CROP = Object.fromEntries(CROPS.map(c=>[c.id,c]));
+const METHODS = {binnen:'',glas:'',buiten:''};
+const STAGE_NAMES = ['','','','',''];
+
+/* ---- Verzorging en buren. l=licht (zon, zh=zon tot halfschaduw, half), w=water (veel, gemiddeld, weinig), v=voeding (zwaar, middel, licht).
+   g=goede buren, s=slechte buren. Namen zonder gewas in de lijst (Aardbei, Dille) zijn gewone tekst; aardappel en kool gelden voor alle soorten.
+   Buurregels zijn ervaringsregels uit de moestuinpraktijk en niet overal wetenschappelijk bewezen. ---- */
+const KOOLZ={l:['zon',''],w:['veel',''],v:['zwaar',''],g:['ui','biet','sla','prei','selderij'],s:['Aardbei']};
+const AARD={l:['zon',''],w:['gemiddeld',''],v:['middel',''],g:['stamslaboon','tuinboon','doperwt','spinazie','koolrabi'],s:['tomaat','paprika','aubergine','pompoen','courgette','komkommer']};
+const CARE = {
+  tomaat:{l:['zon',''],w:['gemiddeld',''],v:['zwaar',''],g:['basilicum','wortel','peterselie','ui','prei','sla','Afrikaantjes'],s:['aardappel','radijs','koolrabi','venkel']},
+  courgette:{l:['zon',''],w:['veel',''],v:['zwaar',''],g:['stamslaboon','radijs','ui','Afrikaantjes'],s:['aardappel','Sierkalebas']},
+  sla:{l:['zh',''],w:['gemiddeld',''],v:['licht',''],g:['radijs','wortel','ui','prei','biet','komkommer','Aardbei'],s:['peterselie']},
+  wortel:{l:['zon',''],w:['gemiddeld',''],v:['middel',''],g:['ui','prei','radijs','sla','tomaat','Afrikaantjes'],s:['pastinaak']},
+  radijs:{l:['zon',''],w:['gemiddeld',''],v:['licht',''],g:['sla','wortel','spinazie','doperwt','stamslaboon','peterselie'],s:['tomaat']},
+  pompoen:{l:['zon',''],w:['veel',''],v:['zwaar',''],g:['stamslaboon','radijs','ui'],s:['aardappel']},
+  stamslaboon:{l:['zon',''],w:['veel',''],v:['licht',''],g:['wortel','komkommer','courgette','aardappel','biet','koolrabi','bloemkool','Bonenkruid'],s:['ui','prei','knoflook','sjalot']},
+  spinazie:{l:['zh',''],w:['gemiddeld',''],v:['middel',''],g:['radijs','doperwt','Aardbei'],s:['biet','snijbiet','bloemkool']},
+  veldsla:{l:['zh',''],w:['gemiddeld',''],v:['licht',''],g:['prei','ui','radijs','wortel'],s:[]},
+  knoflook:{l:['zon',''],w:['weinig',''],v:['licht',''],g:['tomaat','wortel','biet','Aardbei'],s:['stamslaboon','doperwt','tuinboon']},
+  komkommer:{l:['zon',''],w:['veel',''],v:['zwaar',''],g:['stamslaboon','doperwt','sla','ui','prei','Dille'],s:['aardappel']},
+  paprika:{l:['zon',''],w:['veel',''],v:['zwaar',''],g:['basilicum','wortel','ui','peterselie'],s:['aardappel']},
+  aubergine:{l:['zon',''],w:['gemiddeld',''],v:['zwaar',''],g:['stamslaboon','basilicum'],s:['aardappel']},
+  biet:{l:['zh',''],w:['gemiddeld',''],v:['middel',''],g:['ui','prei','sla','koolrabi','stamslaboon'],s:['spinazie','snijbiet']},
+  prei:{l:['zon',''],w:['gemiddeld',''],v:['zwaar',''],g:['wortel','tomaat','sla','Aardbei','selderij'],s:['stamslaboon','doperwt','tuinboon']},
+  ui:{l:['zon',''],w:['weinig',''],v:['licht',''],g:['wortel','sla','biet','tomaat','koolrabi','Aardbei'],s:['stamslaboon','doperwt','tuinboon']},
+  doperwt:{l:['zh',''],w:['gemiddeld',''],v:['licht',''],g:['wortel','radijs','sla','komkommer','koolrabi','aardappel'],s:['ui','prei','knoflook','sjalot']},
+  tuinboon:{l:['zh',''],w:['gemiddeld',''],v:['licht',''],g:['wortel','aardappel','spinazie','sla'],s:['ui','prei','knoflook']},
+  bloemkool:{...KOOLZ,g:[...KOOLZ.g,'stamslaboon'],s:['Aardbei','spinazie']},broccoli:KOOLZ,rodekool:KOOLZ,
+  boerenkool:{l:['zh',''],w:['gemiddeld',''],v:['zwaar',''],g:['ui','biet','sla','prei','selderij'],s:['Aardbei']},
+  koolrabi:{l:['zon',''],w:['gemiddeld',''],v:['zwaar',''],g:['ui','biet','sla','doperwt','stamslaboon'],s:['Aardbei','tomaat']},
+  rucola:{l:['zon',''],w:['veel',''],v:['licht',''],g:['sla','ui','spinazie','radijs','biet'],s:[]},
+  snijbiet:{l:['zh',''],w:['gemiddeld',''],v:['middel',''],g:['ui','stamslaboon','radijs','kool'],s:['spinazie','biet']},
+  pastinaak:{l:['zon',''],w:['gemiddeld',''],v:['licht',''],g:['ui','prei','radijs','knoflook'],s:['wortel','selderij']},
+  peterselie:{l:['zh',''],w:['gemiddeld',''],v:['licht',''],g:['tomaat','ui','prei','radijs'],s:['sla','selderij']},
+  basilicum:{l:['zon',''],w:['gemiddeld',''],v:['licht',''],g:['tomaat','paprika','aubergine','courgette'],s:[]},
+  'aardappel-vroeg':AARD,'aardappel-laat':AARD,
+  andijvie:{l:['zh',''],w:['gemiddeld',''],v:['middel',''],g:['prei','ui','wortel','stamslaboon'],s:[]},
+  spruitkool:KOOLZ,wittekool:KOOLZ,savooiekool:KOOLZ,
+  chinesekool:{l:['zh',''],w:['veel',''],v:['zwaar',''],g:[],s:[]},
+  stokboon:{l:['zon',''],w:['gemiddeld',''],v:['licht',''],g:['wortel','komkommer','courgette','aardappel','biet','koolrabi','bloemkool'],s:['ui','prei','knoflook','sjalot']},
+  mais:{l:['zon',''],w:['gemiddeld',''],v:['zwaar',''],g:['stokboon','courgette','pompoen'],s:[]},
+  peper:{l:['zon',''],w:['gemiddeld',''],v:['zwaar',''],g:['basilicum','wortel','ui','peterselie'],s:['aardappel']},
+  augurk:{l:['zon',''],w:['veel',''],v:['zwaar',''],g:['stamslaboon','doperwt','sla','ui','prei','Dille'],s:['aardappel']},
+  sjalot:{l:['zon',''],w:['weinig',''],v:['licht',''],g:['wortel','sla','biet','tomaat','koolrabi','Aardbei'],s:['stamslaboon','doperwt','tuinboon']},
+  bosui:{l:['zon',''],w:['gemiddeld',''],v:['licht',''],g:['wortel','sla','biet','tomaat','Aardbei'],s:['stamslaboon','doperwt','tuinboon']},
+  pluksla:{l:['zh',''],w:['gemiddeld',''],v:['licht',''],g:['radijs','wortel','ui','prei','biet','komkommer','Aardbei'],s:['peterselie']},
+  winterpostelein:{l:['zh',''],w:['gemiddeld',''],v:['licht',''],g:[],s:[]},
+  venkel:{l:['zon',''],w:['gemiddeld',''],v:['middel',''],g:[],s:['tomaat','Dille']},
+  selderij:{l:['zh',''],w:['veel',''],v:['zwaar',''],g:['prei'],s:['peterselie']}
+};
+
+
+/* ---- Bevestigde informatie. Alleen wat in een Nederlandse of Belgische bron staat telt als bevestigd.
+   Buren: Biologische Tuinvereniging Drienerlo (BTD, Universiteit Twente). Voeding: Gamma, Welkoop en Max Vandaag.
+   Wageningen University meldt dat buurregels nog niet wetenschappelijk bewezen zijn. ---- */
+const KOOLID=['bloemkool','broccoli','rodekool','boerenkool','koolrabi','spruitkool','wittekool','savooiekool','chinesekool'];
+const BV_GOED=[['aardappel-vroeg','stamslaboon'],['aardappel-laat','stamslaboon'],['aardappel-vroeg','doperwt'],['aardappel-laat','doperwt'],['tomaat','peterselie'],['radijs','peterselie'],['koolrabi','ui'],['koolrabi','stamslaboon'],['koolrabi','biet'],['biet','ui'],['biet','stamslaboon'],['bloemkool','stamslaboon'],['prei','wortel'],['prei','selderij'],['ui','Aardbei']];
+const BV_SLECHT=[['aardappel-vroeg','tomaat'],['aardappel-laat','tomaat'],['tomaat','radijs'],['tomaat','koolrabi'],['tomaat','venkel'],['bloemkool','spinazie'],['stamslaboon','ui'],['stamslaboon','knoflook'],['doperwt','ui'],['doperwt','knoflook'],['peterselie','sla'],['peterselie','selderij'],['courgette','Sierkalebas'],['sjalot','stamslaboon'],['sjalot','doperwt'],['venkel','Dille']];
+const pk=(a,b)=>[a,b].sort().join('|');
+const SGOED=new Set(BV_GOED.map(p=>pk(...p))),SSLECHT=new Set(BV_SLECHT.map(p=>pk(...p)));
+const splitBr=(id,arr,set)=>{const ok=[],rest=[];arr.forEach(x=>{const e=x=='aardappel'?['aardappel-vroeg','aardappel-laat']:x=='kool'?KOOLID:[x];(e.some(y=>set.has(pk(id,y)))?ok:rest).push(x)});return[ok,rest]};
+const BEV={
+  l:['tomaat','rucola','prei','radijs','wortel','komkommer','basilicum','pompoen'],
+  w:['tomaat','rucola','komkommer','paprika'],
+  v:['tomaat','courgette','pompoen','paprika','aubergine','komkommer','prei','bloemkool','broccoli','rodekool','boerenkool','koolrabi','wortel','spinazie','stamslaboon','doperwt','tuinboon','ui','radijs','peterselie','basilicum','aardappel-vroeg','aardappel-laat','spruitkool','wittekool','savooiekool','chinesekool','sjalot','bosui']
+};
+const NB={};
+for(const id in CARE){const c=CARE[id],[g,g2]=splitBr(id,c.g,SGOED),[s,s2]=splitBr(id,c.s,SSLECHT);NB[id]={l:c.l,w:c.w,v:c.v,g,g2,s,s2,b:{l:BEV.l.includes(id),w:BEV.w.includes(id),v:BEV.v.includes(id)}}}
+
+/* Taalpakket Nederlands (nl). Eén bestand per taal; structuur en perioden staan in data.js. */
+const LANGS={nl:{
+ "crops": {
+  "tomaat": {
+   "n": "Tomaat",
+   "tip": "Vorstgevoelig: pas na de laatste nachtvorst buiten. Plant tomaten diep, tot aan de onderste bladeren."
+  },
+  "courgette": {
+   "n": "Courgette",
+   "tip": "Vorstgevoelig en groot: geef elke plant minstens 80 cm ruimte. Oogst jong en vaak."
+  },
+  "sla": {
+   "n": "Sla",
+   "tip": "Zaai elke twee weken een stukje voor een doorlopende oogst. In de hitte schiet sla door."
+  },
+  "wortel": {
+   "n": "Wortel",
+   "tip": "Niet verplanten. Zaai dun en houd de grond vochtig tot de zaadjes opkomen."
+  },
+  "radijs": {
+   "n": "Radijs",
+   "tip": "Het snelste gewas van de tuin: oogsten kan na vier tot zes weken. Zaai om de twee weken een stukje."
+  },
+  "pompoen": {
+   "n": "Pompoen",
+   "tip": "Vorstgevoelig en hongerig: geef veel compost. Oogst als de steel verhout is."
+  },
+  "stamslaboon": {
+   "n": "Stamslaboon",
+   "tip": "Vorstgevoelig. Rauwe bonen zijn giftig, kook ze dus altijd gaar."
+  },
+  "spinazie": {
+   "n": "Spinazie",
+   "tip": "Zaai in het voorjaar en het najaar. Bij lange dagen schiet spinazie door."
+  },
+  "veldsla": {
+   "n": "Veldsla",
+   "tip": "Zaai eind zomer. Veldsla verdraagt vorst en geeft de hele winter oogst."
+  },
+  "knoflook": {
+   "n": "Knoflook",
+   "tip": "Zet de teentjes 5 cm diep met de punt omhoog en 10 cm uit elkaar. Oogst als de onderste bladeren geel worden."
+  },
+  "komkommer": {
+   "n": "Komkommer",
+   "tip": "Vorstgevoelig en warmteminnend. Houd de grond gelijkmatig vochtig en oogst jong voor de beste smaak."
+  },
+  "paprika": {
+   "n": "Paprika",
+   "tip": "Zaai vroeg, want paprika heeft een lange warme groeitijd nodig. Zet hem pas na de laatste vorst buiten, bij voorkeur in de kas."
+  },
+  "aubergine": {
+   "n": "Aubergine",
+   "tip": "Warmteminnend: groeit het best in de kas of op een beschutte, zonnige plek."
+  },
+  "biet": {
+   "n": "Biet",
+   "tip": "Een bietenzaadje bevat meerdere kiemen: dun uit na het opkomen. Oogst bij een doorsnede van ongeveer 5 tot 8 cm."
+  },
+  "prei": {
+   "n": "Prei",
+   "tip": "Plant jonge preien diep, in een gat van ongeveer 15 cm, zodat de schacht wit blijft. Prei verdraagt vorst en kan tot in de winter blijven staan."
+  },
+  "ui": {
+   "n": "Ui",
+   "tip": "Zaaiuien zijn goedkoop, plantuitjes zijn de snelle route. Oogst als het loof omvalt en laat de uien daarna drogen."
+  },
+  "doperwt": {
+   "n": "Doperwt",
+   "tip": "Zaai vroeg: doperwten houden van koel weer en verdragen lichte vorst. Geef steun met rijshout of gaas."
+  },
+  "tuinboon": {
+   "n": "Tuinboon",
+   "tip": "Een van de vroegste gewassen: zaai vanaf februari. Knijp de toppen uit zodra de peulen zetten, dat helpt tegen bladluis."
+  },
+  "bloemkool": {
+   "n": "Bloemkool",
+   "tip": "Houdt van vochtige, voedselrijke grond en koel weer. Vouw een blad over de kop om hem tegen de zon te beschermen."
+  },
+  "broccoli": {
+   "n": "Broccoli",
+   "tip": "Oogst de hoofdkop voordat de bloemetjes geel worden. Daarna groeien er zijscheuten bij."
+  },
+  "rodekool": {
+   "n": "Rode kool",
+   "tip": "Een stabiel gewas dat ruimte vraagt: plant ongeveer 50 cm uit elkaar. Tegen koolwitjes helpt een net."
+  },
+  "boerenkool": {
+   "n": "Boerenkool",
+   "tip": "Boerenkool smaakt zoeter na de eerste nachtvorst. Pluk de onderste bladeren en laat de top doorgroeien."
+  },
+  "rucola": {
+   "n": "Rucola",
+   "tip": "Klaar in drie tot zes weken. Zaai in de halfschaduw, want in de volle zon schiet rucola snel door."
+  },
+  "snijbiet": {
+   "n": "Snijbiet",
+   "tip": "Pluk steeds de buitenste bladeren, dan groeit de plant door tot de eerste strenge vorst."
+  },
+  "pastinaak": {
+   "n": "Pastinaak",
+   "tip": "Kiemt langzaam en alleen met vers zaad. De smaak wordt beter na de eerste vorst."
+  },
+  "peterselie": {
+   "n": "Peterselie",
+   "tip": "Kiemt traag, soms pas na drie weken. Houd de grond intussen vochtig."
+  },
+  "basilicum": {
+   "n": "Basilicum",
+   "tip": "Vorstgevoelig en kouwelijk: pas na half mei buiten. Knijp de toppen regelmatig uit voor een bossige plant."
+  },
+  "koolrabi": {
+   "n": "Koolrabi",
+   "tip": "Oogst jong, bij ongeveer 6 tot 8 cm doorsnede. Grotere knollen worden houtig."
+  },
+  "aardappel-vroeg": {
+   "n": "Aardappel (vroeg)",
+   "tip": "Vroege rassen zijn snel klaar maar niet lang te bewaren. Laat de pootaardappelen vooraf voorkiemen en dek het loof af bij nachtvorst. Aanaarden beschermt tegen groene knollen."
+  },
+  "aardappel-laat": {
+   "n": "Aardappel (laat)",
+   "tip": "Halfvroege en late rassen geven de grootste opbrengst en zijn goed te bewaren. Bronnen noemen vooral september als oogstmaand. Oogst als het loof verdord is en laat de aardappels buiten drogen. Aanaarden beschermt tegen groene knollen."
+  },
+  "andijvie": {
+   "n": "Andijvie",
+   "tip": "Zaai pas vanaf half juni, anders schiet andijvie door. Bind de planten enkele weken voor de oogst bijeen om ze te bleken."
+  },
+  "spruitkool": {
+   "n": "Spruitkool",
+   "tip": "Een lange teelt: zaai in het voorjaar en oogst vanaf november. Plant stevig aan en pluk de sprotjes van onder naar boven."
+  },
+  "wittekool": {
+   "n": "Witte kool",
+   "tip": "De late teelt geeft koppen voor de herfst. Plant ongeveer 50 cm uit elkaar en leg een net tegen koolwitjes."
+  },
+  "savooiekool": {
+   "n": "Savooiekool",
+   "tip": "Zaai en plant zoals rode kool. Een net houdt koolwitjes tegen."
+  },
+  "chinesekool": {
+   "n": "Chinese kool",
+   "tip": "Zaai niet eerder dan half juli en direct op de plek waar de kool blijft staan. Oogst van half september tot half november."
+  },
+  "stokboon": {
+   "n": "Stokboon",
+   "tip": "Geef een klimsteun van minstens twee meter en zaai pas na half mei. Rauwe bonen zijn giftig, kook ze dus altijd gaar."
+  },
+  "mais": {
+   "n": "Suikermaïs",
+   "tip": "Zaai in blokken van meerdere rijen, zodat de bloemen elkaar bestuiven. Oogst als de kolfdraden bruin zijn."
+  },
+  "peper": {
+   "n": "Peper",
+   "tip": "Zaai vanaf half april en zet de plant pas na de laatste vorst buiten. Hoe pittig de vruchten worden, hangt vooral af van het ras."
+  },
+  "augurk": {
+   "n": "Augurk",
+   "tip": "Zaai onder glas in april of direct buiten vanaf half mei. Pluk regelmatig, dan blijft de plant nieuwe vruchten maken."
+  },
+  "sjalot": {
+   "n": "Sjalot",
+   "tip": "Druk de uitjes in de grond met de punt net erboven. Oogst als het loof geel wordt en laat ze daarna drogen."
+  },
+  "bosui": {
+   "n": "Bosui",
+   "tip": "Zaai dicht op elkaar in rijen. Trek de uitjes jong uit de grond of laat ze doorgroeien."
+  },
+  "pluksla": {
+   "n": "Pluksla",
+   "tip": "Pluk steeds de buitenste bladeren, dan groeit de plant door en kun je meerdere keren oogsten."
+  },
+  "winterpostelein": {
+   "n": "Winterpostelein",
+   "tip": "Zaai begin september op een plek die na de oogst vrij is gekomen. Oogst van eind oktober tot in het voorjaar."
+  },
+  "venkel": {
+   "n": "Knolvenkel",
+   "tip": "Zaai pas na 21 juni, eerder zaaien geeft doorschieten. Zet venkel niet naast tomaat of dille."
+  },
+  "selderij": {
+   "n": "Knolselderij",
+   "tip": "Zaai onder glas in maart en april en plant vanaf mei uit. Een geduldig gewas met een lange groeitijd."
+  }
+ },
+ "care": {
+  "tomaat": {
+   "l": "Zo zonnig mogelijk, warm en beschut, bijvoorbeeld tegen een muur.",
+   "w": "Regelmatig water, maar niet zoveel dat de grond doornat blijft. Staat de plant te droog, geef dan niet te veel water in één keer.",
+   "v": "Plant in voedzame grond en geef een tomatenmeststof zodra de voeding is uitgewerkt. Stop met bemesten en geef minder water zodra de vruchten rood zijn."
+  },
+  "courgette": {
+   "l": "Volle zon en een warme plek.",
+   "w": "Veel water, vooral bij droog weer. Giet aan de voet om meeldauw te beperken.",
+   "v": "Plant op compost of verteerde mest en geef bij de vruchtzetting extra voeding."
+  },
+  "sla": {
+   "l": "Zon in het voorjaar, halfschaduw in de zomer. Dan schiet sla minder snel door.",
+   "w": "Regelmatig en in kleine beurten. Bij droogte wordt sla bitter.",
+   "v": "Een lichte eter: compost vooraf is genoeg."
+  },
+  "wortel": {
+   "l": "Zon, of lichte halfschaduw.",
+   "w": "Houd de grond vochtig tot de opkomst, daarna matig. Wisselend vocht laat wortels splijten.",
+   "v": "Een matige eter, extra mest is meestal niet nodig. Geen verse mest: die geeft vertakte wortels."
+  },
+  "radijs": {
+   "l": "Volle zon. Zaai in de zomer vaker en houd de grond vochtig.",
+   "w": "Gelijkmatig vochtig voor snelle, knapperige radijsjes.",
+   "v": "Geen extra voeding nodig."
+  },
+  "pompoen": {
+   "l": "Volle zon en veel ruimte.",
+   "w": "Veel water, vooral tijdens het groeien van de vruchten.",
+   "v": "Een hongerige plant: plant in een kuil met veel compost."
+  },
+  "stamslaboon": {
+   "l": "Zon en een warme, beschutte plek.",
+   "w": "Water vooral tijdens de bloei en de peulzetting.",
+   "v": "Bonen halen zelf stikstof uit de lucht. Geef geen stikstofrijke mest."
+  },
+  "spinazie": {
+   "l": "Zon in het voor- en najaar, halfschaduw in de zomer.",
+   "w": "Houd de grond vochtig, anders schiet spinazie door.",
+   "v": "Houdt van stikstofrijke grond: werk compost in."
+  },
+  "veldsla": {
+   "l": "Zon tot halfschaduw.",
+   "w": "Houd de zaaibedding vochtig tot de opkomst, daarna matig.",
+   "v": "Geen extra voeding nodig."
+  },
+  "knoflook": {
+   "l": "Volle zon.",
+   "w": "Matig water. Natte grond in de winter geeft rot.",
+   "v": "Geen verse mest. Compost vooraf is genoeg."
+  },
+  "komkommer": {
+   "l": "Volle zon en beschut.",
+   "w": "Veel water, aan de voet gegeven.",
+   "v": "Een flinke eter: compost vooraf en elke twee weken voeding."
+  },
+  "paprika": {
+   "l": "Volle zon, liefst in de kas of tegen een warme muur.",
+   "w": "Regelmatig en ruim water, gelijkmatig vochtig houden.",
+   "v": "Wekelijks voeding zodra de eerste vruchten zetten."
+  },
+  "aubergine": {
+   "l": "Volle zon en veel warmte.",
+   "w": "Regelmatig water, de grond mag niet uitdrogen.",
+   "v": "Geef elke twee weken voeding vanaf de bloei."
+  },
+  "biet": {
+   "l": "Zon tot halfschaduw.",
+   "w": "Gelijkmatig vochtig houden.",
+   "v": "Compost vooraf, geen verse mest."
+  },
+  "prei": {
+   "l": "Zon tot lichte halfschaduw.",
+   "w": "Regelmatig water in droge perioden.",
+   "v": "Een flinke eter: compost vooraf en halverwege het seizoen extra voeding."
+  },
+  "ui": {
+   "l": "Volle zon.",
+   "w": "Matig water. Stop zodra het loof omvalt.",
+   "v": "Geen verse mest."
+  },
+  "doperwt": {
+   "l": "Zon tot halfschaduw. Doperwten houden van koele grond.",
+   "w": "Water vooral tijdens de bloei en de peulzetting.",
+   "v": "Erwten halen zelf stikstof uit de lucht."
+  },
+  "tuinboon": {
+   "l": "Zon tot halfschaduw, ook goed op koele grond.",
+   "w": "Matig, iets meer tijdens de bloei.",
+   "v": "Maakt zelf stikstof via de wortels. Geen extra voeding."
+  },
+  "bloemkool": {
+   "l": "Volle zon, op stevige grond.",
+   "w": "Gelijkmatig vochtig houden. Droogte geeft kleine, losse koppen.",
+   "v": "Een zware eter: veel compost vooraf en halverwege het seizoen extra voeding."
+  },
+  "broccoli": {
+   "l": "Volle zon, op stevige grond.",
+   "w": "Gelijkmatig vochtig houden. Droogte geeft kleine, losse koppen.",
+   "v": "Een zware eter: veel compost vooraf en halverwege het seizoen extra voeding."
+  },
+  "rodekool": {
+   "l": "Volle zon, op stevige grond.",
+   "w": "Gelijkmatig vochtig houden. Droogte geeft kleine, losse koppen.",
+   "v": "Een zware eter: veel compost vooraf en halverwege het seizoen extra voeding."
+  },
+  "boerenkool": {
+   "l": "Zon tot halfschaduw.",
+   "w": "Regelmatig water, zeker in een droge zomer.",
+   "v": "Een flinke eter: compost vooraf en in de zomer extra voeding."
+  },
+  "koolrabi": {
+   "l": "Zon, op losse en vochtige grond.",
+   "w": "Gelijkmatig vochtig, anders worden de knollen houtig.",
+   "v": "Een koolgewas en dus een flinke eter: werk compost in en geef halverwege het seizoen extra voeding."
+  },
+  "rucola": {
+   "l": "Volle zon. Houd de grond vochtig, anders schiet rucola door.",
+   "w": "Regelmatig en veel water, vooral bij warm weer. Droogte maakt rucola scherp.",
+   "v": "Geen extra voeding nodig."
+  },
+  "snijbiet": {
+   "l": "Zon tot halfschaduw.",
+   "w": "Regelmatig water. De plant verdraagt een korte droogte.",
+   "v": "Compost vooraf en bij langdurig oogsten wat extra voeding."
+  },
+  "pastinaak": {
+   "l": "Zon, op diepe en losse grond.",
+   "w": "Gelijkmatig vochtig, na het opkomen matig.",
+   "v": "Geen verse mest: die geeft vertakte wortels."
+  },
+  "peterselie": {
+   "l": "Zon tot halfschaduw.",
+   "w": "Houd de grond vochtig, vooral tijdens het kiemen.",
+   "v": "Keukenkruiden hebben weinig voeding nodig."
+  },
+  "basilicum": {
+   "l": "Volle zon en beschutting. Basilicum is kouwelijk.",
+   "w": "Houd licht vochtig en geef water aan de voet.",
+   "v": "Een beetje compost volstaat."
+  },
+  "aardappel-vroeg": {
+   "l": "Volle zon.",
+   "w": "Vooral tijdens de bloei en de knolvorming water geven.",
+   "v": "Compost of verteerde mest vooraf. Geen kalk, dat geeft schurft."
+  },
+  "aardappel-laat": {
+   "l": "Volle zon.",
+   "w": "Vooral tijdens de bloei en de knolvorming water geven.",
+   "v": "Compost of verteerde mest vooraf. Geen kalk, dat geeft schurft."
+  },
+  "andijvie": {
+   "l": "Zon tot halfschaduw.",
+   "w": "Regelmatig water, zeker in droge zomers.",
+   "v": "Compost vooraf is genoeg."
+  },
+  "spruitkool": {
+   "l": "Volle zon, op stevige grond.",
+   "w": "Gelijkmatig vochtig houden. Droogte geeft kleine, losse koppen.",
+   "v": "Een zware eter: veel compost vooraf en halverwege het seizoen extra voeding."
+  },
+  "wittekool": {
+   "l": "Volle zon, op stevige grond.",
+   "w": "Gelijkmatig vochtig houden. Droogte geeft kleine, losse koppen.",
+   "v": "Een zware eter: veel compost vooraf en halverwege het seizoen extra voeding."
+  },
+  "savooiekool": {
+   "l": "Volle zon, op stevige grond.",
+   "w": "Gelijkmatig vochtig houden. Droogte geeft kleine, losse koppen.",
+   "v": "Een zware eter: veel compost vooraf en halverwege het seizoen extra voeding."
+  },
+  "chinesekool": {
+   "l": "Zon tot halfschaduw.",
+   "w": "Gelijkmatig vochtig houden.",
+   "v": "Een koolgewas en dus een flinke eter: werk compost in."
+  },
+  "stokboon": {
+   "l": "Zon en een warme, beschutte plek.",
+   "w": "Water vooral tijdens de bloei en de peulzetting.",
+   "v": "Bonen halen zelf stikstof uit de lucht. Geef geen stikstofrijke mest."
+  },
+  "mais": {
+   "l": "Volle zon en beschut tegen wind.",
+   "w": "Regelmatig water, vooral tijdens de bloei en de kolfvorming.",
+   "v": "Een hongerige plant: werk compost in en voed halverwege het seizoen bij."
+  },
+  "peper": {
+   "l": "Volle zon, liefst in de kas of tegen een warme muur.",
+   "w": "Gelijkmatig water, niet te nat.",
+   "v": "Wekelijks voeding zodra de eerste vruchten zetten."
+  },
+  "augurk": {
+   "l": "Volle zon en beschut.",
+   "w": "Veel water, aan de voet gegeven.",
+   "v": "Compost vooraf en elke twee weken voeding."
+  },
+  "sjalot": {
+   "l": "Volle zon.",
+   "w": "Matig water. Stop zodra het loof geel wordt.",
+   "v": "Geen verse mest."
+  },
+  "bosui": {
+   "l": "Zon tot lichte halfschaduw.",
+   "w": "Houd de grond licht vochtig.",
+   "v": "Geen extra voeding nodig."
+  },
+  "pluksla": {
+   "l": "Zon in het voorjaar, halfschaduw in de zomer. Dan schiet sla minder snel door.",
+   "w": "Regelmatig en in kleine beurten.",
+   "v": "Compost vooraf is genoeg."
+  },
+  "winterpostelein": {
+   "l": "Zon tot halfschaduw. Houdt van koel weer.",
+   "w": "Matig water.",
+   "v": "Geen extra voeding nodig."
+  },
+  "venkel": {
+   "l": "Volle zon.",
+   "w": "Gelijkmatig vochtig houden.",
+   "v": "Compost vooraf is meestal genoeg."
+  },
+  "selderij": {
+   "l": "Zon tot halfschaduw, op vochtige en voedselrijke grond.",
+   "w": "Houd de grond gelijkmatig vochtig.",
+   "v": "Een flinke eter: werk compost in en voed halverwege bij."
+  }
+ },
+ "act": {
+  "binnen": {
+   "n": "Voorzaaien binnen",
+   "s": "Binnen"
+  },
+  "glas": {
+   "n": "Zaaien onder glas",
+   "s": "Onder glas"
+  },
+  "verpot": {
+   "n": "Verpotten",
+   "s": "Verpotten"
+  },
+  "buiten": {
+   "n": "Direct buiten zaaien",
+   "s": "Buiten zaaien"
+  },
+  "uitplant": {
+   "n": "Uitplanten",
+   "s": "Uitplanten"
+  },
+  "oogst": {
+   "n": "Oogsten",
+   "s": "Oogsten"
+  }
+ },
+ "methods": {
+  "binnen": "Voorgezaaid binnen",
+  "glas": "Gezaaid onder glas",
+  "buiten": "Direct buiten"
+ },
+ "stages": [
+  "Zaadje",
+  "Kiem",
+  "Jonge plant",
+  "Volgroeid",
+  "Oogstklaar"
+ ]
+}};
+
+/* Taal toepassen: vult namen, tips en verzorgingsteksten in. Ontbreekt een tekst, dan valt hij terug op Nederlands. */
+function applyLang(code){
+  const L=LANGS[code]||LANGS.nl,F=LANGS.nl;
+  const g=(a,b,k)=>(a&&a[k]!==undefined&&a[k]!==''?a[k]:b[k]);
+  CROPS.forEach(c=>{const x=(L.crops||{})[c.id]||{},y=F.crops[c.id]||{};c.n=g(x,y,'n');c.tip=g(x,y,'tip')});
+  for(const id in CARE){const x=(L.care||{})[id]||{},y=F.care[id]||{};['l','w','v'].forEach(k=>{CARE[id][k][1]=g(x,y,k)})}
+  for(const k in ACT){const x=(L.act||{})[k]||{},y=F.act[k]||{};ACT[k].n=g(x,y,'n');ACT[k].s=g(x,y,'s')}
+  for(const k in METHODS)METHODS[k]=((L.methods||{})[k])||F.methods[k];
+  STAGE_NAMES.forEach((_,i)=>{STAGE_NAMES[i]=((L.stages||[])[i])||F.stages[i]});
+}
+
+/* ---- Tekenfilmplanten: SVG per gewastype en groeistadium (0 zaadje ... 4 oogstklaar) ---- */
+const FL=c=>`style="fill:${c}"`;
+const lfD=(l,w)=>`M0 0C${l*.3} ${-w} ${l*.8} ${-w} ${l} 0C${l*.8} ${w} ${l*.3} ${w} 0 0Z`;
+const lf=(x,y,r,s,fill,l=30,w=11)=>`<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})"><g class="lf" style="animation-delay:-${((((x*7+y*13+r)%30)+30)%30/10).toFixed(1)}s"><path d="${lfD(l,w)}" ${FL(fill)}/><path class="vein" d="M3 0H${l-6}" style="fill:none"/></g></g>`;
+const stemP=(d,w=4.6,col='var(--leaf2)')=>`<path d="${d}" style="fill:none;stroke-width:${w+4.4}"/><path d="${d}" style="fill:none;stroke:${col};stroke-width:${w}"/>`;
+const eyes=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><g class="eyes"><circle cx="-5" cy="0" r="3.6" style="fill:#fff"/><circle cx="5" cy="0" r="3.6" style="fill:#fff"/><circle cx="-4.4" cy=".5" r="1.8" style="fill:var(--line);stroke:none"/><circle cx="5.6" cy=".5" r="1.8" style="fill:var(--line);stroke:none"/></g><path d="M-3 6.5Q0 9.5 3 6.5" style="fill:none;stroke-width:1.6"/></g>`;
+const SOIL=`<ellipse cx="60" cy="126" rx="50" ry="12" style="fill:var(--soil)"/><ellipse cx="60" cy="123" rx="42" ry="8" style="fill:var(--soil2);stroke:none"/><circle cx="34" cy="127" r="1.8" style="fill:var(--line);stroke:none"/><circle cx="88" cy="128" r="1.8" style="fill:var(--line);stroke:none"/><circle cx="72" cy="131" r="1.5" style="fill:var(--line);stroke:none"/>`;
+const flower=(x,y,col='var(--yel)')=>stemP(`M60 ${y+12}Q${(x+60)/2} ${y+8} ${x} ${y}`,2)+`<circle cx="${x}" cy="${y}" r="5" ${FL(col)}/><circle cx="${x}" cy="${y}" r="1.8" style="fill:var(--carrot);stroke:none"/>`;
+const hang=(x,y,r)=>stemP(`M60 ${y-4}Q${(x+60)/2} ${y-r-8} ${x} ${y-r}`,2);
+const tomato=(x,y,r,face)=>hang(x,y,r)+`<circle cx="${x}" cy="${y}" r="${r}" ${FL('var(--tomato)')}/><path d="M${x-r*.55} ${y-r*.35}q${r*.15}-${r*.35} ${r*.55}-${r*.5}" style="fill:none;stroke:#fff;stroke-width:2;opacity:.6"/><ellipse cx="${x}" cy="${y-r+1}" rx="${r*.4}" ry="3" ${FL('var(--leafd)')}/>${face?eyes(x,y+r*.15,r/11):''}`;
+const paprika=(x,y,r,f)=>{const k=r/10;return hang(x,y,r)+`<path d="M${x-9*k} ${y-8*k}C${x-12*k} ${y+6*k} ${x-6*k} ${y+12*k} ${x} ${y+12*k}C${x+6*k} ${y+12*k} ${x+12*k} ${y+6*k} ${x+9*k} ${y-8*k}C${x+4*k} ${y-12*k} ${x-4*k} ${y-12*k} ${x-9*k} ${y-8*k}Z" ${FL('var(--tomato)')}/><path d="M${x-2} ${y-10*k}q2-5 5-5" style="fill:none;stroke:var(--leafd);stroke-width:3"/>`+(f?eyes(x,y+k,k*.9):'')};
+const aubergine=(x,y,r,f)=>{const k=r/10;return hang(x,y,r)+`<path d="M${x-6*k} ${y-10*k}C${x-13*k} ${y+6*k} ${x-8*k} ${y+17*k} ${x} ${y+17*k}C${x+9*k} ${y+17*k} ${x+10*k} ${y+4*k} ${x+6*k} ${y-10*k}Z" ${FL('#7B3FA0')}/><ellipse cx="${x}" cy="${y-10*k}" rx="${7*k}" ry="3.4" ${FL('var(--leafd)')}/>`+(f?eyes(x,y+3*k,k*.8):'')};
+const peper=(x,y,r,f)=>hang(x,y,r)+`<path d="M${x-3} ${y-r}C${x-7} ${y} ${x-1} ${y+r*1.5} ${x+4} ${y+r*1.7}C${x+9} ${y+r} ${x+6} ${y-r*.3} ${x+3} ${y-r}Z" ${FL('var(--tomato)')}/><ellipse cx="${x}" cy="${y-r}" rx="4" ry="2.4" ${FL('var(--leafd)')}/>`+(f?eyes(x+1,y+r*.2,r/16):'');
+const FRUIT={tomaat:tomato,paprika,aubergine,peper};
+const lobed=(x,y,r)=>{const P=[0,60,120,180,240,300].map(a=>[x+Math.cos(a*Math.PI/180)*r*.62,y+Math.sin(a*Math.PI/180)*r*.62]);const C=st=>P.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${(r*.52).toFixed(1)}" style="fill:var(--leaf);${st}"/>`).join('')+`<circle cx="${x}" cy="${y}" r="${(r*.7).toFixed(1)}" style="fill:var(--leaf);${st}"/>`;return `<g class="lb" style="animation-delay:-${((x*3+y)%30/10).toFixed(1)}s">`+stemP(`M60 124Q${(x+60)/2} ${y+22} ${x} ${y}`,2.4)+C('')+C('stroke:none')+`<path class="vein" d="M${x} ${y+r*.35}V${y-r*.8}M${x} ${y}L${x-r*.7} ${y-r*.3}M${x} ${y}L${x+r*.7} ${y-r*.3}" style="fill:none"/></g>`};
+const pod=(x,y,r,w=4.6,col='var(--bean)')=>`<g transform="translate(${x} ${y}) rotate(${r})"><g class="lf" style="animation-delay:-${((x+y)%30/10).toFixed(1)}s">${stemP('M0 0C5 10 5 24 1 36',w,col)}</g></g>`;
+const blade=(x,a,len,col)=>`<g class="lb" style="animation-delay:-${((x+len)%30/10).toFixed(1)}s"><path d="M${x} 122Q${x+a*.4} ${122-len*.6} ${x+a} ${122-len}Q${x+a*.4+6} ${122-len*.5} ${x+6} 122Z" ${FL(col)}/></g>`;
+const feather=(a,len,col)=>{const r=a*Math.PI/180;let o=stemP(`M60 121L${(60+Math.cos(r)*len).toFixed(1)} ${(121+Math.sin(r)*len).toFixed(1)}`,2);for(let j=1;j<=4;j++){const t=j/4.4,px=60+Math.cos(r)*len*t,py=121+Math.sin(r)*len*t;[-1,1].forEach(d=>{o+=`<ellipse cx="${(px+d*4).toFixed(1)}" cy="${py.toFixed(1)}" rx="4.6" ry="2.4" transform="rotate(${(a+d*65).toFixed(0)} ${(px+d*4).toFixed(1)} ${py.toFixed(1)})" ${FL(col)}/>`})}return `<g class="lb" style="animation-delay:-${(((a+len)%30+30)%30/10).toFixed(1)}s">${o}</g>`};
+const seed=()=>`<ellipse cx="60" cy="120" rx="7" ry="4.6" transform="rotate(-18 60 120)" style="fill:#C99A5B"/><path d="M56 119q3-2 6-1" style="fill:none;stroke-width:1.4;opacity:.6"/>`;
+const cot=(col,w=11)=>stemP('M60 124C59 118 61 112 60 107')+lf(60,107,-150,.6,col,30,w+3)+lf(60,107,-30,.6,col,30,w+3);
+
+const TN={sla:['var(--leaf3)','var(--leaf)'],spinazie:['var(--spin)','var(--leafd)'],veldsla:['var(--veld)','var(--leaf)'],rucola:['var(--leaf3)','var(--leaf)'],pluksla:['var(--leaf3)','#B5523B'],postelein:['#7BCB6A','#4FA55A'],andijvie:['#B9E27F','#8FD35C'],snijbiet:['var(--leafd)','var(--leaf)'],peterselie:['var(--leafd)','var(--leaf)'],basilicum:['var(--leaf3)','var(--leaf)'],boerenkool:['#3F8F6B','#2E7656']};
+const TS={postelein:.8,veldsla:.75,peterselie:.8,basilicum:.8,rucola:.9,boerenkool:1.15,snijbiet:1.1};
+const TW={postelein:14,pluksla:13,spinazie:9,rucola:7,peterselie:13,basilicum:15,andijvie:10,snijbiet:13,boerenkool:14};
+const ROOTS={selderij:['#D9C89E',13],radijs:['var(--radish)',11],biet:['#A1244F',12],koolrabi:['#B8E08A',13],aardappel:['#C9A06B',12]};
+
+const PLANTS={
+ bush(s,c){
+  if(s==1)return cot('var(--leaf3)',8);
+  const h=s==2?46:78,top=124-h;
+  let o=stemP(`M60 124C57 ${124-h*.35} 63 ${124-h*.7} 60 ${top}`,s==2?4.6:6);
+  [[104,-160],[104,-20],[88,-150],[88,-30],[72,-160],[72,-20],[58,-140]].forEach(([y,a],i)=>{if(top<y-8)o+=lf(60,y,a,.85,i%2?'var(--leaf)':'var(--leaf3)')});
+  o+=lf(60,top+4,-95,.75,'var(--leaf)');
+  if(s==3)o+=flower(36,82)+flower(88,64)+flower(72,44);
+  if(s==4){const f=FRUIT[c.fruit||'tomaat'];o+=f(38,90,10,1)+f(84,80,11,1)+f(42,64,8,0)+f(82,54,8,0)}
+  return o;
+ },
+ vine(s,c){
+  if(s==1)return cot('var(--leaf3)',11);
+  let o=s==2?lobed(40,98,13)+lobed(80,94,13)+lobed(60,78,12):lobed(34,100,18)+lobed(88,96,18)+lobed(60,70,17);
+  if(s==3)o+=`<path d="M96 122q-3-13 6-19q9 6 7 19z" ${FL('var(--yel)')}/>`;
+  if(s==4){
+   if(['courgette','komkommer','augurk'].includes(c.fruit)){const kk=c.fruit!='courgette',au=c.fruit=='augurk';o+=`<g transform="rotate(-14 60 114)"><ellipse cx="60" cy="114" rx="${au?20:kk?30:27}" ry="${au?7:kk?8:10}" ${FL(kk?'var(--bean)':'var(--zuc)')}/><path d="M${au?46:38} ${kk?111:110}q${au?14:22}-5 ${au?28:44} 0" style="fill:none;stroke:#fff;stroke-width:2;opacity:.45"/><path d="M${au?78:kk?88:85} 109l9-2v6l-9-1z" ${FL('var(--leafd)')}/></g>`+eyes(55,113,.85)}
+   else o+=`<circle cx="60" cy="108" r="17" ${FL('var(--pump)')}/><path d="M60 91q-9 17 0 34M60 91q9 17 0 34M60 91q-17 17 0 34" style="fill:none;stroke:#B8520E;stroke-width:1.8;opacity:.6"/>`+stemP('M58 92q0-8 5-9',4,'#8A5A2B')+eyes(60,110,1.1);
+  }
+  return o;
+ },
+ rosette(s,c){
+  const T=TN[c.tone],sc=TS[c.tone]||1,w=TW[c.tone]||12;
+  const A=s==1?[-150,-30]:s==2?[-165,-125,-90,-55,-15]:[-172,-148,-125,-100,-80,-55,-32,-8];
+  const k=[0,.5,.75,.95,1.1][s]*sc;
+  let o='';A.forEach((a,i)=>{o+=lf(60,121,a,k*(i%2?1:.92),T[i%2],30,w)});
+  if(s==4)o+=(c.tone=='sla'?`<ellipse cx="60" cy="106" rx="15" ry="13" ${FL('var(--leaf3)')}/>`:'')+eyes(60,106,1.1);
+  return o;
+ },
+ kool(s,c){
+  const G=['#4E9E7A','#3C8A68'],f=c.fruit,KH={rodekool:['#8E4A9E','round'],wittekool:['#C4E6A2','round'],savooiekool:['#76B954','savoy'],chinesekool:['#E6F0B8','tall'],bloemkool:['#F4EBC8','cluster'],broccoli:['#3FA34D','cluster'],spruitkool:['#6FBF4B','sprouts']},[hc,sh]=KH[f];
+  if(s==1)return cot('#4E9E7A',11);
+  const A=s==2?[-165,-125,-90,-55,-15]:[-172,-148,-125,-100,-80,-55,-32,-8],k=[0,0,.8,1,1.1][s];
+  let o=A.map((a,i)=>lf(60,121,a,k*(i%2?1:.92),G[i%2],30,13)).join('');
+  if(s>=3){
+   const r=s==3?9:15,cy=s==3?112:106;
+   if(sh=='round'||sh=='savoy')o+=`<circle cx="60" cy="${cy}" r="${r}" ${FL(hc)}/><path d="M${60-r*.5} ${cy-r*.6}Q60 ${cy} ${60+r*.5} ${cy-r*.6}" style="fill:none;stroke-width:1.6;opacity:.5"/>`+(sh=='savoy'?`<path d="M${60-r*.7} ${cy+r*.1}q${r*.35} -${r*.4} ${r*.7} 0t${r*.7} 0" style="fill:none;stroke-width:1.4;opacity:.5"/>`:'');
+   else if(sh=='tall')o+=`<ellipse cx="60" cy="${cy-4}" rx="${(r*.62).toFixed(1)}" ry="${(r*1.45).toFixed(1)}" ${FL(hc)}/><path d="M60 ${(cy-r*1.4).toFixed(1)}V${(cy+r*1.1).toFixed(1)}" style="fill:none;stroke-width:1.4;opacity:.45"/>`;
+   else if(sh=='sprouts'){o+=stemP(`M60 124V${s==3?88:70}`,5,'#4E9E7A');[[51,s==3?102:92],[69,s==3?98:86],[52,s==3?90:78],[68,s==3?86:70]].forEach(([x,y])=>{o+=`<circle cx="${x}" cy="${y}" r="${s==3?4:6}" ${FL(hc)}/>`})}
+   else{const P=[[0,0],[-.6,.3],[.6,.3],[-.35,-.55],[.35,-.55]],C=st=>P.map(p=>`<circle cx="${(60+p[0]*r).toFixed(1)}" cy="${(cy+p[1]*r).toFixed(1)}" r="${(r*.55).toFixed(1)}" style="fill:${hc};${st}"/>`).join('');o+=C('')+C('stroke:none')}
+   if(s==4)o+=eyes(60,sh=='sprouts'?100:cy+2,sh=='sprouts'?.75:1.1);
+  }
+  return o;
+ },
+ root(s,c){
+  const f=c.fruit;
+  if(f=='wortel'||f=='pastinaak'||f=='venkel'){
+   const F=s==1?[[-105,14],[-75,14]]:s==2?[[-125,24],[-90,30],[-55,24]]:[[-150,34],[-120,42],[-90,48],[-60,42],[-30,34]];
+   let o=F.map(([a,l])=>feather(a,l,'var(--leaf)')).join('');
+   if(s==4)o+=f=='venkel'?`<ellipse cx="60" cy="115" rx="13" ry="10" ${FL('#E4F0C6')}/>`+eyes(60,115,.8):`<ellipse cx="60" cy="121" rx="12" ry="6.5" ${FL(f=='wortel'?'var(--carrot)':'#F1E2B0')}/>`+eyes(60,121,.6);
+   return o;
+  }
+  const [col,r]=ROOTS[f];
+  const A=s==1?[-135,-45]:s==2?[-140,-90,-40]:[-160,-130,-100,-80,-50,-20];
+  const k=[0,.5,.7,.9,.9][s];
+  let o=A.map((a,i)=>lf(60,120,a,k,i%2?'var(--leaf)':'var(--leafd)',26,12)).join('');
+  if(s==4){
+   if(f=='aardappel')o+=`<ellipse cx="53" cy="119" rx="11" ry="8" transform="rotate(-10 53 119)" ${FL(col)}/><ellipse cx="68" cy="121" rx="9" ry="7" ${FL(col)}/>`+eyes(53,119,.7);
+   else o+=`<circle cx="60" cy="${f=='koolrabi'?114:117}" r="${r}" ${FL(col)}/><path d="M52 ${f=='koolrabi'?108:112}q3-4 7-5" style="fill:none;stroke:#fff;stroke-width:2;opacity:.6"/>`+eyes(60,f=='koolrabi'?115:118,.8);
+  }
+  return o;
+ },
+ bean(s,c){
+  const f=c.fruit,stok=f=='stokboon',tall=f=='tuinboon'||stok,pc=f=='doperwt'?'#8FD35C':stok?'var(--bean)':tall?'#5FAF45':'var(--bean)',pw=f=='tuinboon'?6.5:4.6;
+  if(s==1)return cot('var(--bean)',11);
+  const h=s==2?40:stok?96:tall?74:64,top=124-h;
+  let o=(stok&&s>=2?stemP('M74 124V14',3,'#8A5A2B'):'')+stemP(`M60 124C58 ${124-h*.4} 62 ${124-h*.7} 60 ${top}`,5);
+  [[106,-155],[106,-25],[90,-150],[90,-30],[74,-155],[74,-25],[58,-150],[58,-30],[44,-155],[44,-25]].forEach(([y,a],i)=>{if(top<y-6)o+=lf(60,y,a,.85,i%2?'var(--leaf)':'var(--bean)',26,13)});
+  o+=lf(60,top+4,-95,.7,'var(--bean)',26,13);
+  if(f=='doperwt'&&s>=2)o+=`<path d="M60 ${top}q9-7 13-1q-3 7-9 3" style="fill:none;stroke:var(--leaf2);stroke-width:1.8"/>`;
+  if(s==3)o+=`<circle cx="40" cy="84" r="4" style="fill:#fff"/><circle cx="82" cy="70" r="4" style="fill:#fff"/>`+(tall?`<circle cx="40" cy="84" r="1.4" style="fill:var(--line);stroke:none"/><circle cx="82" cy="70" r="1.4" style="fill:var(--line);stroke:none"/>`:'');
+  if(s==4)o+=pod(46,88,8,pw,pc)+pod(76,84,-8,pw,pc)+pod(50,66,6,pw,pc)+pod(72,62,-6,pw,pc)+eyes(51,102,.6)+eyes(77,98,.6);
+  return o;
+ },
+ bulb(s,c){
+  const f=c.fruit||'knoflook',G=f=='prei'?['#4E9E7A','#3C8A68']:['var(--leaf)','var(--leafd)'],g3=f=='prei'?'#5FB08A':'var(--leaf3)';
+  if(s==1)return blade(57,-2,18,G[0]);
+  if(s==2)return blade(52,-9,34,G[0])+blade(58,0,44,g3)+blade(64,9,34,G[0]);
+  const col=s==4&&f=='knoflook'?'var(--leaf3)':G[0];
+  let o=blade(48,-12,46,col)+blade(54,-5,58,G[1])+blade(58,2,62,col)+blade(62,8,56,G[1])+blade(66,14,46,col);
+  if(s==3&&f=='knoflook')o+=stemP('M60 124C60 90 68 72 78 66',2.4)+`<circle cx="79" cy="64" r="4" ${FL('var(--garlic)')}/>`;
+  if(s==4){
+   if(f=='knoflook')o+=`<path d="M60 105C47 106 42 119 49 127H71C78 119 73 106 60 105Z" ${FL('var(--garlic)')}/><path d="M57 106Q60 98 63 106" ${FL('var(--garlic)')}/><path d="M54 112q-3 7 0 13M66 112q3 7 0 13" style="fill:none;stroke:#B79BC2;stroke-width:1.6"/>`+eyes(60,118,.75);
+   else if(f=='sjalot')o+=`<ellipse cx="50" cy="119" rx="8" ry="9" ${FL('#C98A4A')}/><ellipse cx="68" cy="120" rx="8" ry="8" ${FL('#D49A58')}/>`+eyes(59,119,.6);
+   else if(f=='bosui')o+=`<ellipse cx="60" cy="118" rx="7" ry="9" ${FL('#F4F1D8')}/>`+eyes(60,118,.55);
+   else if(f=='ui')o+=`<path d="M60 103Q58 96 62 93" style="fill:none;stroke-width:2"/><circle cx="60" cy="116" r="13" ${FL('#E3B64A')}/>`+eyes(60,117,.8);
+   else o+=`<path d="M53 126V106Q60 101 67 106V126Z" ${FL('#F4F1D8')}/>`+eyes(60,116,.7);
+  }
+  return o;
+ },
+ mais(s,c){
+  const G=['var(--leaf)','var(--leafd)'];
+  if(s==1)return blade(56,-3,24,G[0])+blade(63,4,22,G[1]);
+  if(s==2)return blade(50,-12,44,G[0])+blade(58,-2,56,G[1])+blade(66,10,44,G[0]);
+  const top=s==3?36:30;
+  let o=stemP(`M60 124V${top}`,6);
+  [[100,-160],[100,-20],[84,-155],[84,-25],[68,-160],[68,-20],[52,-155],[52,-25]].forEach(([y,a],i)=>{if(y>top+10)o+=lf(60,y,a,1.05,G[i%2],34,9)});
+  o+=lf(60,top+4,-95,.8,G[0],30,8);
+  if(s==3)o+=`<path d="M60 ${top}q-6 -10 -3 -16M60 ${top}q6 -10 3 -16M60 ${top}q0 -12 0 -18" style="fill:none;stroke:#C9A24B;stroke-width:2.4"/>`;
+  if(s==4)o+=`<g transform="translate(72 74) rotate(14)"><path d="M0 0C-9 4 -10 26 0 34C10 26 9 4 0 0Z" ${FL('var(--leaf3)')}/><ellipse cx="0" cy="22" rx="6.5" ry="11" ${FL('#FFD84D')}/></g>`+eyes(67,95,.55)+`<g transform="translate(48 88) rotate(-14)"><path d="M0 0C-9 4 -10 24 0 30C10 24 9 4 0 0Z" ${FL('var(--leaf3)')}/><ellipse cx="0" cy="20" rx="6" ry="10" ${FL('#FFD84D')}/></g>`+eyes(53,107,.5);
+  return o;
+ }
+};
+function fxHTML(c){
+  const big=plantSVG(c,4).replace(SOIL,'').replace('<g class="grow">','<g>'),sp=plantSVG(c,1).replace(SOIL,'').replace('<g class="grow">','<g>');
+  const dirt=[[-70,-60],[-40,-90],[-10,-70],[25,-95],[55,-65],[80,-50],[-90,-30],[100,-25]].map(([x,y],i)=>`<i class="dirt" style="--dx:${x}px;--dy:${y}px;animation-delay:${(1.4+i*0.03).toFixed(2)}s"></i>`).join('');
+  const hearts=[[-62,0],[-28,-14],[10,-4],[48,-16],[78,0]].map(([x,y],i)=>`<b class="heart" aria-hidden="true" style="left:calc(50% + ${x}px);--hy:${y}px;animation-delay:${(3.7+i*0.18).toFixed(2)}s">♥</b>`).join('');
+  return `<div class="fx-box"><div class="fx-clip"><div class="fx-plant">${big}</div></div><div class="fx-sprout">${sp}</div><svg class="fx-soil" viewBox="0 0 200 70" aria-hidden="true"><path d="M6 60C14 30 50 16 100 16S186 30 194 60Z" style="fill:var(--soil);stroke:var(--line);stroke-width:3;stroke-linejoin:round"/><path d="M30 40C50 26 150 26 170 40" style="fill:none;stroke:var(--soil2);stroke-width:6;stroke-linecap:round"/></svg>${dirt}${hearts}</div><p class="fx-t">${c.n} is geplant!</p>`;
+}
+function plantSVG(c,stage){
+  const g=stage==0?seed():PLANTS[c.kind](stage,c),sd=-([...c.id].reduce((n,ch)=>n+ch.charCodeAt(0),0)%40)/10;
+  return `<svg class="pl" viewBox="0 0 120 140" role="img" aria-label="${c.n}: ${STAGE_NAMES[stage].toLowerCase()}">${SOIL}<g class="sway" style="animation-delay:${sd}s"><g class="grow">${g}</g></g></svg>`;
+}
+
+/* ---- App ---- */
+(function(){
+'use strict';
+applyLang(typeof navigator!='undefined'&&navigator.language?navigator.language.slice(0,2).toLowerCase():'nl');
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const MND=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+const M3=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+const DAGN=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+const DAG=864e5, KEY='moestuin.v1';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const mid=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate(),12);
+const TODAY=mid(new Date());
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parse=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c,12)};
+const fmt=d=>`${d.getDate()} ${M3[d.getMonth()]}`;
+const addDays=(d,n)=>new Date(d.getTime()+n*DAG);
+const diff=(a,b)=>Math.round((b-a)/DAG);
+const doy=d=>diff(new Date(d.getFullYear(),0,1,12),d)+1;
+const weekOf=d=>Math.min(52,Math.floor((doy(d)-1)/7)+1);
+const dateOfDoy=(y,n)=>new Date(y,0,n,12);
+const clamp=n=>Math.max(1,Math.min(52,n));
+const rel=n=>n<=0?'vandaag':n==1?'morgen':`over ${n} dagen`;
+
+/* ---- Staat ---- */
+const Y0=TODAY.getFullYear();
+const S={view:'maand',y:Y0,m:TODAY.getMonth(),frost:20,shift:0,plantings:null,confirm:null,shared:false,me:null,names:{},db:null,local:null};
+try{const j=JSON.parse(localStorage.getItem(KEY)||'null');if(j){S.frost=j.frost||20;S.plantings=j.plantings||[]}}catch(e){}
+if(S.plantings){
+  S.plantings.forEach(p=>{if(p.crop=='aardappel')p.crop=doy(parse(p.date))<=105?'aardappel-vroeg':'aardappel-laat'});
+  S.plantings=S.plantings.filter(p=>CROP[p.crop]);
+}
+if(!S.plantings){
+  const ago=n=>iso(addDays(TODAY,-n)),late=TODAY.getMonth()>=7;
+  S.plantings=late?[
+    {id:'v1',crop:'knoflook',method:'buiten',date:ago(7),bed:'Bak 1',ex:1},
+    {id:'v2',crop:'spinazie',method:'buiten',date:ago(35),bed:'Bak 2',ex:1},
+    {id:'v3',crop:'veldsla',method:'buiten',date:ago(47),bed:'Bak 3',ex:1}]:[
+    {id:'v1',crop:'tomaat',method:'binnen',date:ago(35),bed:'Vensterbank',ex:1},
+    {id:'v2',crop:'sla',method:'buiten',date:ago(20),bed:'Bak 2',ex:1},
+    {id:'v3',crop:'radijs',method:'buiten',date:ago(12),bed:'Bak 1',ex:1}];
+}
+const save=()=>{if(S.shared)return;try{localStorage.setItem(KEY,JSON.stringify({frost:S.frost,plantings:S.plantings}))}catch(e){}};
+
+/* ---- Samen tuinieren (gedeelde database, anders alleen lokaal) ---- */
+const whoName=id=>id&&id==S.me?'jij':(S.names[id]||'iemand');
+const dbSet=p=>{if(S.shared&&S.db)S.db.doc('plantings/'+p.id).set({crop:p.crop,method:p.method,date:p.date,label:p.label||'',bed:p.bed||'',by:p.by||S.me||''}).catch(()=>{})};
+const dbDel=id=>{if(S.shared&&S.db)S.db.doc('plantings/'+id).delete().catch(()=>{})};
+const dbFrost=()=>{if(S.shared&&S.db)S.db.doc('garden/settings').set({frost:S.frost}).catch(()=>{})};
+async function loadNames(){
+  try{const u=await claude.use('user');if(!u)return;const ids=[...new Set(S.plantings.map(p=>p.by).filter(Boolean))];if(!ids.length)return;
+    const ps=await u.profiles(ids);ids.forEach(i=>{if(ps[i]&&ps[i].name)S.names[i]=ps[i].name});render()}catch(e){}
+}
+async function startShared(){
+  try{
+    const db=await claude.use('db');if(!db)return;
+    const u=await claude.use('user');S.me=u&&u.id?await u.id():null;
+    S.db=db;S.shared=true;S.local=S.plantings.filter(p=>!p.ex);
+    db.collection('plantings').onSnapshot(snap=>{
+      S.plantings=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(p=>CROP[p.crop]);
+      render();loadNames();
+    },()=>{});
+    db.doc('garden/settings').onSnapshot(sn=>{const d=sn.data();if(d&&d.frost){S.frost=d.frost;render()}},()=>{});
+  }catch(e){}
+}
+
+/* ---- Kalenderlogica ---- */
+/* Alle weken in de gegevens zijn relatief aan REF_FROST (laatste nachtvorst in NL/BE: week 20).
+   Vorstgevoelige gewassen schuiven mee met de gekozen vorstweek (S.frost). S.shift is een extra
+   verschuiving voor een ander klimaat of halfrond (bijv. 26 weken op het zuidelijk halfrond); weken lopen rond. */
+const REF_FROST=20;
+function stepsOf(c){
+  const out=[];
+  const add=(t,a,b,l)=>{
+    const k=S.shift+(c.tender&&t!='oogst'?S.frost-REF_FROST:0);
+    let x=a+k,y=b+k;
+    if(!S.shift){out.push({t,a:clamp(x),b:clamp(y),l});return}
+    const m=n=>((n-1)%52+52)%52+1;
+    if(y-x>=51){out.push({t,a:1,b:52,l});return}
+    x=m(x);y=x+(b-a)+(y-x-(b-a));
+    const len=b-a;y=x+len;
+    if(y>52){out.push({t,a:x,b:52,l});out.push({t,a:1,b:y-52,l})}else out.push({t,a:x,b:y,l});
+  };
+  c.s.forEach(([t,a,b,l])=>add(t,a,b,l));
+  if(c.d.verpot){const w=Math.round(c.d.verpot/7);c.s.filter(x=>x[0]=='binnen'||x[0]=='glas').forEach(([t,a,b])=>add('verpot',a+w,b+w))}
+  const by={};out.forEach(x=>(by[x.t]=by[x.t]||[]).push(x));
+  return Object.values(by).flatMap(a=>{a.sort((p,q)=>p.a-q.a);const r=[];a.forEach(x=>{const l=r[r.length-1];if(l&&x.a<=l.b+1)l.b=Math.max(l.b,x.b);else r.push({...x})});return r});
+}
+const wm=w=>Math.min(11,Math.floor(((w-1)*7+3)/30.44));
+function ranges(c,types){
+  const r=stepsOf(c).filter(x=>types.includes(x.t)).map(x=>[x.a,x.b]).sort((a,b)=>a[0]-b[0]),m=[];
+  r.forEach(x=>{const l=m[m.length-1];if(l&&x[0]<=l[1]+1)l[1]=Math.max(l[1],x[1]);else m.push([...x])});
+  return m.map(([a,b])=>wm(a)==wm(b)?M3[wm(a)]:`${M3[wm(a)]}–${M3[wm(b)]}`).join(', ');
+}
+function monthTasks(y,m){
+  const wA=weekOf(new Date(y,m,1,12)),wB=weekOf(new Date(y,m+1,0,12)),g={};
+  CROPS.forEach(c=>stepsOf(c).forEach(st=>{if(st.a<=wB&&st.b>=wA){(g[st.t]=g[st.t]||[]);if(!g[st.t].some(x=>x.c==c))g[st.t].push({c,st,wA})}}));
+  return g;
+}
+const methodsOf=c=>['binnen','glas','buiten'].filter(t=>c.s.some(x=>x[0]==t));
+
+/* ---- Tijdlijn per plant ---- */
+function timeline(p){
+  const c=CROP[p.crop],d=c.d,t0=parse(p.date),ev=[];
+  const A=(k,off,l,end)=>ev.push({k,dt:addDays(t0,off),l,end:end==null?null:addDays(t0,end)});
+  A('zaai',0,c.poten&&p.method=='buiten'?'Poten':ACT[p.method].n);
+  A('kiem',d.kiem,c.poten?'Eerste scheut':'Kiemt');
+  if(p.method!='buiten'&&d.verpot)A('verpot',d.verpot,ACT.verpot.n);
+  if(p.method!='buiten'&&d.uit)A('uitplant',d.uit,ACT.uitplant.n);
+  A('oogst',d.oogst[0],ACT.oogst.n,d.oogst[1]);
+  return ev.sort((a,b)=>a.dt-b.dt);
+}
+function stageOf(p){
+  const c=CROP[p.crop],t=diff(parse(p.date),TODAY),os=c.d.oogst[0];
+  if(t<c.d.kiem)return 0;
+  return t<.25*os?1:t<.6*os?2:t<os?3:4;
+}
+
+/* ---- Weergaves ---- */
+const TAGC=['#E5452E','#2B7FD6','#8E5BD6','#E09A00','#17A398','#D6478A'];
+const dot=p=>{const same=S.plantings.filter(x=>x.crop==p.crop);return same.length<2?'':`<span class="tagdot" style="--tg:${TAGC[same.indexOf(p)%TAGC.length]}"></span>`};
+const nm=p=>CROP[p.crop].n+(p.label?' · '+esc(p.label):'');
+const taskPlant=(c,st)=>`<div class="pp">${plantSVG(c,st)}</div>`;
+/* ---- Zaad kopen (voorbeeld: affiliate-links nog niet actief) ---- */
+const SHOPS=[{n:'Zaadwinkel 1',u:''},{n:'Zaadwinkel 2',u:''},{n:'Zaadwinkel 3',u:''}];
+function seedList(){
+  const w=weekOf(TODAY),L=[];
+  CROPS.forEach(c=>{
+    const s=stepsOf(c).filter(x=>x.t=='binnen'||x.t=='glas'||x.t=='buiten').sort((p,q)=>p.a-q.a);
+    const nxt=s.find(x=>x.b>=w);if(!nxt)return;
+    const gap=Math.max(0,nxt.a-w);if(gap<=4)L.push({c,gap,a:nxt.a});
+  });
+  return L.sort((p,q)=>p.gap-q.gap||p.c.n.localeCompare(q.c.n)).slice(0,6);
+}
+function zaadCard(){
+  const L=seedList();if(!L.length)return '';
+  return `<section class="card"><div class="sec-h"><h3>Zaad halen voor de komende weken</h3><span class="pill" style="--pc:var(--muted)">voorbeeld</span></div>${L.map(({c,gap,a})=>`<div class="task"><div class="task-main" style="cursor:default">${taskPlant(c,3)}<span><b>${c.n}</b><span class="muted small">${gap?`zaaien vanaf ${fmt(dateOfDoy(Y0,(a-1)*7+1))}`:'nu zaaien'}</span></span></div><button class="btn sm" data-a="seed" data-id="${c.id}">Zaad zoeken</button></div>`).join('')}<p class="muted small" style="margin:8px 0 0">Links naar webwinkels zijn affiliate-links: de planner krijgt een kleine vergoeding als je koopt. Dat kost jou niets extra.</p></section>`;
+}
+function openSeed(id){
+  const c=CROP[id];
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">Zaad zoeken: ${c.n}</h2><div class="bigplant"><div class="pp">${plantSVG(c,4)}</div></div><p style="margin:12px 0 8px">Kies een webwinkel. Je gaat naar de zoekresultaten voor <b>${c.n.toLowerCase()}zaad</b>.</p><div class="stack" style="gap:8px">${SHOPS.map(s=>`<button class="btn" style="width:100%${s.u?'':';opacity:.75'}" ${s.u?'':'disabled'}>${s.n} <span class="small">(affiliate-link)</span></button>`).join('')}</div><p class="muted small" style="margin:12px 0 0"><b>Voorbeeld:</b> hier komen de echte winkelknoppen met jouw Daisycon-links zodra je programma's zijn goedgekeurd. Elke knop wordt zichtbaar gemarkeerd als affiliate-link.</p>`);
+}
+function vMaand(){
+  const g=monthTasks(S.y,S.m),order=Object.keys(ACT).sort((a,b)=>ACT[a].o-ACT[b].o);
+  const fd=dateOfDoy(S.y,S.frost*7-3);
+  let h=`<div class="stack"><div class="monthnav"><button class="icon-btn" data-a="mprev" aria-label="Vorige maand">‹</button><h2>${cap(MND[S.m])} ${S.y}</h2><button class="icon-btn" data-a="mnext" aria-label="Volgende maand">›</button></div>`;
+  h+=`<div class="frost"><div class="grow1"><b>Laatste nachtvorst: week ${S.frost}</b> <span class="muted">(rond ${fmt(fd)})</span><div class="small muted">Vorstgevoelige gewassen schuiven mee.</div></div><button class="icon-btn" data-a="fminus" aria-label="Een week eerder">−</button><button class="icon-btn" data-a="fplus" aria-label="Een week later">+</button></div>`;
+  if(S.y==Y0&&S.m==TODAY.getMonth())h+=zaadCard();
+  let n=0;
+  order.forEach(k=>{
+    const L=g[k];if(!L)return;n+=L.length;
+    h+=`<section class="card"><div class="sec-h"><span class="pill" style="--pc:var(${ACT[k].c})">${ACT[k].n}</span><span class="muted small">${L.length} ${L.length==1?'gewas':'gewassen'}</span></div>`;
+    L.forEach(({c,st,wA})=>{
+      const sd=dateOfDoy(S.y,(st.a-1)*7+1),ed=dateOfDoy(S.y,st.b*7);
+      const note=(st.l?st.l+' · ':'')+(st.a>=wA?`vanaf ${fmt(sd)}`:`t/m ${fmt(ed)}`);
+      const sow=k=='binnen'||k=='glas'||k=='buiten';
+      h+=`<div class="task"><button class="task-main" data-a="crop" data-id="${c.id}">${taskPlant(c,ACT[k].st)}<span><b>${c.n}</b><span class="muted small">${note}</span></span></button>${sow?`<button class="btn sm ghost" data-a="add" data-id="${c.id}" data-m="${k}">Planten</button>`:''}</div>`;
+    });
+    h+='</section>';
+  });
+  if(!n)h+=`<div class="card empty"><b>Deze maand valt er weinig te doen.</b><p class="muted">Kijk bij Gewassen wat je alvast kunt voorbereiden.</p></div>`;
+  h+=`<div class="ad">Hier komt later een advertentie (AdMob in de Android-app).</div></div>`;
+  return h;
+}
+const KOOL=KOOLID;
+const expand=a=>a.flatMap(x=>x=='aardappel'?['aardappel-vroeg','aardappel-laat']:x=='kool'?KOOL:[x]);
+const LV={l:{zon:['Volle zon',3],zh:['Zon tot halfschaduw',2],half:['Halfschaduw',1]},w:{veel:['Veel water',3],gemiddeld:['Gemiddeld water',2],weinig:['Weinig water',1]},v:{zwaar:['Zware eter',3],middel:['Matige eter',2],licht:['Lichte eter',1]}};
+const chip=x=>CROP[x]?`<button class="chip" data-a="crop" data-id="${x}">${CROP[x].n}</button>`:`<span class="chip">${x=='aardappel'?'Aardappel':x=='kool'?'Koolsoorten':esc(x)}</span>`;
+function careHTML(id){
+  const k=NB[id];if(!k)return '';
+  const row=(t,key)=>{const [lv,txt]=k[key],[name,n]=LV[key][lv],ok=k.b[key];return `<div class="cr"><span class="cl">${t}</span><span class="cv"><span class="dots" aria-hidden="true">${'●'.repeat(n)}${'○'.repeat(3-n)}</span> ${name}</span><span class="cd">${txt}</span><span class="${ok?'bv':'nb'}">${ok?'Bevestigd door Nederlandse of Belgische bron':'Nog niet bevestigd door een Nederlandse of Belgische bron'}</span></div>`};
+  const lijst=(arr,cls,t)=>arr.length?`<div class="small muted" style="margin:10px 0 4px">${t}</div><div class="chips ${cls}">${arr.map(chip).join('')}</div>`:'';
+  const bev=lijst(k.g,'good','Gaan goed samen')+lijst(k.s,'bad','Liever niet ernaast');
+  const meer=k.g2.length||k.s2.length?`<details class="more"><summary>Ook genoemd, niet bevestigd door een Nederlandse of Belgische bron</summary>${lijst(k.g2,'good unc','Zou goed samen kunnen gaan')}${lijst(k.s2,'bad unc','Zou liever niet ernaast kunnen')}</details>`:'';
+  return `<h3 style="margin-top:14px">Verzorging</h3><div class="care">${row('Licht','l')}${row('Water','w')}${row('Voeding','v')}</div><h3 style="margin-top:14px">Buren</h3>${bev||'<p class="small muted" style="margin:6px 0 0">Geen bevestigde buurregel gevonden.</p>'}${meer}`;
+}
+function neighbourCard(){
+  const by={};S.plantings.forEach(p=>{const b=(p.bed||'').trim().toLowerCase();if(b)(by[b]=by[b]||[]).push(p)});
+  const out=[],seen=new Set();
+  Object.values(by).forEach(L=>{for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){
+    const a=L[i],c=L[j];if(a.crop==c.crop)continue;
+    const A=NB[a.crop],B=NB[c.crop],key=[a.crop,c.crop].sort().join('|')+L[0].bed.toLowerCase();if(!A||!B||seen.has(key))continue;seen.add(key);
+    const bad=expand(A.s).includes(c.crop)||expand(B.s).includes(a.crop),good=expand(A.g).includes(c.crop)||expand(B.g).includes(a.crop);
+    if(bad||good)out.push({bad,t:`${CROP[a.crop].n} en ${CROP[c.crop].n} (${esc(L[0].bed)}): ${bad?'liever niet naast elkaar.':'gaan goed samen.'}`});
+  }});
+  if(!out.length)return '';
+  out.sort((x,y)=>y.bad-x.bad);
+  return `<section class="card"><div class="sec-h"><h3>Buren in je tuin</h3></div>${out.slice(0,8).map(o=>`<div class="row" style="padding:4px 0"><span class="pill" style="--pc:var(${o.bad?'--c-oogst':'--c-buiten'})">${o.bad?'Let op':'Goed'}</span><span class="grow1 small">${o.t}</span></div>`).join('')}<p class="small muted" style="margin:6px 0 0">Alleen combinaties die een Nederlandse bron noemt, gebaseerd op de plek die je bij elke plant invult.</p></section>`;
+}
+const byName=(a,b)=>a.n.localeCompare(b.n,'nl');
+function gridHTML(){
+  const q=(S.q||'').trim().toLowerCase(),L=[...CROPS].sort(byName).filter(c=>c.n.toLowerCase().includes(q));
+  return L.length?L.map(c=>`<button class="crop" data-a="crop" data-id="${c.id}"><div class="pp" data-auto="${c.id}">${plantSVG(c,4)}</div><h3>${c.n}</h3><span class="small muted">Zaaien: ${ranges(c,['binnen','glas','buiten'])}<br>Oogst: ${ranges(c,['oogst'])}</span><span class="seedrow"><span class="seedlink" role="button" data-a="seed" data-id="${c.id}">Zaad zoeken</span><span class="seedlink plant" role="button" data-a="add" data-id="${c.id}">+ Planten</span></span></button>`).join(''):`<p class="muted">Geen gewas gevonden voor "${esc(S.q)}".</p>`;
+}
+function vGewassen(){
+  return `<div class="stack"><div class="row"><h2 class="grow1">Gewassen</h2><span class="muted small">${CROPS.length} gewassen</span></div><div class="field" style="margin:0"><label for="q">Zoek een gewas</label><input id="q" type="search" value="${esc(S.q||'')}" placeholder="Bijvoorbeeld tomaat" autocomplete="off"></div><div class="grid" id="grid">${gridHTML()}</div></div>`;
+}
+function ganttOf(p,ev){
+  const seq=ev.filter(e=>e.k!='kiem'),t0=ev[0].dt,end=seq[seq.length-1].end,tot=Math.max(1,diff(t0,end));
+  const segs=seq.map((e,i)=>{const to=seq[i+1]?seq[i+1].dt:e.end,w=Math.max(0,diff(e.dt,to))/tot*100,col=e.k=='zaai'?ACT[p.method].c:ACT[e.k].c;return `<i style="width:${w.toFixed(2)}%;--sc:var(${col})"></i>`}).join('');
+  const pos=Math.max(0,Math.min(100,diff(t0,TODAY)/tot*100));
+  return `<div class="gantt" role="img" aria-label="Tijdlijn van zaaien tot einde oogst">${segs}<span class="t" style="left:calc(${pos.toFixed(1)}% - 1.5px)"></span></div>`;
+}
+function plantCard(p){
+  const c=CROP[p.crop],ev=timeline(p),st=stageOf(p),t=diff(parse(p.date),TODAY);
+  const firstOpen=ev.findIndex(e=>TODAY<=(e.end||e.dt));
+  let steps='';
+  ev.forEach((e,i)=>{
+    const over=TODAY>(e.end||e.dt),cls=over?'done':i==firstOpen?'now':'';
+    const dt=e.end?`${fmt(e.dt)} – ${fmt(e.end)}`:fmt(e.dt);
+    const sub=i==firstOpen&&!over?` <span class="muted small">· ${e.end&&TODAY>=e.dt?'nu bezig':rel(diff(TODAY,e.dt))}</span>`:'';
+    steps+=`<li class="${cls}"><span class="dot">${over?'✓':''}</span><span><b>${e.l}</b><br><span class="small">${dt}</span>${sub}</span></li>`;
+  });
+  const status=firstOpen<0?'Seizoen afgerond':t<0?`Zaaien op ${fmt(parse(p.date))}`:`Dag ${t+1} · ${STAGE_NAMES[st].toLowerCase()}`;
+  return `<article class="card plant-card${S.newId==p.id?' pop':''}"><div class="plant-head"><div class="pp">${plantSVG(c,Math.max(0,st))}</div><div class="grow1"><h3>${dot(p)}${nm(p)}${p.ex?' <span class="pill" style="--pc:var(--muted)">voorbeeld</span>':''}</h3><div class="small muted">${p.bed?esc(p.bed)+' · ':''}${METHODS[p.method]} op ${fmt(parse(p.date))}${S.shared&&p.by?' · door '+esc(whoName(p.by)):''}</div><div class="small"><b>${status}</b></div></div><div class="del row"><button class="btn sm ghost" data-a="edit" data-id="${p.id}">Wijzigen</button><button class="btn sm ghost" data-a="del" data-id="${p.id}">${S.confirm==p.id?'Zeker weten?':'Verwijderen'}</button></div></div>${ganttOf(p,ev)}<ol class="steps">${steps}</ol></article>`;
+}
+function upcoming(){
+  const L=[];
+  S.plantings.forEach(p=>timeline(p).forEach(e=>{
+    if(e.k=='zaai'||e.k=='kiem')return;
+    const act=e.end&&e.dt<=TODAY&&e.end>=TODAY,soon=e.dt>=TODAY&&diff(TODAY,e.dt)<=30;
+    if(act||soon)L.push({dt:act?TODAY:e.dt,p,e,act});
+  }));
+  L.sort((a,b)=>a.dt-b.dt);
+  const rows=L.slice(0,8).map(x=>`<div class="row" style="padding:6px 0"><b style="min-width:62px">${x.act?'Nu':fmt(x.dt)}</b><span class="pill" style="--pc:var(${ACT[x.e.k].c})">${ACT[x.e.k].n}</span><span class="grow1">${dot(x.p)}${nm(x.p)}</span></div>`).join('');
+  return `<section class="card"><div class="sec-h"><h3>Komende 30 dagen</h3></div>${rows||'<p class="muted" style="margin:0">Geen taken de komende 30 dagen.</p>'}</section>`;
+}
+function samenCard(){
+  if(!S.shared)return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="muted small" style="margin:0">Samen tuinieren werkt hier nog niet. Je tuin staat alleen op dit apparaat.</p></section>`;
+  const ids=[...new Set(S.plantings.map(p=>p.by).filter(Boolean))];
+  const who=ids.length?ids.map(i=>`<span class="pill" style="--pc:var(--muted)">${esc(S.names[i]||'iemand')}${i==S.me?' (jij)':''}</span>`).join(' '):'';
+  const mig=S.local&&S.local.length&&!S.plantings.length?`<button class="btn sm" data-a="migrate">Mijn ${S.local.length} lokale planten meenemen</button>`:'';
+  return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="small" style="margin:0 0 8px">Deze tuin wordt gedeeld: wie je uitnodigt ziet en bewerkt dezelfde planten, direct.</p><p class="muted small" style="margin:0 0 8px"><b>Uitnodigen:</b> kies bovenaan in Claude <b>Delen</b>, voeg de ander toe en geef bewerkrechten. Met alleen kijkrechten kan iemand meekijken maar niets wijzigen.</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap">${who}</div>`:''}${mig}</section>`;
+}
+function vTuin(){
+  let h=`<div class="stack"><div class="row"><h2 class="grow1">Mijn tuin</h2><button class="btn" data-a="add">+ Gewas planten</button></div>`;
+  if(!S.plantings.length)return h+`<div class="card empty"><b>Je tuin is nog leeg.</b><p class="muted">Voeg een gewas toe en zie direct wanneer je moet verpotten, uitplanten en oogsten.</p></div>${samenCard()}</div>`;
+  h+=upcoming()+neighbourCard()+samenCard();
+  const sorted=[...S.plantings].sort((a,b)=>a.date<b.date?1:-1);
+  sorted.forEach(p=>h+=plantCard(p));
+  return h+`<div class="ad">Hier komt later een advertentie (AdMob in de Android-app).</div></div>`;
+}
+function render(){
+  $('#main').innerHTML=S.view=='maand'?vMaand():S.view=='gewassen'?vGewassen():vTuin();
+  $$('.tab').forEach(b=>b.setAttribute('aria-current',b.dataset.view==S.view?'page':'false'));
+}
+
+/* ---- Bladen (sheets) ---- */
+let playT=null;
+function openSheet(html){$('#sh-body').innerHTML=html;$('#ov').hidden=false;$('#sh-close').focus();$('.sheet').scrollTop=0}
+function closeSheet(){$('#ov').hidden=true;clearInterval(playT);playT=null}
+function yearChart(c){
+  const st=stepsOf(c),types=Object.keys(ACT).filter(t=>st.some(x=>x.t==t)).sort((a,b)=>ACT[a].o-ACT[b].o);
+  const dim=[31,28,31,30,31,30,31,31,30,31,30,31],np=((doy(TODAY)-.5)/365*100).toFixed(1);
+  return `<div class="yc"><div class="yc-h"><span></span><div class="months">${dim.map((d,i)=>`<span style="--d:${d}">${'JFMAMJJASOND'[i]}</span>`).join('')}</div></div>`+types.map(t=>`<div class="yr"><span>${ACT[t].s}</span><div class="yt">${st.filter(x=>x.t==t).map(x=>`<i class="bar" style="left:${((x.a-1)/52*100).toFixed(1)}%;width:${((x.b-x.a+1)/52*100).toFixed(1)}%;--bc:var(${ACT[t].c})"></i>`).join('')}<i class="now" style="left:${np}%"></i></div></div>`).join('')+`</div>`;
+}
+function openCrop(id){
+  const c=CROP[id];
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">${c.n}</h2><div class="bigplant"><div class="pp" id="bigp">${plantSVG(c,4)}</div></div><div class="stages" role="group" aria-label="Groeistadium">${STAGE_NAMES.map((n,i)=>`<button data-a="stage" data-s="${i}" data-id="${id}" aria-pressed="${i==4}">${n}</button>`).join('')}<button data-a="play" data-id="${id}">▶ Afspelen</button></div><p>${c.tip}</p>${careHTML(id)}<h3 style="margin-top:14px">Het hele jaar</h3>${yearChart(c)}<p class="small muted">De streep geeft vandaag aan.</p><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="add" data-id="${id}">Planten in mijn tuin</button><button class="btn ghost" data-a="seed" data-id="${id}">Zaad zoeken</button></div>`);
+}
+function setStage(id,s){
+  $('#bigp').innerHTML=plantSVG(CROP[id],s);
+  $$('.stages [data-s]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.s==s)));
+}
+function openAdd(id,m){
+  const c=CROP[id||'tomaat'];
+  openSheet(`<h2 id="sh-title" style="padding-right:48px;margin-bottom:14px">Gewas planten</h2><form id="addf"><div class="field"><label for="f-crop">Gewas</label><select id="f-crop">${[...CROPS].sort(byName).map(x=>`<option value="${x.id}"${x.id==c.id?' selected':''}>${x.n}</option>`).join('')}</select></div><div class="field"><label for="f-method">Zaaimethode</label><select id="f-method"></select></div><div class="field"><label for="f-date">Datum van zaaien of poten</label><input type="date" id="f-date" required value="${iso(TODAY)}"></div><div class="field"><label for="f-label">Herkenning (optioneel)</label><input id="f-label" maxlength="30" placeholder="Bijvoorbeeld Roma of Rij 2"><span class="small muted" id="f-hint"></span></div><div class="field"><label for="f-bed">Plek (optioneel)</label><input id="f-bed" maxlength="30" placeholder="Bijvoorbeeld Bak 1"></div><div class="row"><button class="btn" type="submit">Toevoegen</button><button class="btn ghost" type="button" data-a="close">Annuleren</button></div></form>`);
+  const fill=pref=>{const cc=CROP[$('#f-crop').value];$('#f-method').innerHTML=methodsOf(cc).map(t=>`<option value="${t}"${t==pref?' selected':''}>${METHODS[t]}</option>`).join('')};
+  const hint=()=>{const cc=CROP[$('#f-crop').value],n=S.plantings.filter(x=>x.crop==cc.id).length;$('#f-hint').textContent=n?`Je hebt al ${n} ${cc.n.toLowerCase()} in je tuin. Geef deze een eigen naam, zoals de variëteit of de rij. Laat je het leeg, dan wordt het #${n+1}.`:''};
+  fill(m);hint();$('#f-crop').onchange=()=>{fill();hint()};
+  $('#addf').onsubmit=e=>{
+    e.preventDefault();
+    const cid=$('#f-crop').value,n=S.plantings.filter(x=>x.crop==cid).length;
+    S.plantings.push({id:'p'+Date.now()+Math.random().toString(36).slice(2,6),crop:cid,method:$('#f-method').value,date:$('#f-date').value,label:$('#f-label').value.trim()||(n?'#'+(n+1):''),bed:$('#f-bed').value.trim(),by:S.me||''});
+    save();dbSet(S.plantings[S.plantings.length-1]);closeSheet();S.view='tuin';S.newId=S.plantings[S.plantings.length-1].id;render();scrollTo(0,0);plantFx(CROP[cid]);setTimeout(()=>{S.newId=null;$$('.plant-card.pop').forEach(x=>x.classList.remove('pop'))},9000);
+  };
+}
+
+function plantFx(c){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const el=document.createElement('div');el.className='fx';el.setAttribute('role','status');el.innerHTML=fxHTML(c);
+  const bye=()=>{el.classList.add('out');setTimeout(()=>el.remove(),400)};
+  el.addEventListener('click',bye);document.body.appendChild(el);setTimeout(bye,5600);
+}
+function openEdit(id){
+  const p=S.plantings.find(x=>x.id==id);if(!p)return;
+  openSheet(`<h2 id="sh-title" style="padding-right:48px;margin-bottom:14px">${CROP[p.crop].n} aanpassen</h2><form id="editf"><div class="field"><label for="e-date">Datum van zaaien of poten</label><input type="date" id="e-date" required value="${esc(p.date)}"></div><div class="field"><label for="e-label">Herkenning</label><input id="e-label" maxlength="30" value="${esc(p.label||'')}" placeholder="Bijvoorbeeld Roma of Rij 2"></div><div class="field"><label for="e-bed">Plek</label><input id="e-bed" maxlength="30" value="${esc(p.bed||'')}"></div><div class="row"><button class="btn" type="submit">Opslaan</button><button class="btn ghost" type="button" data-a="close">Annuleren</button></div></form>`);
+  $('#editf').onsubmit=e=>{e.preventDefault();if($('#e-date').value)p.date=$('#e-date').value;p.label=$('#e-label').value.trim();p.bed=$('#e-bed').value.trim();save();dbSet(p);closeSheet();render()};
+}
+
+/* ---- Events ---- */
+document.addEventListener('click',e=>{
+  if(e.target.id=='ov'){closeSheet();return}
+  const tab=e.target.closest('.tab');
+  if(tab){S.view=tab.dataset.view;S.confirm=null;render();scrollTo(0,0);return}
+  const t=e.target.closest('[data-a]');if(!t)return;
+  const a=t.dataset.a,id=t.dataset.id;
+  if(a=='close')closeSheet();
+  else if(a=='mprev'){S.m--;if(S.m<0){S.m=11;S.y--}render()}
+  else if(a=='mnext'){S.m++;if(S.m>11){S.m=0;S.y++}render()}
+  else if(a=='fminus'||a=='fplus'){S.frost=Math.max(14,Math.min(26,S.frost+(a=='fplus'?1:-1)));save();dbFrost();render()}
+  else if(a=='crop')openCrop(id);
+  else if(a=='seed')openSeed(id);
+  else if(a=='add')openAdd(id,t.dataset.m);
+  else if(a=='edit')openEdit(id);
+  else if(a=='stage'){clearInterval(playT);setStage(id,+t.dataset.s)}
+  else if(a=='play'){
+    clearInterval(playT);let s=0;setStage(id,0);
+    playT=setInterval(()=>{s++;if(s>4){clearInterval(playT);return}setStage(id,s)},1100);
+  }
+  else if(a=='migrate'){(S.local||[]).forEach(p=>{const q=Object.assign({},p,{by:S.me||''});dbSet(q)});S.local=[]}
+  else if(a=='del'){
+    if(S.confirm==id){S.plantings=S.plantings.filter(p=>p.id!=id);S.confirm=null;save();dbDel(id)}else S.confirm=id;
+    render();
+  }
+});
+document.addEventListener('input',e=>{if(e.target.id=='q'){S.q=e.target.value;$('#grid').innerHTML=gridHTML()}});
+$('#sh-close').onclick=closeSheet;
+document.addEventListener('keydown',e=>{if(e.key=='Escape'&&!$('#ov').hidden)closeSheet()});
+
+/* ---- Start ---- */
+$('#today').textContent=`${cap(DAGN[TODAY.getDay()])} ${TODAY.getDate()} ${MND[TODAY.getMonth()]} · week ${weekOf(TODAY)}`;
+const MASCOT=`<svg class="pl" viewBox="0 0 120 124" role="img" aria-label="Kiempje, de mascotte van Sowly"><ellipse class="mshadow" cx="60" cy="114" rx="30" ry="6" style="fill:#000;stroke:none;opacity:.28"/><g class="mbody mz"><path class="marmL" d="M38 84 C26 86 20 78 22 70 C30 70 36 74 40 80Z" style="fill:var(--leaf)"/><path class="marmR" d="M82 84 C94 86 100 78 98 70 C90 70 84 74 80 80Z" style="fill:var(--leaf)"/><path d="M26 112 C22 92 34 60 60 60 C86 60 98 92 94 112 C80 118 40 118 26 112Z" style="fill:var(--leaf3)"/><path d="M30 106 C40 112 80 112 90 106" style="fill:none;stroke:var(--soil);stroke-width:7"/><path d="M24 114 C34 106 86 106 96 114 C86 120 34 120 24 114Z" style="fill:var(--soil)"/><g class="mhead"><path d="M60 62 C60 52 59 46 60 38" style="fill:none;stroke-width:4"/><path class="mleafL" d="M60 42 C46 44 32 36 30 22 C46 20 58 28 60 42Z" style="fill:var(--leaf)"/><path class="mleafR" d="M60 42 C74 40 90 32 92 18 C76 16 62 26 60 42Z" style="fill:var(--leaf2)"/><path class="vein" d="M58 40 C50 34 42 28 36 24"/><path class="vein" d="M62 40 C70 32 80 26 88 20"/></g><circle cx="48" cy="80" r="9" style="fill:#fff"/><circle cx="72" cy="80" r="9" style="fill:#fff"/><g class="mpupil"><circle cx="50" cy="81" r="4.6" style="fill:var(--line);stroke:none"/><circle cx="51.6" cy="79.2" r="1.5" style="fill:#fff;stroke:none"/><g class="mwink"><circle cx="74" cy="81" r="4.6" style="fill:var(--line);stroke:none"/><circle cx="75.6" cy="79.2" r="1.5" style="fill:#fff;stroke:none"/></g></g><ellipse cx="38" cy="93" rx="5" ry="3.2" style="fill:#F4958C;stroke:none;opacity:.8"/><ellipse cx="82" cy="93" rx="5" ry="3.2" style="fill:#F4958C;stroke:none;opacity:.8"/><path d="M52 93 Q60 102 68 93Z" style="fill:#B3392F;stroke-width:2.2"/></g><path class="mheart" d="M92 42 C86 36 80 42 92 52 C104 42 98 36 92 42Z" style="fill:var(--radish);stroke-width:2"/></svg>`;
+$('#mascot').innerHTML=MASCOT;
+$('#mascot').addEventListener('click',function(){this.classList.remove('jump');void this.offsetWidth;this.classList.add('jump');setTimeout(()=>this.classList.remove('jump'),950)});
+render();startShared();
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  let tick=0;
+  setInterval(()=>{tick++;$$('[data-auto]').forEach((el,i)=>{el.innerHTML=plantSVG(CROP[el.dataset.auto],(tick+i)%5)})},2400);
+}
+})();
+
+</script>
+</body>
+</html>

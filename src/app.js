@@ -232,7 +232,7 @@ function accountCard(){
   if(!S.shared)return `<section class="card"><div class="sec-h"><h3>Account</h3></div><p class="small" style="margin:0 0 10px">${C.err||'Je online tuin wordt geopend…'}</p><a href="#" class="small" data-a="logout">Uitloggen</a></section>`;
   const own=C.role=='owner',gs=Object.entries(C.gardens);
   const sel=gs.length>1?`<div class="field"><label for="g-sel">Tuin</label><select id="g-sel">${gs.map(([g,n])=>`<option value="${g}"${g==C.gid?' selected':''}>${esc(n)}</option>`).join('')}</select></div>`:'';
-  const who=C.members.map(m=>`<span class="pill" style="--pc:var(--muted)">${esc(m.name||'iemand')}${m.uid==S.me?' (jij)':''} · ${ROLE[m.role]||''}${own&&m.uid!=S.me?` <button class="linkbtn" data-a="kick" data-id="${m.uid}" aria-label="${esc(m.name||'iemand')} uit je tuin halen">${S.confirm=='kick:'+m.uid?'zeker?':'×'}</button>`:''}</span>`).join(' ');
+  const who=C.members.map(m=>`<span class="pill soft">${esc(m.name||'iemand')}${m.uid==S.me?' (jij)':''} · ${ROLE[m.role]||''}${own&&m.uid!=S.me?` <button class="linkbtn" data-a="kick" data-id="${m.uid}" aria-label="${esc(m.name||'iemand')} uit je tuin halen">${S.confirm=='kick:'+m.uid?'zeker?':'×'}</button>`:''}</span>`).join(' ');
   const intro=own?'Dit is jouw tuin. Nodig iemand uit om mee te kijken of mee te werken.':C.role=='edit'?`Je werkt mee in <b>${esc(C.gname)}</b>.`:`Je kijkt mee in <b>${esc(C.gname)}</b>. Aanpassen kan alleen de eigenaar of wie meewerkt.`;
   return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div>${sel}<p class="small" style="margin:0 0 8px">${intro}</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:10px">${who}</div>`:''}<div class="row" style="gap:8px;flex-wrap:wrap">${own?'<button class="btn sm" data-a="invite">Iemand uitnodigen</button>':`<button class="btn sm ghost" data-a="leave">${S.confirm=='leave'?'Zeker weten?':'Deze tuin verlaten'}</button>`}</div><p class="small muted" style="margin:12px 0 0">Ingelogd als ${esc(myName())}${C.user.email?' ('+esc(C.user.email)+')':''}. <a href="#" data-a="logout">Uitloggen</a></p></section>`;
 }
@@ -310,7 +310,7 @@ function seedList(){
 }
 function zaadCard(){
   const L=seedList();if(!L.length)return '';
-  return `<section class="card"><div class="sec-h"><h3>Zaad halen voor de komende weken</h3><span class="pill" style="--pc:var(--muted)">voorbeeld</span></div>${L.map(({c,gap,a})=>`<div class="task"><div class="task-main" style="cursor:default">${taskPlant(c,3)}<span><b>${c.n}</b><span class="muted small">${gap?`zaaien vanaf ${fmt(dateOfDoy(Y0,(a-1)*7+1))}`:'nu zaaien'}</span></span></div><button class="btn sm" data-a="seed" data-id="${c.id}">Zaad zoeken</button></div>`).join('')}<p class="muted small" style="margin:8px 0 0">Links naar webwinkels zijn affiliate-links: de planner krijgt een kleine vergoeding als je koopt. Dat kost jou niets extra.</p></section>`;
+  return `<section class="card"><div class="sec-h"><h3>Zaad halen voor de komende weken</h3><span class="pill soft">voorbeeld</span></div>${L.map(({c,gap,a})=>`<div class="task"><div class="task-main" style="cursor:default">${taskPlant(c,3)}<span><b>${c.n}</b><span class="muted small">${gap?`zaaien vanaf ${fmt(dateOfDoy(Y0,(a-1)*7+1))}`:'nu zaaien'}</span></span></div><button class="btn sm" data-a="seed" data-id="${c.id}">Zaad zoeken</button></div>`).join('')}<p class="muted small" style="margin:8px 0 0">Links naar webwinkels zijn affiliate-links: de planner krijgt een kleine vergoeding als je koopt. Dat kost jou niets extra.</p></section>`;
 }
 function openSeed(id){
   const c=CROP[id];
@@ -390,7 +390,7 @@ function plantCard(p){
     steps+=`<li class="${cls}"><span class="dot">${over?'✓':''}</span><span><b>${e.l}</b><br><span class="small">${dt}</span>${sub}</span></li>`;
   });
   const status=firstOpen<0?'Seizoen afgerond':t<0?`Zaaien op ${fmt(parse(p.date))}`:`Dag ${t+1} · ${STAGE_NAMES[st].toLowerCase()}`;
-  return `<article class="card plant-card${S.newId==p.id?' pop':''}"><div class="plant-head"><div class="pp">${plantSVG(c,Math.max(0,st))}</div><div class="grow1"><h3>${dot(p)}${nm(p)}${p.ex?' <span class="pill" style="--pc:var(--muted)">voorbeeld</span>':''}</h3><div class="small muted">${p.bed?esc(p.bed)+' · ':''}${METHODS[p.method]} op ${fmt(parse(p.date))}${S.shared&&p.by?' · door '+esc(whoName(p.by)):''}</div><div class="small"><b>${status}</b></div></div><div class="del row"><button class="btn sm ghost" data-a="edit" data-id="${p.id}">Wijzigen</button><button class="btn sm ghost" data-a="del" data-id="${p.id}">${S.confirm==p.id?'Zeker weten?':'Verwijderen'}</button></div></div>${ganttOf(p,ev)}<ol class="steps">${steps}</ol></article>`;
+  return `<article class="card plant-card${S.newId==p.id?' pop':''}"><div class="plant-head"><div class="pp">${plantSVG(c,Math.max(0,st))}</div><div class="grow1"><h3>${dot(p)}${nm(p)}${p.ex?' <span class="pill soft">voorbeeld</span>':''}</h3><div class="small muted">${p.bed?esc(p.bed)+' · ':''}${METHODS[p.method]} op ${fmt(parse(p.date))}${S.shared&&p.by?' · door '+esc(whoName(p.by)):''}</div><div class="small"><b>${status}</b></div></div><div class="del row"><button class="btn sm ghost" data-a="edit" data-id="${p.id}">Wijzigen</button><button class="btn sm ghost" data-a="del" data-id="${p.id}">${S.confirm==p.id?'Zeker weten?':'Verwijderen'}</button></div></div>${ganttOf(p,ev)}<ol class="steps">${steps}</ol></article>`;
 }
 function upcoming(){
   const L=[];
@@ -443,7 +443,7 @@ function samenCard(){
   if(hasFB())return accountCard();
   if(!S.shared)return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="muted small" style="margin:0">Opslaan en samen tuinieren werken hier niet. Wat je toevoegt, ben je kwijt als je de pagina sluit.</p></section>`;
   const ids=[...new Set(S.plantings.map(p=>p.by).filter(Boolean))];
-  const who=ids.length?ids.map(i=>`<span class="pill" style="--pc:var(--muted)">${esc(S.names[i]||'iemand')}${i==S.me?' (jij)':''}</span>`).join(' '):'';
+  const who=ids.length?ids.map(i=>`<span class="pill soft">${esc(S.names[i]||'iemand')}${i==S.me?' (jij)':''}</span>`).join(' '):'';
   return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="small" style="margin:0 0 8px">Deze tuin wordt gedeeld: wie je uitnodigt ziet en bewerkt dezelfde planten, direct.</p><p class="muted small" style="margin:0 0 8px"><b>Uitnodigen:</b> kies bovenaan in Claude <b>Delen</b>, voeg de ander toe en geef bewerkrechten. Met alleen kijkrechten kan iemand meekijken maar niets wijzigen.</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap">${who}</div>`:''}</section>`;
 }
 function vTuin(){

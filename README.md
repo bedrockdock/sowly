@@ -48,7 +48,7 @@ Zet de inhoud van `docs/` online. Alle drie de opties werken met dezelfde bestan
 
 `docs/` bevat een manifest en iconen, dus je kunt Sowly op het beginscherm zetten. Hij opent dan zonder adresbalk, als een app.
 
-In Mijn tuin staat de knop **Als app**. Op Android en in Chrome of Edge op de computer opent die de installatievraag van de browser. Op iPhone en iPad toont hij de stappen hieronder, want daar kan een website dat niet zelf. De knop verdwijnt als Sowly al als app draait, en op toestellen waar het niet kan.
+In Mijn tuin staat de knop **Installeer Sowly-app**. Op Android en in Chrome of Edge op de computer opent die de installatievraag van de browser. Op iPhone en iPad toont hij de stappen hieronder, want daar kan een website dat niet zelf. De knop verdwijnt als Sowly al als app draait, en op toestellen waar het niet kan.
 
 - **Android (Chrome):** menu ⋮ → **App installeren** of **Toevoegen aan startscherm**. Chrome biedt het soms ook zelf aan.
 - **iPhone en iPad:** iOS vraagt het nooit zelf. In Safari: **Deel**-knop → **Zet op beginscherm**. Sinds iOS 16.4 kan dat ook vanuit Chrome en Edge via hun Deel-menu.

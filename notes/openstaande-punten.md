@@ -60,6 +60,10 @@ Gedaan: alle weken staan relatief aan week 20, er is een verschuiving (`shift`) 
 ## Android
 - [ ] Android-app via Capacitor met AdMob (Play Store kost een eenmalig bedrag voor een ontwikkelaarsaccount).
 
+## Mijn tuin
+- [x] **Jaarplanning als pdf** (24 oktober 2026): knop bij Mijn tuin, kies een jaar, printvenster van de browser (Opslaan als pdf). A4 liggend: per plant een balk over twaalf maanden, daarna per maand een afvinklijst. Geen extra bibliotheek.
+- [ ] Jaarplanning testen op een echte iPhone en Android-telefoon (printvenster en Opslaan als pdf).
+
 ## Kleine punten
 - [ ] Knoppen "Zaad zoeken" en "+ Planten" op één lijn in de gewassenlijst.
 - [ ] Grotere plaatjes bij Deze maand en de nieuwe mascotte controleren op een echte telefoon.

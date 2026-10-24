@@ -403,6 +403,42 @@ function upcoming(){
   const rows=L.slice(0,8).map(x=>`<div class="row" style="padding:6px 0"><b style="min-width:62px">${x.act?'Nu':fmt(x.dt)}</b><span class="pill" style="--pc:var(${ACT[x.e.k].c})">${ACT[x.e.k].n}</span><span class="grow1">${dot(x.p)}${nm(x.p)}</span></div>`).join('');
   return `<section class="card"><div class="sec-h"><h3>Komende 30 dagen</h3></div>${rows||'<p class="muted" style="margin:0">Geen taken de komende 30 dagen.</p>'}</section>`;
 }
+/* ---- Jaarplanning om uit te printen of als pdf op te slaan (printvenster van de browser) ---- */
+const mine=()=>S.plantings.filter(p=>!p.ex);
+const planEv=p=>timeline(p).filter(e=>e.k!='kiem');
+function planYears(){
+  const ys=new Set();mine().forEach(p=>planEv(p).forEach(e=>{ys.add(e.dt.getFullYear());if(e.end)ys.add(e.end.getFullYear())}));
+  return [...ys].sort().slice(-4);
+}
+function yearPlanHTML(y){
+  const y0=new Date(y,0,1,12),y1=new Date(y,11,31,12),len=diff(y0,y1)+1;
+  const pct=d=>(Math.max(0,Math.min(len,diff(y0,d)))/len*100).toFixed(2);
+  const dim=[...Array(12)].map((_,i)=>new Date(y,i+1,0).getDate());
+  const track=bars=>`<div class="jp-t">${dim.map(d=>`<span style="--d:${d}"></span>`).join('')}${bars}</div>`;
+  const used=new Set(),rows=[],todo=[...Array(12)].map(()=>[]);
+  mine().map(p=>({p,ev:planEv(p)})).sort((a,b)=>a.ev[0].dt-b.ev[0].dt).forEach(({p,ev})=>{
+    /* Balk: van elke stap tot de volgende, net als de tijdlijn op de plantkaart */
+    const bars=ev.map((e,i)=>{const to=ev[i+1]?ev[i+1].dt:e.end;if(!to||to<y0||e.dt>y1)return '';const col=e.k=='zaai'?ACT[p.method].c:ACT[e.k].c;used.add(e.k=='zaai'?p.method:e.k);
+      return `<i style="left:${pct(e.dt)}%;width:${(pct(to)-pct(e.dt)).toFixed(2)}%;--sc:var(${col})"></i>`}).join('');
+    if(bars)rows.push(`<div class="jp-r"><span><b>${nm(p)}</b>${p.bed?`<br><span class="jp-s">${esc(p.bed)}</span>`:''}</span>${track(bars)}</div>`);
+    ev.forEach(e=>{if(e.dt.getFullYear()==y)todo[e.dt.getMonth()].push({p,e})});
+  });
+  const legend=Object.keys(ACT).filter(k=>used.has(k)).sort((a,b)=>ACT[a].o-ACT[b].o).map(k=>`<span class="pill" style="--pc:var(${ACT[k].c})">${ACT[k].n}</span>`).join(' ');
+  const months=todo.map((L,m)=>L.length?`<section><h3>${cap(MND[m])}</h3><ul>${L.sort((a,b)=>a.e.dt-b.e.dt).map(({p,e})=>`<li><span class="jp-box"></span><span>${e.end?`${fmt(e.dt)} – ${fmt(e.end)}`:fmt(e.dt)}</span><span class="pill" style="--pc:var(${e.k=='zaai'?ACT[p.method].c:ACT[e.k].c})">${e.l}</span><span>${nm(p)}${p.bed?' · '+esc(p.bed):''}</span></li>`).join('')}</ul></section>`:'').join('');
+  const fd=dateOfDoy(y,S.frost*7-3);
+  return `<div class="jp"><h1>Jaarplanning ${y}</h1><p class="jp-s">${esc(C.gname||'Mijn tuin')} · laatste nachtvorst week ${S.frost} (rond ${fmt(fd)}) · gemaakt met Sowly op ${TODAY.getDate()} ${MND[TODAY.getMonth()]} ${Y0}</p><div class="jp-r jp-h"><span></span><div class="jp-t">${dim.map((d,i)=>`<span style="--d:${d}">${M3[i]}</span>`).join('')}</div></div>${rows.join('')}<p>${legend}</p><div class="jp-m"><h2>Per maand</h2>${months}</div><p class="jp-s">Zaaitijden zijn indicatief voor Nederland en België. Het zaadzakje blijft leidend.</p></div>`;
+}
+function openYear(){
+  const ys=planYears();
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">Jaarplanning</h2><p>Een overzicht van je tuin over het hele jaar, met per maand een afvinklijst voor in de tuin.</p><div class="row" style="gap:8px">${ys.map(y=>`<button class="btn" data-a="print" data-y="${y}">${y}</button>`).join('')}</div><p class="small muted" style="margin-top:12px">Je browser opent het printvenster. Kies daar <b>Opslaan als pdf</b> voor een pdf, of print direct.</p>`);
+}
+function printYear(y){
+  const el=$('#print'),t=document.title;
+  el.innerHTML=yearPlanHTML(y);closeSheet();
+  document.title='Sowly jaarplanning '+y;/* wordt de bestandsnaam van de pdf */
+  addEventListener('afterprint',()=>{document.title=t;el.innerHTML=''},{once:true});
+  try{print()}catch(e){toast('Printen lukt hier niet. Open Sowly in je browser.')}
+}
 function samenCard(){
   if(hasFB())return accountCard();
   if(!S.shared)return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="muted small" style="margin:0">Opslaan en samen tuinieren werken hier niet. Wat je toevoegt, ben je kwijt als je de pagina sluit.</p></section>`;
@@ -411,7 +447,7 @@ function samenCard(){
   return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="small" style="margin:0 0 8px">Deze tuin wordt gedeeld: wie je uitnodigt ziet en bewerkt dezelfde planten, direct.</p><p class="muted small" style="margin:0 0 8px"><b>Uitnodigen:</b> kies bovenaan in Claude <b>Delen</b>, voeg de ander toe en geef bewerkrechten. Met alleen kijkrechten kan iemand meekijken maar niets wijzigen.</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap">${who}</div>`:''}</section>`;
 }
 function vTuin(){
-  let h=`<div class="stack"><div class="row"><h2 class="grow1">Mijn tuin</h2>${canEdit()?'<button class="btn" data-a="add">+ Gewas planten</button>':''}</div>`;
+  let h=`<div class="stack"><div class="row"><h2 class="grow1" style="white-space:nowrap;flex:1 0 auto">Mijn tuin</h2>${canEdit()?'<button class="btn" data-a="add">+ Gewas planten</button>':''}${S.shared&&mine().length?'<button class="btn sm ghost" data-a="year">Jaarplanning</button>':''}</div>`;
   /* Bovenaan: inloggen of het e-mailadres bevestigen, zolang er nog niets online staat */
   const top=hasFB()&&!S.shared&&(!C.fb||!C.user||!C.user.emailVerified);
   if(top)h+=samenCard();
@@ -492,6 +528,8 @@ document.addEventListener('click',e=>{
     clearInterval(playT);let s=0;setStage(id,0);
     playT=setInterval(()=>{s++;if(s>4){clearInterval(playT);return}setStage(id,s)},1100);
   }
+  else if(a=='year')openYear();
+  else if(a=='print')printYear(+t.dataset.y);
   else if(a=='login')openLogin(t.dataset.m||'in');
   else if(a=='google')google();
   else if(a=='verified')checkVerified(false).catch(()=>toast('Controleren lukte niet. Probeer het opnieuw.'));

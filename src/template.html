@@ -187,6 +187,31 @@ button{cursor:pointer}
 .plant-card.pop{animation:pulse 1s ease-out 4.9s 3}
 @media (prefers-reduced-motion:reduce){.mbody,.mhead,.mleafL,.mleafR,.marmL,.marmR,.mwink,.mpupil,.mheart,.mshadow,.mascot.jump .mbody{animation:none}.fx{display:none}.sway,.grow,.eyes,.lf,.lb,.now .dot,.sheet{animation:none}}
 @media (max-width:420px){.plant-head{grid-template-columns:72px minmax(0,1fr)}.plant-head .del{grid-column:1/-1}}
+/* Jaarplanning: alleen op papier of in de pdf (zie printYear in app.js) */
+#print{display:none}
+@media print{
+@page{size:A4 landscape;margin:12mm}
+html,body{background:#fff!important}
+body>:not(#print){display:none!important}
+#print{display:block;color:#1D3221;font:9pt/1.35 var(--body);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+.jp h1{font:700 18pt var(--head);margin:0}
+.jp h2{font:700 14pt var(--head);margin:0 0 3mm;column-span:all}
+.jp .jp-s{color:#47664C;font-size:8pt;margin:0 0 4mm}
+.jp-r{display:grid;grid-template-columns:44mm minmax(0,1fr);gap:3mm;align-items:center;padding:1.5mm 0;border-bottom:1px solid #B5D6B8;break-inside:avoid}
+.jp-r .jp-s{margin:0}
+.jp-h{border-bottom:2px solid #2A3B2C;font:600 8pt var(--head);padding-top:0}
+.jp-t{position:relative;display:flex;min-height:5mm}
+.jp-t span{flex:var(--d);border-left:1px solid #D8EDD9;text-align:center}
+.jp-t span:last-of-type{border-right:1px solid #D8EDD9}
+.jp-t i{position:absolute;top:1mm;bottom:1mm;background:var(--sc);border-radius:1mm}
+.jp .pill{font-size:7.5pt;padding:.3mm 2.2mm}
+.jp-m{break-before:page;columns:2;column-gap:10mm}
+.jp-m section{break-inside:avoid;margin-bottom:4mm}
+.jp-m h3{font:600 11pt var(--head);margin:0 0 1mm;border-bottom:2px solid #2A3B2C}
+.jp-m ul{list-style:none;margin:0;padding:0}
+.jp-m li{display:grid;grid-template-columns:4mm 24mm auto minmax(0,1fr);gap:2mm;align-items:center;padding:.8mm 0;border-bottom:1px solid #D8EDD9}
+.jp-box{width:3mm;height:3mm;border:1.2px solid #2A3B2C;border-radius:.6mm}
 </style>
 <div class="app">
 <header class="top"><div class="mascot" id="mascot" aria-hidden="true"></div><div><h1>Sowly</h1><p class="sub" id="today"></p></div></header>
@@ -198,5 +223,6 @@ button{cursor:pointer}
 <button class="tab" data-view="gewassen"><svg viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6zM12 14c0-3 2-5 6-5 0 3-2 5-6 5z"/></svg><span>Gewassen</span></button>
 <button class="tab" data-view="tuin"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="7.5" height="7.5" rx="2"/><rect x="13" y="4" width="7.5" height="7.5" rx="2"/><rect x="3.5" y="13.5" width="7.5" height="7.5" rx="2"/><path d="M16.8 14v6.5M13.6 17.2h6.4"/></svg><span>Mijn tuin</span></button>
 </nav>
+<div id="print"></div>
 <div class="ov" id="ov" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title"><button class="x" id="sh-close" aria-label="Sluiten">×</button><div id="sh-body"></div></div></div>
 <script>

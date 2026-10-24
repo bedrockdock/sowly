@@ -2,7 +2,7 @@
 
 Moestuinplanner voor Nederland en België (later internationaal). Je ziet per maand wat je moet zaaien, verpotten, uitplanten en oogsten, houdt je eigen tuin bij met een tijdlijn per gewas, en er zijn tekenfilmplanten met animaties.
 
-Zonder eigen server: één HTML-bestand met lokale opslag (`localStorage`). Wie inlogt, krijgt een online tuin via Firebase (zie `src/cloud.js` en `firestore.rules`). Mascotte: Kiempje.
+Zonder eigen server: één HTML-bestand. Je tuin opslaan kan alleen na inloggen, in een online tuin via Firebase (zie `src/cloud.js` en `firestore.rules`); de tuin staat niet in `localStorage`. Mascotte: Kiempje.
 
 ## Snel starten
 
@@ -44,7 +44,7 @@ Zet de inhoud van `docs/` online. Alle drie de opties werken met dezelfde bestan
 
 ## Wat anders werkt dan in Claude
 
-In Claude draait de app als gepubliceerde pagina met de database van Claude voor "samen tuinieren". In deze zelfstandige versie zijn die onderdelen er niet. De app merkt dat en valt terug op lokaal opslaan, zonder foutmelding. Samen tuinieren met een uitnodigingslink vraagt een eigen backend (voorstel: Firebase). Zie `notes/openstaande-punten.md`.
+In Claude draait de app als gepubliceerde pagina met de database van Claude voor "samen tuinieren". In de webversie (`docs/index.html`) loopt opslaan en samen tuinieren via Firebase, met uitnodigen via een link. Zie `notes/openstaande-punten.md`.
 
 `npm run build:artifact` maakt `dist/artifact.html`, de variant zonder `<html>`-kop zoals Claude die publiceert.
 

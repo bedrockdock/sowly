@@ -6,7 +6,7 @@ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelect
 const MND=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
 const M3=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 const DAGN=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
-const DAG=864e5, KEY='moestuin.v1';
+const DAG=864e5;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const cap=s=>s[0].toUpperCase()+s.slice(1);
 const mid=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate(),12);
@@ -24,13 +24,10 @@ const rel=n=>n<=0?'vandaag':n==1?'morgen':`over ${n} dagen`;
 
 /* ---- Staat ---- */
 const Y0=TODAY.getFullYear();
-const S={view:'maand',y:Y0,m:TODAY.getMonth(),frost:20,shift:0,plantings:null,confirm:null,shared:false,me:null,names:{},db:null,local:null};
-try{const j=JSON.parse(localStorage.getItem(KEY)||'null');if(j){S.frost=j.frost||20;S.plantings=j.plantings||[]}}catch(e){}
-if(S.plantings){
-  S.plantings.forEach(p=>{if(p.crop=='aardappel')p.crop=doy(parse(p.date))<=105?'aardappel-vroeg':'aardappel-laat'});
-  S.plantings=S.plantings.filter(p=>CROP[p.crop]);
-}
-if(!S.plantings){
+const S={view:'maand',y:Y0,m:TODAY.getMonth(),frost:20,shift:0,plantings:null,confirm:null,shared:false,me:null,names:{},db:null};
+/* Niets in localStorage: wie zijn cache leegt, zou zijn tuin kwijt zijn. Opslaan kan alleen online
+   (inloggen in de webversie, de database van Claude in Claude). Tot dan zie je voorbeeldplanten. */
+{
   const ago=n=>iso(addDays(TODAY,-n)),late=TODAY.getMonth()>=7;
   S.plantings=late?[
     {id:'v1',crop:'knoflook',method:'buiten',date:ago(7),bed:'Bak 1',ex:1},
@@ -40,9 +37,8 @@ if(!S.plantings){
     {id:'v2',crop:'sla',method:'buiten',date:ago(20),bed:'Bak 2',ex:1},
     {id:'v3',crop:'radijs',method:'buiten',date:ago(12),bed:'Bak 1',ex:1}];
 }
-const save=()=>{if(S.shared)return;try{localStorage.setItem(KEY,JSON.stringify({frost:S.frost,plantings:S.plantings}))}catch(e){}};
 
-/* ---- Samen tuinieren (gedeelde database, anders alleen lokaal) ---- */
+/* ---- Samen tuinieren (gedeelde database; zonder database wordt niets opgeslagen) ---- */
 const whoName=id=>id&&id==S.me?'jij':(S.names[id]||'iemand');
 const dbSet=p=>{if(S.shared&&S.db)S.db.doc('plantings/'+p.id).set({crop:p.crop,method:p.method,date:p.date,label:p.label||'',bed:p.bed||'',by:p.by||S.me||''}).catch(()=>{})};
 const dbDel=id=>{if(S.shared&&S.db)S.db.doc('plantings/'+id).delete().catch(()=>{})};
@@ -52,7 +48,6 @@ async function loadNames(){
     const ps=await u.profiles(ids);ids.forEach(i=>{if(ps[i]&&ps[i].name)S.names[i]=ps[i].name});render()}catch(e){}
 }
 function attach(db,onLost){
-  if(!S.shared)S.local=S.plantings.filter(p=>!p.ex);
   S.db=db;S.shared=true;
   return [
     db.collection('plantings').onSnapshot(snap=>{
@@ -75,7 +70,7 @@ async function startShared(){
               gardens/{gid} {owner, name, frost} met plantings/{id} en members/{uid} {role: owner|edit|view, name, invite?}
               invites/{code} {garden, gname, role, by}
    Wie wat mag: zie firestore.rules. */
-const C={fb:null,user:null,gid:null,gname:'',role:null,members:[],gardens:{},unsub:[],err:'',newName:''};
+const C={fb:null,user:null,gid:null,gname:'',role:null,members:[],gardens:{},unsub:[],err:'',newName:'',pend:null};
 const INV_KEY='sowly.uitnodiging';
 const hasFB=()=>typeof FB_CONFIG!='undefined'&&typeof claude=='undefined';
 const canEdit=()=>!C.fb||!S.shared||C.role!='view';
@@ -98,7 +93,7 @@ async function startCloud(){
   if(!hasFB())return;
   const inv=new URLSearchParams(location.search).get('uitnodiging');
   if(inv){try{localStorage.setItem(INV_KEY,inv)}catch(e){}history.replaceState(null,'',location.pathname)}
-  try{C.fb=await fbLoad()}catch(e){C.err='Inloggen is nu niet bereikbaar. Je tuin blijft op dit apparaat.';render();return}
+  try{C.fb=await fbLoad()}catch(e){C.err='Inloggen is nu niet bereikbaar, dus opslaan lukt even niet. Probeer het later opnieuw.';render();return}
   let first=true;
   C.fb.Au.onAuthStateChanged(C.fb.auth,u=>{
     C.user=u;
@@ -136,21 +131,19 @@ async function enterCloud(){
   if(inv){dropInv();const j=await joinInvite(inv);if(j){gardens[j.gid]=j.name;gid=j.gid;toast('Je doet nu mee in '+j.name+'.');S.view='tuin'}}
   for(const g of Object.keys(gardens))if(!(await isMember(g)))delete gardens[g];
   if(!gid||!gardens[gid])gid=Object.keys(gardens)[0];
-  let moved=false;
   if(!gid){
-    /* Eerste keer: eigen tuin aanmaken en de planten van dit apparaat meenemen */
+    /* Eerste keer: eigen tuin aanmaken */
     gid=F.doc(F.collection(db,'gardens')).id;
     await F.setDoc(F.doc(db,'gardens/'+gid),{owner:u.uid,name:'Tuin van '+myName(),frost:S.frost});
     await F.setDoc(F.doc(db,`gardens/${gid}/members/${u.uid}`),{role:'owner',name:myName()});
-    const b=F.writeBatch(db);
-    S.plantings.filter(p=>!p.ex).forEach(p=>b.set(F.doc(db,`gardens/${gid}/plantings/${p.id}`),{crop:p.crop,method:p.method,date:p.date,label:p.label||'',bed:p.bed||'',by:u.uid}));
-    await b.commit();gardens[gid]='Mijn tuin';moved=true;
+    gardens[gid]='Mijn tuin';
   }
   await F.setDoc(uref,{garden:gid,gardens,name:myName()});
   C.gardens=gardens;C.newName='';C.err='';
   await openGarden(gid);
-  if(moved)S.local=[];
   render();
+  /* Wie vóór het inloggen op Planten klikte, gaat daar nu verder */
+  if(C.pend&&canEdit()){const p=C.pend;C.pend=null;S.view='tuin';render();openAdd(p.id,p.m)}
 }
 async function joinInvite(code){
   const {F,db}=C.fb;
@@ -219,6 +212,13 @@ function openLogin(mode,intro){
     }catch(x){C.newName='';out.textContent=authErr(x);btn.disabled=false}
   };
 }
+function needLogin(pend){
+  if(!C.fb){toast(C.err||'Inloggen wordt nog geladen. Probeer het zo opnieuw.');return}
+  if(C.user&&C.user.emailVerified){toast(C.err||'Je online tuin wordt nog geopend. Probeer het zo opnieuw.');return}
+  C.pend=pend;
+  if(C.user){closeSheet();S.view='tuin';render();scrollTo(0,0);toast('Bevestig eerst je e-mailadres, dan kun je opslaan.');return}
+  openLogin('in','Log in om planten in je tuin te zetten. Je tuin staat dan veilig online, ook als je je browser leegmaakt.');
+}
 function google(){
   const {Au,auth}=C.fb;
   Au.signInWithPopup(auth,new Au.GoogleAuthProvider()).then(closeSheet).catch(x=>{const m=authErr(x),o=$('#l-err');if(m&&o)o.textContent=m});
@@ -226,18 +226,15 @@ function google(){
 function accountCard(){
   if(!C.fb)return `<section class="card"><div class="sec-h"><h3>Account</h3></div><p class="muted small" style="margin:0">${C.err||'Even laden…'}</p></section>`;
   if(!C.user){
-    const n=S.plantings.filter(p=>!p.ex).length;
-    return `<section class="card"><div class="sec-h"><h3>${n>=3?'Zet je tuin veilig':'Account'}</h3></div><p class="small" style="margin:0 0 10px">Je tuin staat nu alleen op dit apparaat. Log in om hem op al je apparaten te gebruiken en samen te tuinieren. Wat je al hebt geplant, gaat mee.</p><button class="btn sm" data-a="login" data-m="in">Inloggen of account maken</button></section>`;
+    return `<section class="card"><div class="sec-h"><h3>Log in om je tuin te bewaren</h3></div><p class="small" style="margin:0 0 10px">Hieronder zie je voorbeeldplanten. Log in om je eigen tuin bij te houden. Hij staat dan veilig online, op al je apparaten, en je kunt samen tuinieren.</p><button class="btn sm" data-a="login" data-m="in">Inloggen of account maken</button></section>`;
   }
-  if(!C.user.emailVerified)return `<section class="card"><div class="sec-h"><h3>Bevestig je e-mailadres</h3></div><p class="small" style="margin:0 0 10px">We hebben een mail gestuurd naar <b>${esc(C.user.email||'')}</b>. Klik op de link in die mail en kom dan hier terug. Tot die tijd staat je tuin alleen op dit apparaat. Geen mail gezien? Kijk ook in je spam.</p><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn sm" data-a="verified">Ik heb bevestigd</button><button class="btn sm ghost" data-a="resend">Mail opnieuw sturen</button></div><p class="small muted" style="margin:12px 0 0"><a href="#" data-a="logout">Uitloggen</a></p></section>`;
+  if(!C.user.emailVerified)return `<section class="card"><div class="sec-h"><h3>Bevestig je e-mailadres</h3></div><p class="small" style="margin:0 0 10px">We hebben een mail gestuurd naar <b>${esc(C.user.email||'')}</b>. Klik op de link in die mail en kom dan hier terug. Daarna kun je je tuin opslaan. Geen mail gezien? Kijk ook in je spam.</p><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn sm" data-a="verified">Ik heb bevestigd</button><button class="btn sm ghost" data-a="resend">Mail opnieuw sturen</button></div><p class="small muted" style="margin:12px 0 0"><a href="#" data-a="logout">Uitloggen</a></p></section>`;
   if(!S.shared)return `<section class="card"><div class="sec-h"><h3>Account</h3></div><p class="small" style="margin:0 0 10px">${C.err||'Je online tuin wordt geopend…'}</p><a href="#" class="small" data-a="logout">Uitloggen</a></section>`;
   const own=C.role=='owner',gs=Object.entries(C.gardens);
   const sel=gs.length>1?`<div class="field"><label for="g-sel">Tuin</label><select id="g-sel">${gs.map(([g,n])=>`<option value="${g}"${g==C.gid?' selected':''}>${esc(n)}</option>`).join('')}</select></div>`:'';
   const who=C.members.map(m=>`<span class="pill" style="--pc:var(--muted)">${esc(m.name||'iemand')}${m.uid==S.me?' (jij)':''} · ${ROLE[m.role]||''}${own&&m.uid!=S.me?` <button class="linkbtn" data-a="kick" data-id="${m.uid}" aria-label="${esc(m.name||'iemand')} uit je tuin halen">${S.confirm=='kick:'+m.uid?'zeker?':'×'}</button>`:''}</span>`).join(' ');
-  const extra=(S.local||[]).filter(p=>!S.plantings.some(q=>q.id==p.id));
-  const mig=extra.length&&canEdit()?`<button class="btn sm" data-a="migrate">${extra.length} ${extra.length==1?'plant':'planten'} van dit apparaat meenemen</button>`:'';
   const intro=own?'Dit is jouw tuin. Nodig iemand uit om mee te kijken of mee te werken.':C.role=='edit'?`Je werkt mee in <b>${esc(C.gname)}</b>.`:`Je kijkt mee in <b>${esc(C.gname)}</b>. Aanpassen kan alleen de eigenaar of wie meewerkt.`;
-  return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div>${sel}<p class="small" style="margin:0 0 8px">${intro}</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:10px">${who}</div>`:''}<div class="row" style="gap:8px;flex-wrap:wrap">${own?'<button class="btn sm" data-a="invite">Iemand uitnodigen</button>':`<button class="btn sm ghost" data-a="leave">${S.confirm=='leave'?'Zeker weten?':'Deze tuin verlaten'}</button>`}${mig}</div><p class="small muted" style="margin:12px 0 0">Ingelogd als ${esc(myName())}${C.user.email?' ('+esc(C.user.email)+')':''}. <a href="#" data-a="logout">Uitloggen</a></p></section>`;
+  return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div>${sel}<p class="small" style="margin:0 0 8px">${intro}</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:10px">${who}</div>`:''}<div class="row" style="gap:8px;flex-wrap:wrap">${own?'<button class="btn sm" data-a="invite">Iemand uitnodigen</button>':`<button class="btn sm ghost" data-a="leave">${S.confirm=='leave'?'Zeker weten?':'Deze tuin verlaten'}</button>`}</div><p class="small muted" style="margin:12px 0 0">Ingelogd als ${esc(myName())}${C.user.email?' ('+esc(C.user.email)+')':''}. <a href="#" data-a="logout">Uitloggen</a></p></section>`;
 }
 
 /* ---- Kalenderlogica ---- */
@@ -408,16 +405,15 @@ function upcoming(){
 }
 function samenCard(){
   if(hasFB())return accountCard();
-  if(!S.shared)return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="muted small" style="margin:0">Samen tuinieren werkt hier nog niet. Je tuin staat alleen op dit apparaat.</p></section>`;
+  if(!S.shared)return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="muted small" style="margin:0">Opslaan en samen tuinieren werken hier niet. Wat je toevoegt, ben je kwijt als je de pagina sluit.</p></section>`;
   const ids=[...new Set(S.plantings.map(p=>p.by).filter(Boolean))];
   const who=ids.length?ids.map(i=>`<span class="pill" style="--pc:var(--muted)">${esc(S.names[i]||'iemand')}${i==S.me?' (jij)':''}</span>`).join(' '):'';
-  const mig=S.local&&S.local.length&&!S.plantings.length?`<button class="btn sm" data-a="migrate">Mijn ${S.local.length} lokale planten meenemen</button>`:'';
-  return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="small" style="margin:0 0 8px">Deze tuin wordt gedeeld: wie je uitnodigt ziet en bewerkt dezelfde planten, direct.</p><p class="muted small" style="margin:0 0 8px"><b>Uitnodigen:</b> kies bovenaan in Claude <b>Delen</b>, voeg de ander toe en geef bewerkrechten. Met alleen kijkrechten kan iemand meekijken maar niets wijzigen.</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap">${who}</div>`:''}${mig}</section>`;
+  return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="small" style="margin:0 0 8px">Deze tuin wordt gedeeld: wie je uitnodigt ziet en bewerkt dezelfde planten, direct.</p><p class="muted small" style="margin:0 0 8px"><b>Uitnodigen:</b> kies bovenaan in Claude <b>Delen</b>, voeg de ander toe en geef bewerkrechten. Met alleen kijkrechten kan iemand meekijken maar niets wijzigen.</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap">${who}</div>`:''}</section>`;
 }
 function vTuin(){
   let h=`<div class="stack"><div class="row"><h2 class="grow1">Mijn tuin</h2>${canEdit()?'<button class="btn" data-a="add">+ Gewas planten</button>':''}</div>`;
-  /* Bovenaan: herinnering voor wie niet inlogt en al 3 planten heeft, of nog het e-mailadres moet bevestigen */
-  const top=hasFB()&&C.fb&&(C.user?!C.user.emailVerified:S.plantings.filter(p=>!p.ex).length>=3);
+  /* Bovenaan: inloggen of het e-mailadres bevestigen, zolang er nog niets online staat */
+  const top=hasFB()&&!S.shared&&(!C.fb||!C.user||!C.user.emailVerified);
   if(top)h+=samenCard();
   if(!S.plantings.length)return h+`<div class="card empty"><b>Je tuin is nog leeg.</b><p class="muted">Voeg een gewas toe en zie direct wanneer je moet verpotten, uitplanten en oogsten.</p></div>${samenCard()}</div>`;
   h+=upcoming()+neighbourCard()+(top?'':samenCard());
@@ -457,7 +453,7 @@ function openAdd(id,m){
     e.preventDefault();
     const cid=$('#f-crop').value,n=S.plantings.filter(x=>x.crop==cid).length;
     S.plantings.push({id:'p'+Date.now()+Math.random().toString(36).slice(2,6),crop:cid,method:$('#f-method').value,date:$('#f-date').value,label:$('#f-label').value.trim()||(n?'#'+(n+1):''),bed:$('#f-bed').value.trim(),by:S.me||''});
-    save();dbSet(S.plantings[S.plantings.length-1]);closeSheet();S.view='tuin';S.newId=S.plantings[S.plantings.length-1].id;render();scrollTo(0,0);plantFx(CROP[cid]);setTimeout(()=>{S.newId=null;$$('.plant-card.pop').forEach(x=>x.classList.remove('pop'))},9000);
+    dbSet(S.plantings[S.plantings.length-1]);closeSheet();S.view='tuin';S.newId=S.plantings[S.plantings.length-1].id;render();scrollTo(0,0);plantFx(CROP[cid]);setTimeout(()=>{S.newId=null;$$('.plant-card.pop').forEach(x=>x.classList.remove('pop'))},9000);
   };
 }
 
@@ -470,7 +466,7 @@ function plantFx(c){
 function openEdit(id){
   const p=S.plantings.find(x=>x.id==id);if(!p)return;
   openSheet(`<h2 id="sh-title" style="padding-right:48px;margin-bottom:14px">${CROP[p.crop].n} aanpassen</h2><form id="editf"><div class="field"><label for="e-date">Datum van zaaien of poten</label><input type="date" id="e-date" required value="${esc(p.date)}"></div><div class="field"><label for="e-label">Herkenning</label><input id="e-label" maxlength="30" value="${esc(p.label||'')}" placeholder="Bijvoorbeeld Roma of Rij 2"></div><div class="field"><label for="e-bed">Plek</label><input id="e-bed" maxlength="30" value="${esc(p.bed||'')}"></div><div class="row"><button class="btn" type="submit">Opslaan</button><button class="btn ghost" type="button" data-a="close">Annuleren</button></div></form>`);
-  $('#editf').onsubmit=e=>{e.preventDefault();if($('#e-date').value)p.date=$('#e-date').value;p.label=$('#e-label').value.trim();p.bed=$('#e-bed').value.trim();save();dbSet(p);closeSheet();render()};
+  $('#editf').onsubmit=e=>{e.preventDefault();if($('#e-date').value)p.date=$('#e-date').value;p.label=$('#e-label').value.trim();p.bed=$('#e-bed').value.trim();dbSet(p);closeSheet();render()};
 }
 
 /* ---- Events ---- */
@@ -481,11 +477,12 @@ document.addEventListener('click',e=>{
   const t=e.target.closest('[data-a]');if(!t)return;
   const a=t.dataset.a,id=t.dataset.id;
   if(t.tagName=='A')e.preventDefault();
-  if(!canEdit()&&['add','edit','del','migrate','fminus','fplus'].includes(a)){toast('Je kijkt mee in deze tuin. Aanpassen kan alleen de eigenaar of wie meewerkt.');return}
+  if(!canEdit()&&['add','edit','del','fminus','fplus'].includes(a)){toast('Je kijkt mee in deze tuin. Aanpassen kan alleen de eigenaar of wie meewerkt.');return}
+  if(hasFB()&&!S.shared&&['add','edit','del'].includes(a)){needLogin(a=='add'?{id,m:t.dataset.m}:null);return}
   if(a=='close')closeSheet();
   else if(a=='mprev'){S.m--;if(S.m<0){S.m=11;S.y--}render()}
   else if(a=='mnext'){S.m++;if(S.m>11){S.m=0;S.y++}render()}
-  else if(a=='fminus'||a=='fplus'){S.frost=Math.max(14,Math.min(26,S.frost+(a=='fplus'?1:-1)));save();dbFrost();render()}
+  else if(a=='fminus'||a=='fplus'){S.frost=Math.max(14,Math.min(26,S.frost+(a=='fplus'?1:-1)));dbFrost();render()}
   else if(a=='crop')openCrop(id);
   else if(a=='seed'&&COMMERCE)openSeed(id);
   else if(a=='add')openAdd(id,t.dataset.m);
@@ -495,7 +492,6 @@ document.addEventListener('click',e=>{
     clearInterval(playT);let s=0;setStage(id,0);
     playT=setInterval(()=>{s++;if(s>4){clearInterval(playT);return}setStage(id,s)},1100);
   }
-  else if(a=='migrate'){(S.local||[]).forEach(p=>{const q=Object.assign({},p,{by:S.me||''});dbSet(q)});S.local=[]}
   else if(a=='login')openLogin(t.dataset.m||'in');
   else if(a=='google')google();
   else if(a=='verified')checkVerified(false).catch(()=>toast('Controleren lukte niet. Probeer het opnieuw.'));
@@ -514,7 +510,7 @@ document.addEventListener('click',e=>{
     render();
   }
   else if(a=='del'){
-    if(S.confirm==id){S.plantings=S.plantings.filter(p=>p.id!=id);S.confirm=null;save();dbDel(id)}else S.confirm=id;
+    if(S.confirm==id){S.plantings=S.plantings.filter(p=>p.id!=id);S.confirm=null;dbDel(id)}else S.confirm=id;
     render();
   }
 });

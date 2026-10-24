@@ -247,9 +247,9 @@ body>:not(#print){display:none!important}
 <p class="note">Zaaitijden zijn indicatief voor Nederland en België. Het zaadzakje blijft leidend.</p>
 </div>
 <nav class="tabbar" aria-label="Hoofdmenu">
+<button class="tab" data-view="tuin"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="7.5" height="7.5" rx="2"/><rect x="13" y="4" width="7.5" height="7.5" rx="2"/><rect x="3.5" y="13.5" width="7.5" height="7.5" rx="2"/><path d="M16.8 14v6.5M13.6 17.2h6.4"/></svg><span>Mijn tuin</span></button>
 <button class="tab" data-view="maand"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg><span>Deze maand</span></button>
 <button class="tab" data-view="gewassen"><svg viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6zM12 14c0-3 2-5 6-5 0 3-2 5-6 5z"/></svg><span>Gewassen</span></button>
-<button class="tab" data-view="tuin"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="7.5" height="7.5" rx="2"/><rect x="13" y="4" width="7.5" height="7.5" rx="2"/><rect x="3.5" y="13.5" width="7.5" height="7.5" rx="2"/><path d="M16.8 14v6.5M13.6 17.2h6.4"/></svg><span>Mijn tuin</span></button>
 </nav>
 <div id="print"></div>
 <div class="ov" id="ov" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title"><button class="x" id="sh-close" aria-label="Sluiten">×</button><div id="sh-body"></div></div></div>
@@ -1331,6 +1331,8 @@ async function enterCloud(){
   await F.setDoc(uref,{garden:gid,gardens,name:myName()});
   C.gardens=gardens;C.newName='';C.err='';
   await openGarden(gid);
+  /* Ingelogd: Mijn tuin is de startpagina, tenzij je zelf al een ander tabblad koos */
+  if(!S.picked)S.view='tuin';
   render();
   /* Wie vóór het inloggen op Planten klikte, gaat daar nu verder */
   if(C.pend&&canEdit()){const p=C.pend;C.pend=null;S.view='tuin';render();openAdd(p.id,p.m)}
@@ -1718,7 +1720,7 @@ function openEdit(id){
 document.addEventListener('click',e=>{
   if(e.target.id=='ov'){closeSheet();return}
   const tab=e.target.closest('.tab');
-  if(tab){S.view=tab.dataset.view;S.confirm=null;render();scrollTo(0,0);return}
+  if(tab){S.view=tab.dataset.view;S.picked=true;S.confirm=null;render();scrollTo(0,0);return}
   const t=e.target.closest('[data-a]');if(!t)return;
   const a=t.dataset.a,id=t.dataset.id;
   if(t.tagName=='A')e.preventDefault();

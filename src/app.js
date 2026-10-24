@@ -141,6 +141,8 @@ async function enterCloud(){
   await F.setDoc(uref,{garden:gid,gardens,name:myName()});
   C.gardens=gardens;C.newName='';C.err='';
   await openGarden(gid);
+  /* Ingelogd: Mijn tuin is de startpagina, tenzij je zelf al een ander tabblad koos */
+  if(!S.picked)S.view='tuin';
   render();
   /* Wie vóór het inloggen op Planten klikte, gaat daar nu verder */
   if(C.pend&&canEdit()){const p=C.pend;C.pend=null;S.view='tuin';render();openAdd(p.id,p.m)}
@@ -528,7 +530,7 @@ function openEdit(id){
 document.addEventListener('click',e=>{
   if(e.target.id=='ov'){closeSheet();return}
   const tab=e.target.closest('.tab');
-  if(tab){S.view=tab.dataset.view;S.confirm=null;render();scrollTo(0,0);return}
+  if(tab){S.view=tab.dataset.view;S.picked=true;S.confirm=null;render();scrollTo(0,0);return}
   const t=e.target.closest('[data-a]');if(!t)return;
   const a=t.dataset.a,id=t.dataset.id;
   if(t.tagName=='A')e.preventDefault();

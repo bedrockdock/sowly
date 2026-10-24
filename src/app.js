@@ -471,7 +471,7 @@ function sortPlantings(){
   return [...S.plantings].sort(f);
 }
 function vTuin(){
-  const inl=hasFB()&&S.shared?`<div class="small muted">Ingelogd als <b>${esc(myName())}</b>${C.role!='owner'&&C.gname?' · tuin '+esc(C.gname):''}</div>`:'';
+  const inl=hasFB()&&S.shared?`<div class="small muted inl">Ingelogd als <b>${esc(myName())}</b>${C.role!='owner'&&C.gname?' · tuin '+esc(C.gname):''} · <a href="#" data-a="logout">Uitloggen</a></div>`:'';
   let h=`<div class="stack"><div class="row"><div class="grow1" style="flex:1 0 auto"><h2 style="white-space:nowrap;margin:0">Mijn tuin</h2>${inl}</div>${canEdit()&&!(C.wait&&!S.shared)?'<button class="btn" data-a="add">+ Gewas planten</button>':''}${S.shared&&mine().length?'<button class="btn sm ghost" data-a="year">Jaarplanning</button>':''}${hasFB()&&S.shared?samenBtn():''}</div>`;
   /* Bovenaan: inloggen of het e-mailadres bevestigen, zolang er nog niets online staat */
   if(C.wait&&!S.shared)return h+`<div class="card empty"><b>Je tuin wordt geladen…</b></div></div>`;

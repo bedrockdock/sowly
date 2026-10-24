@@ -234,8 +234,11 @@ function accountCard(){
   const sel=gs.length>1?`<div class="field"><label for="g-sel">Tuin</label><select id="g-sel">${gs.map(([g,n])=>`<option value="${g}"${g==C.gid?' selected':''}>${esc(n)}</option>`).join('')}</select></div>`:'';
   const who=C.members.map(m=>`<span class="pill soft">${esc(m.name||'iemand')}${m.uid==S.me?' (jij)':''} · ${ROLE[m.role]||''}${own&&m.uid!=S.me?` <button class="linkbtn" data-a="kick" data-id="${m.uid}" aria-label="${esc(m.name||'iemand')} uit je tuin halen">${S.confirm=='kick:'+m.uid?'zeker?':'×'}</button>`:''}</span>`).join(' ');
   const intro=own?'Dit is jouw tuin. Nodig iemand uit om mee te kijken of mee te werken.':C.role=='edit'?`Je werkt mee in <b>${esc(C.gname)}</b>.`:`Je kijkt mee in <b>${esc(C.gname)}</b>. Aanpassen kan alleen de eigenaar of wie meewerkt.`;
-  return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div>${sel}<p class="small" style="margin:0 0 8px">${intro}</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:10px">${who}</div>`:''}<div class="row" style="gap:8px;flex-wrap:wrap">${own?'<button class="btn sm" data-a="invite">Iemand uitnodigen</button>':`<button class="btn sm ghost" data-a="leave">${S.confirm=='leave'?'Zeker weten?':'Deze tuin verlaten'}</button>`}</div><p class="small muted" style="margin:12px 0 0">Ingelogd als ${esc(myName())}${C.user.email?' ('+esc(C.user.email)+')':''}. <a href="#" data-a="logout">Uitloggen</a></p></section>`;
+  return `${sel}<p class="small" style="margin:0 0 8px">${intro}</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:10px">${who}</div>`:''}<div class="row" style="gap:8px;flex-wrap:wrap">${own?'<button class="btn sm" data-a="invite">Iemand uitnodigen</button>':`<button class="btn sm ghost" data-a="leave">${S.confirm=='leave'?'Zeker weten?':'Deze tuin verlaten'}</button>`}</div><p class="small muted" style="margin:12px 0 0">Ingelogd als ${esc(myName())}${C.user.email?' ('+esc(C.user.email)+')':''}. <a href="#" data-a="logout">Uitloggen</a></p>`;
 }
+/* Ingelogd met een online tuin: Samen tuinieren als knopje rechts bovenin, de inhoud in een blad */
+const samenBtn=()=>`<button class="btn sm ghost" data-a="samen" aria-label="Samen tuinieren, ${C.members.length} ${C.members.length==1?'persoon':'personen'}">Samen <span class="pill soft">${C.members.length}</span></button>`;
+function openSamen(){openSheet(`<h2 id="sh-title" style="padding-right:48px">Samen tuinieren</h2><div id="samen-b">${accountCard()}</div>`)}
 
 /* ---- Kalenderlogica ---- */
 /* Alle weken in de gegevens zijn relatief aan REF_FROST (laatste nachtvorst in NL/BE: week 20).
@@ -440,7 +443,7 @@ function printYear(y){
   try{print()}catch(e){toast('Printen lukt hier niet. Open Sowly in je browser.')}
 }
 function samenCard(){
-  if(hasFB())return accountCard();
+  if(hasFB())return S.shared?'':accountCard();
   if(!S.shared)return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="muted small" style="margin:0">Opslaan en samen tuinieren werken hier niet. Wat je toevoegt, ben je kwijt als je de pagina sluit.</p></section>`;
   const ids=[...new Set(S.plantings.map(p=>p.by).filter(Boolean))];
   const who=ids.length?ids.map(i=>`<span class="pill soft">${esc(S.names[i]||'iemand')}${i==S.me?' (jij)':''}</span>`).join(' '):'';
@@ -461,7 +464,7 @@ function sortPlantings(){
   return [...S.plantings].sort(f);
 }
 function vTuin(){
-  let h=`<div class="stack"><div class="row"><h2 class="grow1" style="white-space:nowrap;flex:1 0 auto">Mijn tuin</h2>${canEdit()?'<button class="btn" data-a="add">+ Gewas planten</button>':''}${S.shared&&mine().length?'<button class="btn sm ghost" data-a="year">Jaarplanning</button>':''}</div>`;
+  let h=`<div class="stack"><div class="row"><h2 class="grow1" style="white-space:nowrap;flex:1 0 auto">Mijn tuin</h2>${canEdit()?'<button class="btn" data-a="add">+ Gewas planten</button>':''}${S.shared&&mine().length?'<button class="btn sm ghost" data-a="year">Jaarplanning</button>':''}${hasFB()&&S.shared?samenBtn():''}</div>`;
   /* Bovenaan: inloggen of het e-mailadres bevestigen, zolang er nog niets online staat */
   const top=hasFB()&&!S.shared&&(!C.fb||!C.user||!C.user.emailVerified);
   if(top)h+=samenCard();
@@ -474,6 +477,7 @@ function vTuin(){
 function render(){
   $('#main').innerHTML=S.view=='maand'?vMaand():S.view=='gewassen'?vGewassen():vTuin();
   $$('.tab').forEach(b=>b.setAttribute('aria-current',b.dataset.view==S.view?'page':'false'));
+  const sb=$('#samen-b');if(sb){if(S.shared)sb.innerHTML=accountCard();else closeSheet()}
 }
 
 /* ---- Bladen (sheets) ---- */
@@ -549,6 +553,7 @@ document.addEventListener('click',e=>{
   else if(a=='verified')checkVerified(false).catch(()=>toast('Controleren lukte niet. Probeer het opnieuw.'));
   else if(a=='resend')sendVerify().then(()=>toast('Mail opnieuw gestuurd.'),x=>toast(authErr(x)));
   else if(a=='logout')C.fb.Au.signOut(C.fb.auth);
+  else if(a=='samen')openSamen();
   else if(a=='invite')openInvite();
   else if(a=='mkinv')makeInvite(t.dataset.m).catch(()=>toast('De uitnodiging kon niet worden gemaakt. Probeer het opnieuw.'));
   else if(a=='copyinv'){const u=$('#inv-url');u.select();(navigator.clipboard?navigator.clipboard.writeText(u.value):Promise.reject()).then(()=>toast('Link gekopieerd.'),()=>{try{document.execCommand('copy');toast('Link gekopieerd.')}catch(x){}})}

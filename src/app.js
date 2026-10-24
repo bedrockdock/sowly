@@ -446,6 +446,20 @@ function samenCard(){
   const who=ids.length?ids.map(i=>`<span class="pill soft">${esc(S.names[i]||'iemand')}${i==S.me?' (jij)':''}</span>`).join(' '):'';
   return `<section class="card"><div class="sec-h"><h3>Samen tuinieren</h3></div><p class="small" style="margin:0 0 8px">Deze tuin wordt gedeeld: wie je uitnodigt ziet en bewerkt dezelfde planten, direct.</p><p class="muted small" style="margin:0 0 8px"><b>Uitnodigen:</b> kies bovenaan in Claude <b>Delen</b>, voeg de ander toe en geef bewerkrechten. Met alleen kijkrechten kan iemand meekijken maar niets wijzigen.</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap">${who}</div>`:''}</section>`;
 }
+/* Sorteren in Mijn tuin: standaard wat het eerst aandacht nodig heeft; lege herkenning of plek onderaan */
+const SORTS={aandacht:'Eerst aandacht nodig',alfabet:'Alfabet',label:'Herkenning',plek:'Plek'};
+const cmpT=(a,b)=>a.localeCompare(b,'nl',{numeric:true,sensitivity:'base'});
+const cmpEmpty=(a,b)=>!a!=!b?(a?-1:1):cmpT(a||'',b||'');
+function needBy(p){
+  const e=timeline(p).find(e=>e.k!='kiem'&&TODAY<=(e.end||e.dt));
+  return e?(e.dt<=TODAY?0:+e.dt):Infinity;
+}
+function sortPlantings(){
+  const k=S.sort||'aandacht',need=new Map(S.plantings.map(p=>[p.id,needBy(p)]));
+  const byNeed=(a,b)=>need.get(a.id)-need.get(b.id)||0,byAlf=(a,b)=>cmpT(CROP[a.crop].n,CROP[b.crop].n)||cmpEmpty(a.label,b.label);
+  const f={aandacht:(a,b)=>byNeed(a,b)||byAlf(a,b),alfabet:byAlf,label:(a,b)=>cmpEmpty(a.label,b.label)||byAlf(a,b),plek:(a,b)=>cmpEmpty(a.bed,b.bed)||byNeed(a,b)||byAlf(a,b)}[k]||byNeed;
+  return [...S.plantings].sort(f);
+}
 function vTuin(){
   let h=`<div class="stack"><div class="row"><h2 class="grow1" style="white-space:nowrap;flex:1 0 auto">Mijn tuin</h2>${canEdit()?'<button class="btn" data-a="add">+ Gewas planten</button>':''}${S.shared&&mine().length?'<button class="btn sm ghost" data-a="year">Jaarplanning</button>':''}</div>`;
   /* Bovenaan: inloggen of het e-mailadres bevestigen, zolang er nog niets online staat */
@@ -453,8 +467,8 @@ function vTuin(){
   if(top)h+=samenCard();
   if(!S.plantings.length)return h+`<div class="card empty"><b>Je tuin is nog leeg.</b><p class="muted">Voeg een gewas toe en zie direct wanneer je moet verpotten, uitplanten en oogsten.</p></div>${samenCard()}</div>`;
   h+=upcoming()+neighbourCard()+(top?'':samenCard());
-  const sorted=[...S.plantings].sort((a,b)=>a.date<b.date?1:-1);
-  sorted.forEach(p=>h+=plantCard(p));
+  if(S.plantings.length>1)h+=`<div class="field sortf"><label for="t-sort">Sorteren op</label><select id="t-sort">${Object.entries(SORTS).map(([k,v])=>`<option value="${k}"${k==(S.sort||'aandacht')?' selected':''}>${v}</option>`).join('')}</select></div>`;
+  sortPlantings().forEach(p=>h+=plantCard(p));
   return h+`${adSlot()}</div>`;
 }
 function render(){
@@ -552,7 +566,7 @@ document.addEventListener('click',e=>{
     render();
   }
 });
-document.addEventListener('change',e=>{if(e.target.id=='g-sel')switchGarden(e.target.value).catch(()=>toast('Die tuin kon niet worden geopend.'))});
+document.addEventListener('change',e=>{if(e.target.id=='t-sort'){S.sort=e.target.value;render();$('#t-sort').focus();return}if(e.target.id=='g-sel')switchGarden(e.target.value).catch(()=>toast('Die tuin kon niet worden geopend.'))});
 document.addEventListener('input',e=>{if(e.target.id=='q'){S.q=e.target.value;$('#grid').innerHTML=gridHTML()}});
 $('#sh-close').onclick=closeSheet;
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&C.user&&!C.user.emailVerified)checkVerified(true).catch(()=>{})});

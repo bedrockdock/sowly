@@ -8,7 +8,7 @@ module.exports = function load() {
   const els = {};
   const mk = id => els[id] || (els[id] = { innerHTML: '', textContent: '', hidden: true, dataset: {}, focus() {}, setAttribute() {}, scrollTop: 0, style: {}, addEventListener() {}, classList: { add() {}, remove() {} } });
   const doc = { querySelector: s => mk(s), querySelectorAll: () => [], addEventListener() {}, getElementById: mk };
-  const ctx = { document: doc, matchMedia: () => ({ matches: true }), scrollTo() {}, localStorage: { getItem: () => null, setItem() {} }, setInterval() {}, clearInterval() {}, setTimeout() {}, console, Date, Math, JSON, Object };
+  const ctx = { document: doc, matchMedia: () => ({ matches: true }), scrollTo() {}, localStorage: { getItem: () => null, setItem() {} }, setInterval() {}, clearInterval() {}, setTimeout() {}, addEventListener() {}, console, Date, Math, JSON, Object };
   vm.createContext(ctx);
   vm.runInContext(js, ctx);
   return { ...ctx.__t, els };

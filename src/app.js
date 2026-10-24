@@ -470,9 +470,20 @@ function sortPlantings(){
   const f={aandacht:(a,b)=>byNeed(a,b)||byAlf(a,b),alfabet:byAlf,label:(a,b)=>cmpEmpty(a.label,b.label)||byAlf(a,b),plek:(a,b)=>cmpEmpty(a.bed,b.bed)||byNeed(a,b)||byAlf(a,b)}[k]||byNeed;
   return [...S.plantings].sort(f);
 }
+/* Sowly als app op het beginscherm: Android en Chrome/Edge via de installatievraag van de browser, iOS met uitleg (daar bestaat geen knop voor) */
+let instEv=null;
+const isIOS=()=>/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform=='MacIntel'&&navigator.maxTouchPoints>1);
+const isApp=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const canInstall=()=>hasFB()&&!isApp()&&(!!instEv||isIOS());
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();instEv=e;if(S.view=='tuin')render()});
+addEventListener('appinstalled',()=>{instEv=null;render();toast('Sowly staat nu als app op je toestel.')});
+function installApp(){
+  if(instEv){const e=instEv;e.prompt();e.userChoice.then(r=>{if(r.outcome=='accepted'){instEv=null;render()}}).catch(()=>{});return}
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">Sowly als app</h2><p>Zet Sowly op je beginscherm. Hij opent dan zonder adresbalk, als een app.</p><ol><li>Tik in Safari op de <b>Deel</b>-knop <svg viewBox="0 0 24 24" width="18" height="18" aria-label="Deel-knop" style="vertical-align:-3px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M7 10H5v11h14V10h-2"/></svg> (in Chrome of Edge: het Deel-menu).</li><li>Kies <b>Zet op beginscherm</b>. Staat het er niet, scrol dan naar beneden.</li><li>Tik op <b>Voeg toe</b>.</li></ol><p class="small muted">De app heeft een eigen opslag, los van Safari. Log daar dus één keer opnieuw in.</p>`);
+}
 function vTuin(){
   const inl=hasFB()&&S.shared?`<div class="small muted inl">Ingelogd als <b>${esc(myName())}</b>${C.role!='owner'&&C.gname?' · tuin '+esc(C.gname):''} · <a href="#" data-a="logout">Uitloggen</a></div>`:'';
-  let h=`<div class="stack"><div class="row"><div class="grow1" style="flex:1 0 auto"><h2 style="white-space:nowrap;margin:0">Mijn tuin</h2>${inl}</div>${canEdit()&&!(C.wait&&!S.shared)?'<button class="btn" data-a="add">+ Gewas planten</button>':''}${S.shared&&mine().length?'<button class="btn sm ghost" data-a="year">Jaarplanning</button>':''}${hasFB()&&S.shared?samenBtn():''}</div>`;
+  let h=`<div class="stack"><div class="row"><div class="grow1" style="flex:1 0 auto"><h2 style="white-space:nowrap;margin:0">Mijn tuin</h2>${inl}</div>${canEdit()&&!(C.wait&&!S.shared)?'<button class="btn" data-a="add">+ Gewas planten</button>':''}${S.shared&&mine().length?'<button class="btn sm ghost" data-a="year">Jaarplanning</button>':''}${canInstall()?'<button class="btn sm ghost" data-a="app">Als app</button>':''}${hasFB()&&S.shared?samenBtn():''}</div>`;
   /* Bovenaan: inloggen of het e-mailadres bevestigen, zolang er nog niets online staat */
   if(C.wait&&!S.shared)return h+`<div class="card empty"><b>Je tuin wordt geladen…</b></div></div>`;
   const top=hasFB()&&!S.shared&&(!C.fb||!C.user||!C.user.emailVerified);
@@ -563,6 +574,7 @@ document.addEventListener('click',e=>{
   else if(a=='resend')sendVerify().then(()=>toast('Mail opnieuw gestuurd.'),x=>toast(authErr(x)));
   else if(a=='logout')C.fb.Au.signOut(C.fb.auth);
   else if(a=='samen')openSamen();
+  else if(a=='app')installApp();
   else if(a=='invite')openInvite();
   else if(a=='mkinv')makeInvite(t.dataset.m).catch(()=>toast('De uitnodiging kon niet worden gemaakt. Probeer het opnieuw.'));
   else if(a=='copyinv'){const u=$('#inv-url');u.select();(navigator.clipboard?navigator.clipboard.writeText(u.value):Promise.reject()).then(()=>toast('Link gekopieerd.'),()=>{try{document.execCommand('copy');toast('Link gekopieerd.')}catch(x){}})}

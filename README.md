@@ -2,7 +2,9 @@
 
 Moestuinplanner voor Nederland en België (later internationaal). Je ziet per maand wat je moet zaaien, verpotten, uitplanten en oogsten, houdt je eigen tuin bij met een tijdlijn per gewas, en er zijn tekenfilmplanten met animaties.
 
-Zonder eigen server: één HTML-bestand. Je tuin opslaan kan alleen na inloggen, in een online tuin via Firebase (zie `src/cloud.js` en `firestore.rules`); de tuin staat niet in `localStorage`. Mascotte: Kiempje.
+Tabbladen: Mijn tuin, Deze maand en Gewassen. Ingelogd opent Sowly op Mijn tuin, anders op Deze maand. In Mijn tuin sorteer je standaard op wat het eerst aandacht nodig heeft, en verder op alfabet, herkenning of plek. Bovenaan staat met wie je bent ingelogd (met Uitloggen), en de knop Samen voor delen en uitnodigen.
+
+Zonder eigen server: één HTML-bestand. Je tuin opslaan kan alleen na inloggen, in een online tuin via Firebase (zie `src/cloud.js` en `firestore.rules`); de tuin staat niet in `localStorage`. Daar staat alleen het vlaggetje `sowly.ingelogd` (zodat Sowly direct op Mijn tuin opent) en tijdelijk een uitnodigingscode. Mascotte: Kiempje.
 
 ## Snel starten
 
@@ -41,6 +43,17 @@ Zet de inhoud van `docs/` online. Alle drie de opties werken met dezelfde bestan
 3. Je krijgt `https://<gebruikersnaam>.github.io/<repo>/`.
 
 **Netlify of Cloudflare Pages:** koppel dezelfde repo. Build-commando `npm run build` (of leeg laten, `docs/` zit al in git), publicatiemap `docs`. Lees eerst de voorwaarden voor commercieel gebruik als je advertenties of affiliate-links toevoegt.
+
+## Als app op je telefoon
+
+`docs/` bevat een manifest en iconen, dus je kunt Sowly op het beginscherm zetten. Hij opent dan zonder adresbalk, als een app.
+
+In Mijn tuin staat de knop **Als app**. Op Android en in Chrome of Edge op de computer opent die de installatievraag van de browser. Op iPhone en iPad toont hij de stappen hieronder, want daar kan een website dat niet zelf. De knop verdwijnt als Sowly al als app draait, en op toestellen waar het niet kan.
+
+- **Android (Chrome):** menu ⋮ → **App installeren** of **Toevoegen aan startscherm**. Chrome biedt het soms ook zelf aan.
+- **iPhone en iPad:** iOS vraagt het nooit zelf. In Safari: **Deel**-knop → **Zet op beginscherm**. Sinds iOS 16.4 kan dat ook vanuit Chrome en Edge via hun Deel-menu.
+
+Let op bij iOS: de app op het beginscherm heeft een eigen opslag, los van Safari. Je moet daar dus één keer opnieuw inloggen.
 
 ## Wat anders werkt dan in Claude
 

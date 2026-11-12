@@ -23,6 +23,11 @@ Bijgewerkt: zaterdag 24 oktober 2026. Naam: **Sowly** (internationaal, van "to s
 - [x] **Database inrichten** (12 november 2026): `supabase.sql` in Supabase uitgevoerd (SQL Editor > Run). Na een wijziging in dat bestand opnieuw draaien; het script begint met opruimen, dus bestaande gegevens gaan dan weg.
 - [x] **Eigen SMTP** (12 november 2026): Brevo, gratis plan (300 mails per dag), afzender `noreply@sowly.eu`, domein geverifieerd met DNS-records bij Strato. Strato kon niet: het pakket van sowly.eu heeft geen mail.
 - [x] **Redirect URLs** in Supabase: sowly.eu en www.sowly.eu. Inloggen, bevestigen en de live site getest en werkend (12 november 2026).
+- [ ] **Back-ups van Supabase.** Het gratis plan heeft geen downloadbare back-ups; zelf maken met de Supabase-CLI (Docker Desktop moet draaien). Verbindingsregel: Supabase > Connect > **Session pooler** (de directe verbinding is op het gratis plan alleen IPv6), met het databasewachtwoord (Project Settings > Database; niet de publishable key). Drie bestanden, in een map buiten de repo:
+  `npx supabase db dump --db-url "<regel>" -f roles.sql --role-only`
+  `npx supabase db dump --db-url "<regel>" -f schema.sql`
+  `npx supabase db dump --db-url "<regel>" -f data.sql --use-copy --data-only`
+  Volgens de Supabase-documentatie zitten daarin tabellen, gegevens, RLS-regels, functies, triggers en `auth.users`; nog niet getest. Nooit in git (openbare repo; e-mailadressen en wachtwoordhashes). Eén keer terugzetten in een leeg tweede project om te bewijzen dat het werkt. Voorlopig wekelijks met de hand; eventueel later een script `npm run backup` met de verbindingsregel in een bestand buiten git, of Windows Taakplanner.
 - [ ] **Firebase-project `sowly-f5be6` opruimen** in de Firebase-console (Project settings > Delete project). Wordt niet meer gebruikt.
 - [ ] **Nederlandse mailteksten** in Supabase (Authentication > Email Templates): bevestigen en wachtwoord herstellen.
 - [ ] **Gratis project pauzeert** na een week zonder gebruik (de reden dat Supabase op 23 oktober afviel). In de gaten houden, of een betaald plan nemen.

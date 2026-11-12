@@ -1,3 +1,8 @@
 node_modules/
 dist/
 .DS_Store
+
+# Nooit in git: geheimen en back-ups (e-mailadressen, wachtwoordhashes)
+.env*
+backups/
+*.dump

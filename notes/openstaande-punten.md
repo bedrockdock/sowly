@@ -12,7 +12,7 @@ Bijgewerkt: zaterdag 24 oktober 2026. Naam: **Sowly** (internationaal, van "to s
   - [ ] let op: GitHub Pages is gratis alleen voor openbare repo's en niet bedoeld voor commerciële sites
 - [ ] **Voorwaarden hosting lezen** voor affiliate-links en advertenties (Cloudflare noemt de gratis variant "voor persoonlijke of hobbyprojecten"; de algemene voorwaarden zijn niet gelezen).
 - [x] **Privacyverklaring** (12 november 2026): `src/privacy.html`, door `build.js` gekopieerd naar `docs/privacy.html`, met een link onderaan de site (alleen webversie). Noemt GitHub Pages, Cloudflare Web Analytics, jsDelivr, Supabase (West EU, Parijs) en Brevo; verantwoordelijke Bedrockdock (KvK 42216279), contact info@bedrockdock.com. Niet juridisch nagekeken.
-- [ ] **Privacyverklaring bijwerken** bij advertenties, affiliate-links, KvK-gegevens of een nieuwe dienst. Cloudflare Web Analytics: zelf nalezen in hun privacyvoorwaarden of het klopt dat het zonder cookies en persoonsgegevens werkt.
+- [ ] **Privacyverklaring bijwerken** bij advertenties, affiliate-links of een nieuwe dienst. De verwijzing naar de Autoriteit Persoonsgegevens is op verzoek weggehaald (12 november 2026); de AVG (art. 13) vraagt wel om het klachtrecht te noemen. Cloudflare Web Analytics: zelf nalezen in hun privacyvoorwaarden of het klopt dat het zonder cookies en persoonsgegevens werkt.
 
 ## Accounts en samen tuinieren
 - [x] **Backend:** Supabase (sinds 12 november 2026, project `xkreecbnockrjrisbswj`; daarvoor Firebase, zonder migratie). URL en publishable key in `src/cloud.js`, alleen in de webversie.
@@ -32,7 +32,8 @@ Bijgewerkt: zaterdag 24 oktober 2026. Naam: **Sowly** (internationaal, van "to s
 - [ ] **Uitnodigingen beheren:** lijst van openstaande links en intrekken zonder iemand weg te halen.
 
 ## Inkomsten
-- [ ] **KvK-inschrijving afronden.** Tot die tijd staan zaad-knoppen en advertenties uit (`COMMERCE=false` in `src/app.js`). Daarna op `true` zetten, samen met echte links in `SHOPS` en, voor advertenties, cookiebanner en privacyverklaring.
+- [x] **KvK-inschrijving** (12 november 2026): Bedrockdock, KvK 42216279.
+- [ ] **Zaad-knoppen en advertenties aanzetten.** Staan nog uit (`COMMERCE=false` in `src/app.js`). Op `true` zetten samen met echte links in `SHOPS` en, voor advertenties, een cookiebanner en een bijgewerkte privacyverklaring.
 - [ ] **Daisycon:** aanmelden bij de zaadwinkels van je keuze, wachten op goedkeuring (meestal is een live website nodig).
 - [ ] **Affiliate per land uitzoeken.** Daisycon heeft kantoren in NL, BE, DE, DK, SE, FI en RO (niet bevestigd voor PL, CZ, SK, AT). Voor die landen een ander netwerk of directe partnerprogramma's zoeken. Per land een eigen lijst `SHOPS`, met winkels in de eigen taal.
 - [ ] **Werkvolgorde per land:** eerst NL en BE (Daisycon), daarna DE, DK en SE (Daisycon, alleen als er zaadwinkels in hun lijst staan). Voor elk volgend land (PL, CZ, SK, AT): eerst vaststellen of er een netwerk met zaadwinkels is, daarna pas taal en planning toevoegen. Zonder werkende affiliate start dat land zonder zaad-knoppen of met advertenties.

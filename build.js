@@ -8,8 +8,8 @@ const src = f => fs.readFileSync(path.join(__dirname, 'src', f), 'utf8');
 const artifact = process.argv.includes('--artifact');
 
 const template = src('template.html');
-// cloud.js (Firebase) alleen in de webversie; in Claude loopt samen tuinieren via de database van Claude.
-// Vóór app.js, anders valt FB_CONFIG nog in de "temporal dead zone" als app.js start.
+// cloud.js (Supabase) alleen in de webversie; in Claude loopt samen tuinieren via de database van Claude.
+// Vóór app.js, anders valt SB_URL nog in de "temporal dead zone" als app.js start.
 const js = ['data.js', 'lang-nl.js', 'plants.js', ...(artifact ? [] : ['cloud.js']), 'app.js'].map(src).join('\n');
 
 const face = (family, weight, file, range) =>

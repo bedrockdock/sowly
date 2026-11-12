@@ -4,7 +4,7 @@ Moestuinplanner voor Nederland en België (later internationaal). Je ziet per ma
 
 Tabbladen: Mijn tuin, Deze maand en Gewassen. Ingelogd opent Sowly op Mijn tuin, anders op Deze maand. In Mijn tuin sorteer je standaard op wat het eerst aandacht nodig heeft, en verder op alfabet, herkenning of plek. Bovenaan staat met wie je bent ingelogd (met Uitloggen), en de knop Samen voor delen en uitnodigen.
 
-Zonder eigen server: één HTML-bestand. Je tuin opslaan kan alleen na inloggen, in een online tuin via Firebase (zie `src/cloud.js` en `firestore.rules`); de tuin staat niet in `localStorage`. Daar staat alleen het vlaggetje `sowly.ingelogd` (zodat Sowly direct op Mijn tuin opent) en tijdelijk een uitnodigingscode. Mascotte: Kiempje.
+Zonder eigen server: één HTML-bestand. Je tuin opslaan kan alleen na inloggen, in een online tuin via Supabase (zie `src/cloud.js` en `supabase.sql`); de tuin staat niet in `localStorage`. Daar staat alleen het vlaggetje `sowly.ingelogd` (zodat Sowly direct op Mijn tuin opent) en tijdelijk een uitnodigingscode. Mascotte: Kiempje.
 
 ## Snel starten
 
@@ -57,7 +57,7 @@ Let op bij iOS: de app op het beginscherm heeft een eigen opslag, los van Safari
 
 ## Wat anders werkt dan in Claude
 
-In Claude draait de app als gepubliceerde pagina met de database van Claude voor "samen tuinieren". In de webversie (`docs/index.html`) loopt opslaan en samen tuinieren via Firebase, met uitnodigen via een link. Zie `notes/openstaande-punten.md`.
+In Claude draait de app als gepubliceerde pagina met de database van Claude voor "samen tuinieren". In de webversie (`docs/index.html`) loopt opslaan en samen tuinieren via Supabase, met uitnodigen via een link. Zie `notes/openstaande-punten.md`.
 
 `npm run build:artifact` maakt `dist/artifact.html`, de variant zonder `<html>`-kop zoals Claude die publiceert.
 

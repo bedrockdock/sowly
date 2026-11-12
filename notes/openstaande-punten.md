@@ -3,7 +3,7 @@
 Bijgewerkt: zaterdag 24 oktober 2026. Naam: **Sowly** (internationaal, van "to sow"). De mascotte, het springende groene kereltje met de scheut, heet in Nederland **Kiempje** en krijgt per taal een eigen naam (Engels: Sprout, Duits: Spross).
 
 ## Eerst (om online te komen)
-- [x] **Domein sowly.eu gekoppeld** (24 oktober 2026): GitHub Pages met eigen domein, HTTPS aan, www en bedrockdock.github.io/sowly sturen door. DNS bij Strato: A-record `185.199.108.153` op het hoofddomein, geen AAAA, CNAME `www` naar `bedrockdock.github.io`. Firebase: sowly.eu en www.sowly.eu bij Authorized domains.
+- [x] **Domein sowly.eu gekoppeld** (24 oktober 2026): GitHub Pages met eigen domein, HTTPS aan, www en bedrockdock.github.io/sowly sturen door. DNS bij Strato: A-record `185.199.108.153` op het hoofddomein, geen AAAA, CNAME `www` naar `bedrockdock.github.io`. Supabase: sowly.eu bij Site URL en Redirect URLs.
 - [ ] **Merknaam Sowly controleren.** Besluit 23 oktober: de naam Sowly blijft, met sowly.eu als adres. Bekend: sowly.com en sowly.app zijn bezet, en de naam is in meerdere landen bezet. Eerst uitzoeken wat er achter die bestaande Sowly's zit (actief bedrijf, welke sector?) en het merkenregister (EUIPO en Benelux, klasse 9, 42 en 31) raadplegen voordat je investeert. Controleer ook of "Sowly" in een andere taal iets onhandigs betekent.
 - [ ] **Namen die niet gelukt zijn** (niet opnieuw proberen): Sowmate (bezet), moestuin-namen (meest bezet), Moonsprout (te lang), Harvia (saunamerk), Harvest Moon en FarmVille (merken). Nog niet gecontroleerd en bruikbaar als terugval: Growie, Plotty, Harvo, Orto, Veggo, Harvie, Tendrio, Verdo, Plotmate, Patchmate, First Frost.
 - [ ] **Webversie online zetten** (aanpak: VS Code + Claude desktop, code in GitHub). Voorbereid in dit project: los `docs/index.html` met doctype en viewport, icoon (`icon.svg`, `icon-192.png`, `icon-512.png`), manifest voor het beginscherm en bouwscript.
@@ -14,16 +14,18 @@ Bijgewerkt: zaterdag 24 oktober 2026. Naam: **Sowly** (internationaal, van "to s
 - [ ] **Privacyverklaring** met daarin Cloudflare Web Analytics (staat sinds 23 oktober 2026 in de webversie, via `build.js`). Volgens Cloudflare zonder cookies en zonder persoonsgegevens; zelf nalezen in hun privacyvoorwaarden. Later uitbreiden voor advertenties en accounts.
 
 ## Accounts en samen tuinieren
-- [x] **Backend:** Firebase (project `sowly-f5be6`, Spark). Config in `src/cloud.js`, alleen in de webversie.
-- [x] **Inlogstroom:** zonder account alleen voorbeeldplanten, niets lokaal opgeslagen (besluit 24 oktober: wie zijn cache leegt, zou zijn tuin kwijt zijn); Planten, Wijzigen en Verwijderen vragen om inloggen en gaan daarna verder; inloggen met Google of e-mail en wachtwoord (besluit 23 oktober: met wachtwoord, niet met inloglink). Wachtwoord vergeten via herstelmail.
+- [x] **Backend:** Supabase (sinds 12 november 2026, project `xkreecbnockrjrisbswj`; daarvoor Firebase, zonder migratie). URL en publishable key in `src/cloud.js`, alleen in de webversie.
+- [x] **Inlogstroom:** zonder account alleen voorbeeldplanten, niets lokaal opgeslagen (besluit 24 oktober: wie zijn cache leegt, zou zijn tuin kwijt zijn); Planten, Wijzigen en Verwijderen vragen om inloggen en gaan daarna verder; inloggen alleen met e-mail en wachtwoord (besluit 23 oktober: met wachtwoord, niet met inloglink; 12 november: geen Google). Wachtwoord vergeten via herstelmail, daarna nieuw wachtwoord kiezen in de app.
 - [x] **Uitnodigen met link** in de app, per uitnodiging meekijken of meewerken. Weghalen trekt ook de link in waarmee iemand binnenkwam.
 - [x] **Kaart "Log in om je tuin te bewaren"** bovenaan Mijn tuin zolang je niet bent ingelogd. (Lokale tuin meenemen is vervallen met het lokaal opslaan.)
-- [x] **E-mailadres bevestigen** voordat iemand iets online opslaat (regels: `email_verified`). Remt nep-accounts die het Firestore-quotum opmaken; houdt aanmelden zelf niet tegen.
-- [ ] **App Check (reCAPTCHA)** als echte bescherming tegen bots, zodra er gebruikers zijn of misbruik zichtbaar is.
-- [ ] **API-sleutel beperken** in Google Cloud Console (websites en API's).
-- [ ] **Regels publiceren:** `firestore.rules` in Firebase plakken (Firestore Database > Rules > Publish). Zonder die regels werkt de online tuin niet.
-- [ ] **Testen met twee echte accounts:** inloggen, uitnodigen (meekijken en meewerken), weghalen, verlaten, wisselen tussen tuinen. De regels zijn niet in een emulator getest (geen Java).
-- [ ] **Account verwijderen** in de app (AVG: recht op verwijdering). Nu alleen via de Firebase-console.
+- [x] **E-mailadres bevestigen** voordat iemand kan inloggen (Supabase: Confirm email aan). Houdt aanmelden zelf niet tegen.
+- [ ] **Database inrichten:** `supabase.sql` in Supabase plakken (SQL Editor > Run). Zonder dat werkt de online tuin niet.
+- [ ] **Eigen SMTP** in Supabase (Authentication > SMTP Settings). De ingebouwde mail stuurt alleen naar teamleden en maar een paar per uur.
+- [ ] **Nederlandse mailteksten** in Supabase (Authentication > Email Templates): bevestigen en wachtwoord herstellen.
+- [ ] **Gratis project pauzeert** na een week zonder gebruik (de reden dat Supabase op 23 oktober afviel). In de gaten houden, of een betaald plan nemen.
+- [ ] **Bescherming tegen bots** (CAPTCHA bij aanmelden; Supabase ondersteunt hCaptcha en Cloudflare Turnstile), zodra er gebruikers zijn of misbruik zichtbaar is.
+- [ ] **Testen met twee echte accounts:** inloggen, uitnodigen (meekijken en meewerken), weghalen, verlaten, wisselen tussen tuinen. `supabase.sql` is nog niet tegen het echte project getest.
+- [ ] **Account verwijderen** in de app (AVG: recht op verwijdering). Nu alleen via de Supabase-console (Authentication > Users); tuinen, lidmaatschappen en uitnodigingen verdwijnen dan mee.
 - [ ] **Uitnodigingen beheren:** lijst van openstaande links en intrekken zonder iemand weg te halen.
 
 ## Inkomsten

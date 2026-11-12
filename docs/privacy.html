@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2F8F46">
+<title>Privacy · Sowly</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/fredoka-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/fredoka-latin-ext-500-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/fredoka-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/fredoka-latin-ext-600-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/fredoka-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/fredoka-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/nunito-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/nunito-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/nunito-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/nunito-latin-ext-600-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/nunito-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/nunito-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+:root{--bg:#E7F4E8;--surface:#F9FEF8;--ink:#1D3221;--muted:#47664C;--edge:#2A3B2C;--accent:#2F8F46}
+@media (prefers-color-scheme:dark){:root{--bg:#0F1A12;--surface:#182619;--ink:#E3F1E2;--muted:#9BB89F;--edge:#5B8762;--accent:#58C26B;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 Nunito,system-ui,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:24px 16px 48px}
+.card{background:var(--surface);border:3px solid var(--edge);border-radius:20px;padding:20px 20px 8px;box-shadow:0 4px 0 var(--edge)}
+h1,h2{font-family:Fredoka,Nunito,system-ui,sans-serif;line-height:1.2}
+h1{font-size:2rem;margin:12px 0 4px}
+h2{font-size:1.2rem;margin:24px 0 6px}
+p,ul{margin:0 0 12px}
+ul{padding-left:1.2em}
+li{margin-bottom:4px}
+a{color:var(--accent);font-weight:700}
+.muted{color:var(--muted)}
+code{font-size:.9em;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p><a href="./">← Terug naar Sowly</a></p>
+<h1>Privacyverklaring</h1>
+<p class="muted">Laatst bijgewerkt: 12 november 2026</p>
+<div class="card">
+
+<h2>Wie is verantwoordelijk</h2>
+<p>Sowly (sowly.eu) is een project van Titus de Jong. Vragen over je gegevens, of een verzoek om ze in te zien of te verwijderen? Mail naar <a href="mailto:info@bedrockdock.com">info@bedrockdock.com</a>.</p>
+
+<h2>Zonder account</h2>
+<p>Je kunt Sowly gebruiken zonder account. Je ziet dan de kalender, de gewassen en voorbeeldplanten. Sowly slaat dan niets over jou op. Wel komen bij het openen van de site technische gegevens, zoals je IP-adres, langs bij deze diensten:</p>
+<ul>
+<li><b>GitHub Pages</b> (GitHub): hier staat de website.</li>
+<li><b>Cloudflare Web Analytics</b>: telt hoe vaak pagina's bezocht worden. Volgens Cloudflare zonder cookies en zonder je te volgen over andere sites.</li>
+<li><b>jsDelivr</b>: levert de programmacode om in te loggen (supabase-js).</li>
+</ul>
+
+<h2>Met een account</h2>
+<p>Om je tuin te bewaren maak je een account. Dan bewaren we:</p>
+<ul>
+<li>je e-mailadres en je wachtwoord (het wachtwoord alleen versleuteld, wij kunnen het niet lezen);</li>
+<li>de naam die je opgeeft;</li>
+<li>je tuin: welke gewassen, hoe en wanneer je ze plantte, en de namen en plekken die je zelf invult;</li>
+<li>de tuinen waarin je meedoet, je rol daarin en de uitnodigingen die je maakt.</li>
+</ul>
+<p>Dit staat bij <b>Supabase</b>, in een datacentrum in de EU (Parijs). Supabase legt bij het inloggen ook technische gegevens vast, zoals je IP-adres, voor de beveiliging.</p>
+<p>De mail om je e-mailadres te bevestigen en de mail om je wachtwoord te herstellen gaan via <b>Brevo</b>. Brevo krijgt daarvoor je e-mailadres en de inhoud van die mail.</p>
+<p>Doe je mee in de tuin van een ander, dan zien de andere leden van die tuin je naam, je rol en de planten die jij toevoegt.</p>
+
+<h2>Waarom</h2>
+<ul>
+<li>Je account en je tuin: om de dienst te leveren waar je om vraagt (uitvoering van de overeenkomst).</li>
+<li>Beveiliging en bezoekcijfers: omdat we de site veilig willen houden en willen weten hoe hij gebruikt wordt (gerechtvaardigd belang).</li>
+</ul>
+<p>We verkopen je gegevens niet, gebruiken ze niet voor reclame en sturen je geen nieuwsbrief.</p>
+
+<h2>Cookies en opslag in je browser</h2>
+<p>Sowly gebruikt geen cookies. Wel bewaart je browser een paar kleine dingen in de lokale opslag:</p>
+<ul>
+<li>je inlogsessie, zodat je ingelogd blijft (<code>sb-…-auth-token</code>);</li>
+<li>een vlaggetje dat je ingelogd was, zodat Sowly direct op Mijn tuin opent (<code>sowly.ingelogd</code>);</li>
+<li>tijdelijk de code van een uitnodiging, tot je hebt ingelogd (<code>sowly.uitnodiging</code>).</li>
+</ul>
+<p>Je tuin zelf staat niet in je browser, alleen online.</p>
+
+<h2>Hoe lang</h2>
+<p>We bewaren je gegevens zolang je account bestaat. Vraag je om verwijdering, dan verwijderen we je account, de tuinen waarvan je eigenaar bent, je lidmaatschappen en je uitnodigingen. Planten die je in de tuin van een ander zette, blijven in die tuin staan, maar zonder je naam.</p>
+
+<h2>Buiten de EU</h2>
+<p>GitHub, Cloudflare, jsDelivr, Supabase en Brevo werken met eigen servers en onderaannemers, waarvan sommige buiten de EU, bijvoorbeeld in de Verenigde Staten. Je accountgegevens en je tuin staan in de EU.</p>
+
+<h2>Je rechten</h2>
+<p>Je mag je gegevens inzien, laten verbeteren of laten verwijderen, en bezwaar maken. Mail daarvoor naar <a href="mailto:info@bedrockdock.com">info@bedrockdock.com</a>. Ben je het niet eens met hoe we met je gegevens omgaan, dan kun je een klacht indienen bij de <a href="https://www.autoriteitpersoonsgegevens.nl/">Autoriteit Persoonsgegevens</a>.</p>
+
+<h2>Wijzigingen</h2>
+<p>Verandert er iets, bijvoorbeeld als er advertenties of affiliate-links bijkomen, dan passen we deze verklaring aan. Bovenaan staat de datum van de laatste wijziging.</p>
+</div>
+</div>
+</body>
+</html>

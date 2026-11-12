@@ -11,7 +11,8 @@ Bijgewerkt: zaterdag 24 oktober 2026. Naam: **Sowly** (internationaal, van "to s
   - [x] repository op GitHub, daarna GitHub Pages (map `/docs`); later eventueel Netlify of Cloudflare
   - [ ] let op: GitHub Pages is gratis alleen voor openbare repo's en niet bedoeld voor commerciële sites
 - [ ] **Voorwaarden hosting lezen** voor affiliate-links en advertenties (Cloudflare noemt de gratis variant "voor persoonlijke of hobbyprojecten"; de algemene voorwaarden zijn niet gelezen).
-- [ ] **Privacyverklaring** met daarin Cloudflare Web Analytics (staat sinds 23 oktober 2026 in de webversie, via `build.js`). Volgens Cloudflare zonder cookies en zonder persoonsgegevens; zelf nalezen in hun privacyvoorwaarden. Later uitbreiden voor advertenties en accounts (Supabase voor accounts en tuinen, Brevo voor de mails).
+- [x] **Privacyverklaring** (12 november 2026): `src/privacy.html`, door `build.js` gekopieerd naar `docs/privacy.html`, met een link onderaan de site (alleen webversie). Noemt GitHub Pages, Cloudflare Web Analytics, jsDelivr, Supabase (West EU, Parijs) en Brevo; contact info@bedrockdock.com. Niet juridisch nagekeken.
+- [ ] **Privacyverklaring bijwerken** bij advertenties, affiliate-links, KvK-gegevens of een nieuwe dienst. Cloudflare Web Analytics: zelf nalezen in hun privacyvoorwaarden of het klopt dat het zonder cookies en persoonsgegevens werkt.
 
 ## Accounts en samen tuinieren
 - [x] **Backend:** Supabase (sinds 12 november 2026, project `xkreecbnockrjrisbswj`; daarvoor Firebase, zonder migratie). URL en publishable key in `src/cloud.js`, alleen in de webversie.

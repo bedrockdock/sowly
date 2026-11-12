@@ -22,6 +22,9 @@ Moestuinplanner (NL/BE, later internationaal). Eigenaar: Titus, Nederlandstalig,
 - De plantanimatie bij het toevoegen aan je tuin is bewust langzaam (ongeveer 5,5 seconden, vallen 1,4 seconden). Maak hem niet sneller.
 - Mascotte Kiempje staat in `app.js` (`MASCOT`) en heeft eigen animaties met klassen `m*` in de CSS.
 
+## Privacy
+- De privacyverklaring staat in `src/privacy.html`; `build.js` kopieert hem naar `docs/privacy.html` en zet de link onderaan de webversie. Komt er een dienst bij die gegevens verwerkt (advertenties, affiliate, analytics, mail), werk hem dan bij, inclusief de datum.
+
 ## Affiliate en advertenties
 - Zaad-knoppen gebruiken `SHOPS` in `app.js`. Zonder link staan ze uitgeschakeld en gemarkeerd als voorbeeld. Elke echte link moet zichtbaar als affiliate-link zijn gemarkeerd. Teeltgegevens mogen niet door commissie beïnvloed worden.
 - Voor het web: cookiebanner en privacyverklaring vóór advertenties.

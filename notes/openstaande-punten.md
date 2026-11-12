@@ -11,7 +11,7 @@ Bijgewerkt: zaterdag 24 oktober 2026. Naam: **Sowly** (internationaal, van "to s
   - [x] repository op GitHub, daarna GitHub Pages (map `/docs`); later eventueel Netlify of Cloudflare
   - [ ] let op: GitHub Pages is gratis alleen voor openbare repo's en niet bedoeld voor commerciële sites
 - [ ] **Voorwaarden hosting lezen** voor affiliate-links en advertenties (Cloudflare noemt de gratis variant "voor persoonlijke of hobbyprojecten"; de algemene voorwaarden zijn niet gelezen).
-- [ ] **Privacyverklaring** met daarin Cloudflare Web Analytics (staat sinds 23 oktober 2026 in de webversie, via `build.js`). Volgens Cloudflare zonder cookies en zonder persoonsgegevens; zelf nalezen in hun privacyvoorwaarden. Later uitbreiden voor advertenties en accounts.
+- [ ] **Privacyverklaring** met daarin Cloudflare Web Analytics (staat sinds 23 oktober 2026 in de webversie, via `build.js`). Volgens Cloudflare zonder cookies en zonder persoonsgegevens; zelf nalezen in hun privacyvoorwaarden. Later uitbreiden voor advertenties en accounts (Supabase voor accounts en tuinen, Brevo voor de mails).
 
 ## Accounts en samen tuinieren
 - [x] **Backend:** Supabase (sinds 12 november 2026, project `xkreecbnockrjrisbswj`; daarvoor Firebase, zonder migratie). URL en publishable key in `src/cloud.js`, alleen in de webversie.
@@ -19,12 +19,14 @@ Bijgewerkt: zaterdag 24 oktober 2026. Naam: **Sowly** (internationaal, van "to s
 - [x] **Uitnodigen met link** in de app, per uitnodiging meekijken of meewerken. Weghalen trekt ook de link in waarmee iemand binnenkwam.
 - [x] **Kaart "Log in om je tuin te bewaren"** bovenaan Mijn tuin zolang je niet bent ingelogd. (Lokale tuin meenemen is vervallen met het lokaal opslaan.)
 - [x] **E-mailadres bevestigen** voordat iemand kan inloggen (Supabase: Confirm email aan). Houdt aanmelden zelf niet tegen.
-- [ ] **Database inrichten:** `supabase.sql` in Supabase plakken (SQL Editor > Run). Zonder dat werkt de online tuin niet.
-- [ ] **Eigen SMTP** in Supabase (Authentication > SMTP Settings). De ingebouwde mail stuurt alleen naar teamleden en maar een paar per uur.
+- [x] **Database inrichten** (12 november 2026): `supabase.sql` in Supabase uitgevoerd (SQL Editor > Run). Na een wijziging in dat bestand opnieuw draaien; het script begint met opruimen, dus bestaande gegevens gaan dan weg.
+- [x] **Eigen SMTP** (12 november 2026): Brevo, gratis plan (300 mails per dag), afzender `noreply@sowly.eu`, domein geverifieerd met DNS-records bij Strato. Strato kon niet: het pakket van sowly.eu heeft geen mail.
+- [x] **Redirect URLs** in Supabase: sowly.eu en www.sowly.eu. Inloggen, bevestigen en de live site getest en werkend (12 november 2026).
+- [ ] **Firebase-project `sowly-f5be6` opruimen** in de Firebase-console (Project settings > Delete project). Wordt niet meer gebruikt.
 - [ ] **Nederlandse mailteksten** in Supabase (Authentication > Email Templates): bevestigen en wachtwoord herstellen.
 - [ ] **Gratis project pauzeert** na een week zonder gebruik (de reden dat Supabase op 23 oktober afviel). In de gaten houden, of een betaald plan nemen.
 - [ ] **Bescherming tegen bots** (CAPTCHA bij aanmelden; Supabase ondersteunt hCaptcha en Cloudflare Turnstile), zodra er gebruikers zijn of misbruik zichtbaar is.
-- [ ] **Testen met twee echte accounts:** inloggen, uitnodigen (meekijken en meewerken), weghalen, verlaten, wisselen tussen tuinen. `supabase.sql` is nog niet tegen het echte project getest.
+- [ ] **Testen met twee echte accounts:** inloggen, uitnodigen (meekijken en meewerken), weghalen, verlaten, wisselen tussen tuinen. Inloggen werkt live; samen tuinieren met twee accounts nog apart nalopen.
 - [ ] **Account verwijderen** in de app (AVG: recht op verwijdering). Nu alleen via de Supabase-console (Authentication > Users); tuinen, lidmaatschappen en uitnodigingen verdwijnen dan mee.
 - [ ] **Uitnodigingen beheren:** lijst van openstaande links en intrekken zonder iemand weg te halen.
 

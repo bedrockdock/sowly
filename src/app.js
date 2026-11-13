@@ -56,7 +56,8 @@ function attach(db,onLost){
     db.doc('garden/settings').onSnapshot(sn=>{
       const d=sn.data();if(!d)return;
       if(d.frost)S.frost=d.frost;
-      if(d.land&&d.land in COUNTRIES){if(d.land!=S.land){S.land=d.land;applyStatic()}}
+      const dl=normLand(d.land);
+      if(dl&&dl in COUNTRIES){if(dl!=S.land){S.land=dl;applyStatic()}}
       else if(canEdit()&&!landTried){landTried=true;dbFrost()}/* tuin zonder land: één keer het land van dit apparaat vastleggen */
       render();
     },()=>{})
@@ -294,12 +295,15 @@ function openSamen(){openSheet(`<h2 id="sh-title" style="padding-right:48px">${t
 const isNLBE=()=>COUNTRIES[S.land]=='nlbe';
 const noteText=()=>{
   if(isNLBE())return tx('note');
+  if(COUNTRIES[S.land]=='-')return tx('note.zone',{land:landName(S.land)});
   const r=region(),land=landName(S.land);
-  return r?tx('note.partial',{land,src:r.src,n:CROPS.filter(c=>r.s[c.id]).length,t:CROPS.length}):tx('note.other',{land});
+  /* Alle bronnen van dit land (hoofdbron plus bron per gewas in cs) */
+  const srcs=r&&[...new Set([r.src,...Object.values(r.cs||{})])].join(', ');
+  return r?tx('note.partial',{land,src:srcs,n:CROPS.filter(c=>r.s[c.id]).length,t:CROPS.length}):tx('note.other',{land});
 };
 const landBanner=()=>isNLBE()?'':`<div class="card landnote small">${esc(noteText())}</div>`;
 /* Per gewas: waar komen de zaaitijden vandaan (alleen buiten NL/BE) */
-const cropSrc=id=>{if(isNLBE())return '';const r=region(),land=landName(S.land);return `<p class="small muted" style="margin:6px 0 0">${esc(r&&r.s[id]?tx('src.local',{land,src:r.src}):tx('src.none',{land}))}</p>`};
+const cropSrc=id=>{if(isNLBE()||COUNTRIES[S.land]=='-')return '';const r=region(),land=landName(S.land);return `<p class="small muted" style="margin:6px 0 0">${esc(r&&r.s[id]?tx('src.local',{land,src:(r.cs&&r.cs[id])||r.src}):tx('src.none',{land}))}</p>`};
 function setLand(c){
   if(!(c in COUNTRIES)||c==S.land)return;
   S.land=c;try{localStorage.setItem(LAND_KEY,c)}catch(e){}

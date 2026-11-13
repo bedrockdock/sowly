@@ -21,7 +21,7 @@ create table public.gardens (
   owner uuid not null references auth.users on delete cascade,
   name text not null check (char_length(name) <= 80),
   frost int not null check (frost between 14 and 26),
-  land text check (land is null or land ~ '^[A-Z]{2}$')
+  land text constraint gardens_land_check check (land is null or land ~ '^[A-Z]{2}(-[A-Z])?$')
 );
 
 create table public.members (

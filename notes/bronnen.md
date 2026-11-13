@@ -104,3 +104,75 @@ selderij         NL: glas 10-17 | uitplant 19-24 | oogst 39-48
 ui               NL: buiten 6-15 | uitplant 11-16 | oogst 29-38
                  DE: buiten 9-14 | uitplant 9-14 | oogst 31-39
 ```
+
+## Frankrijk (sinds 13 november 2026)
+Frankrijk is in de app verdeeld in drie klimaatzones: FR-N (noord en west), FR-C (midden en oost), FR-S (zuid, mediterraan). Een landelijke officiële tabel bestaat niet; bronnen zijn regionaal.
+- **FR-C, gebruikt:** CIVAM Auvergne-Rhône-Alpes, *Calendrier des semis, plantations et récoltes*, met logo's van het ministère de l'Agriculture, de Préfet de région en ARS Auvergne-Rhône-Alpes, gepubliceerd op de site van de DRAAF: https://draaf.auvergne-rhone-alpes.agriculture.gouv.fr/IMG/pdf/FICHE_TECH_CALENDRIER_SEMIS_PLANTATIONS_RECOLTES-2_cle091634.pdf . Lijnen exact uit de PDF gelezen. 27 van 45 gewassen (`src/region-frc.js`).
+  - Regels: Semis = buiten zaaien (alleen bij gewassen die bij ons ook direct gezaaid worden), Plantations = uitplanten, Récoltes = oogsten; binnen en onder glas: NL-weken. Ail: semis = poten (teentjes). Oignons: semis = zaaiuien, plantations = plantuitjes.
+  - Verzamelrijen voor twee gewassen: Haricots (stamslaboon, stokboon), Poivrons et piments (paprika, peper), Chou-fleur/brocoli (bloemkool, broccoli), Choux frisé/blanc/rouge (alleen witte en rode kool).
+  - Niet overgenomen: pommes de terre (geen onderscheid vroeg/laat), fenouil (staat bij de kruiden), chou frisé voor boerenkool/savooiekool (dubbelzinnig), céleri (bleekselderij, zit niet in de app; tweede oogstlijn loopt schuin).
+  - De bron is ruim: bijv. tomaten planten mei t/m eind augustus. Zo overgenomen.
+- **FR-S, bekeken, niet gebruikt:** Écolothèque de Montpellier Méditerranée Métropole, *Calendrier des cultures potagères* (versie 2, februari 2025), 15 gewassen met één stip per activiteit per maand; te grof (oogst zou één maand duren). https://www.ecolotheque.montpellier3m.fr/sites/default/files/documents/Calendrier%20des%20cultures%20potag%C3%A8res.pdf
+- **FR-N, bekeken, niet gebruikt:** Mairie de Paris, *Le semis* (Végétalisons Paris): alleen een lijst wat je per maand zaait, geen planten of oogsten.
+- **FR-N en aanvulling FR-C, gebruikt:** Jardiner Malin, *Calendrier de semis et récolte au potager* (gepubliceerd 14 februari 2016, bijgewerkt 24 april 2026), tabel met als bron GNIS (Groupement national interprofessionnel des semences, nu SEMAE): https://www.jardiner-malin.fr/fiche/calendrier-semis-recolte-potager.html . Landelijk, niet per streek ("à titre indicatif"). Gebruikt voor alle 29 gewassen die erin staan in FR-N (`src/region-frn.js`), en in FR-C voor de 12 die CIVAM niet heeft (courgette, pompoen, veldsla, tuinboon, aardappel vroeg en laat, andijvie, spruitkool, savooiekool, maïs, augurk, venkel; bron per gewas in `cs`).
+  - Regels: À l'intérieur = binnen, Sous abri = glas, Pleine terre en Pépinière = buiten, Repiquage = uitplanten. 'mi-' = halverwege de maand, 'fin' = laatste 2 weken, 'début' = eerste 2 weken. Courges zonder methode maar met repiquage = binnen. Komkommer/augurk "repiquage 15 jours après le semis" = binnenzaai + 2 weken. Maïs "récolte 3-4 mois après le semis" = zaaiperiode + 13 tot 17 weken. Fèves "régions douces" en aubergines "Sud-Ouest et Midi" niet overgenomen. Choux (cabus, de Milan, rouge) = witte, savooie- en rode kool; Choux-fleurs plus Choux-fleurs d'hiver = bloemkool; Concombres, cornichons = komkommer en augurk; Haricots nains = stamslaboon, rames = stokboon; Oignons zonder plantuitjes (repiquage = jonge planten, geen uitjes).
+  - Niet in de tabel: knoflook, boerenkool, basilicum, koolrabi, sjalot, pluksla, winterpostelein, rucola, peterselie, snijbiet, prei, doperwt, Chinese kool, bosui, pastinaak, peper.
+- Buiten NL/BE noemt de app nergens dat gegevens uit Nederland of België komen: bij landen, zones en gewassen zonder lokale bron staat alleen dat er nog geen lokale bron is en dat de zaaitijden een algemene richtlijn zijn (besluit eigenaar, 13 november 2026). Bevestigingen bij verzorging en buren blijven "Nederlandse of Belgische bron" noemen.
+
+### Vergelijking NL (data.js) en FR-C (region-frc.js), in weken
+```
+sla              NL: binnen 6-12 | glas 6-12 | buiten 10-34 | uitplant 12-38 | oogst 19-43
+                 FR: binnen 6-12 | glas 6-12 | buiten 7-43 | uitplant 12-38 | oogst 10-48
+snijbiet         NL: buiten 14-26 | oogst 24-44
+                 FR: buiten 14-34 | oogst 1-9 | oogst 22-51
+rucola           NL: glas 8-11 | buiten 9-37 | oogst 15-43
+                 FR: glas 8-11 | buiten 9-39 | oogst 18-48
+spinazie         NL: glas 1-9 | buiten 5-15 | buiten 33-41 | oogst 14-25 | oogst 40-50
+                 FR: glas 1-9 | buiten 6-18 | buiten 31-39 | oogst 1-9 | oogst 14-26 | oogst 36-52
+stamslaboon      NL: binnen 16-19 | buiten 20-28 | uitplant 20-24 | oogst 27-39
+                 FR: binnen 16-19 | buiten 18-31 | uitplant 18-31 | oogst 23-39
+stokboon         NL: buiten 19-28 | oogst 27-39
+                 FR: buiten 18-31 | oogst 23-39
+doperwt          NL: buiten 10-19 | oogst 26-31
+                 FR: buiten 10-31 | oogst 23-39
+peterselie       NL: glas 9-13 | buiten 14-35 | oogst 23-46
+                 FR: glas 9-13 | buiten 14-35 | uitplant 5-44 | oogst 1-52
+bloemkool        NL: glas 3-12 | buiten 14-24 | uitplant 14-30 | oogst 20-30 | oogst 39-48
+                 FR: glas 3-12 | uitplant 9-35 | oogst 18-48
+broccoli         NL: glas 10-14 | buiten 16-23 | uitplant 16-30 | oogst 24-44
+                 FR: glas 10-14 | uitplant 9-35 | oogst 18-48
+wittekool        NL: glas 6-13 | buiten 13-18 | uitplant 19-24 | oogst 36-47
+                 FR: glas 6-13 | uitplant 9-35 | oogst 31-52
+rodekool         NL: glas 10-14 | buiten 13-18 | uitplant 19-24 | oogst 36-47
+                 FR: glas 10-14 | uitplant 9-35 | oogst 31-52
+chinesekool      NL: buiten 27-35 | oogst 38-46
+                 FR: buiten 26-35 | oogst 39-52
+prei             NL: binnen 6-13 | buiten 16-26 | uitplant 14-28 | oogst 27-52
+                 FR: binnen 6-13 | buiten 14-21 | uitplant 18-34 | oogst 1-9 | oogst 31-52
+bosui            NL: buiten 10-18 | oogst 22-36
+                 FR: buiten 10-26 | oogst 26-39
+knoflook         NL: buiten 40-48 | oogst 27-31
+                 FR: buiten 40-48 | oogst 14-26
+ui               NL: buiten 6-15 | uitplant 11-16 | oogst 29-38
+                 FR: buiten 10-26 | uitplant 10-26 | oogst 22-35
+komkommer        NL: binnen 16-22 | buiten 18-30 | uitplant 21-25 | oogst 27-38
+                 FR: binnen 16-22 | uitplant 19-35 | oogst 26-39
+aubergine        NL: binnen 9-13 | uitplant 20-23 | oogst 30-40
+                 FR: binnen 9-13 | uitplant 22-31 | oogst 31-39
+paprika          NL: binnen 9-22 | uitplant 22-26 | oogst 33-42
+                 FR: binnen 9-22 | uitplant 22-31 | oogst 31-39
+peper            NL: binnen 16-22 | uitplant 22-26 | oogst 33-42
+                 FR: binnen 16-22 | uitplant 22-31 | oogst 31-39
+tomaat           NL: binnen 6-19 | glas 12-16 | uitplant 21-26 | oogst 31-42
+                 FR: binnen 6-19 | glas 12-16 | uitplant 18-34 | oogst 26-39
+wortel           NL: glas 7-10 | buiten 10-28 | oogst 23-46
+                 FR: glas 7-10 | buiten 9-26 | oogst 22-52
+pastinaak        NL: buiten 16-20 | buiten 27-30 | oogst 37-52
+                 FR: buiten 9-22 | oogst 31-52
+radijs           NL: glas 7-17 | buiten 11-35 | oogst 14-43
+                 FR: glas 7-17 | buiten 5-18 | buiten 31-44 | oogst 14-22 | oogst 36-48
+biet             NL: buiten 11-27 | oogst 27-44
+                 FR: buiten 9-35 | oogst 18-52
+selderij         NL: glas 10-17 | uitplant 19-24 | oogst 39-48
+                 FR: glas 10-17 | uitplant 9-22 | oogst 26-52
+```

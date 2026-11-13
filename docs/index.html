@@ -571,6 +571,95 @@ REGIONS.de={src:'Bayerische Gartenakademie (LWG)',s:{
   'ui':[["buiten", 9, 14], ["uitplant", 9, 14, "uitjes"], ["oogst", 31, 39]]
 }};
 
+/* Zaaitijden Frankrijk, Midden & Oost. Bron: CIVAM Auvergne-Rhône-Alpes, "Calendrier des semis, plantations et récoltes",
+   gepubliceerd door de DRAAF Auvergne-Rhône-Alpes (ministère de l'Agriculture), met Préfet de région en ARS:
+   https://draaf.auvergne-rhone-alpes.agriculture.gouv.fr/IMG/pdf/FICHE_TECH_CALENDRIER_SEMIS_PLANTATIONS_RECOLTES-2_cle091634.pdf
+   Lijnen exact uit de PDF gelezen. Semis = buiten zaaien (alleen bij gewassen die ook bij ons direct gezaaid worden),
+   Plantations = uitplanten, Récoltes = oogsten. Binnen voorzaaien en onder glas staan niet in de bron: NL-weken.
+   Niet overgenomen (bron maakt het onderscheid niet): aardappel (vroeg/laat), venkel (staat bij de kruiden), boerenkool en
+   savooiekool ("chou frisé" is dubbelzinnig). Gewassen die CIVAM niet heeft, komen uit de landelijke GNIS-tabel (zie region-frn.js);
+   die staan in cs (bron per gewas). Details: notes/bronnen.md. */
+REGIONS.frc={src:'CIVAM Auvergne-Rhône-Alpes',cs:{"andijvie": "GNIS (Jardiner Malin)", "savooiekool": "GNIS (Jardiner Malin)", "spruitkool": "GNIS (Jardiner Malin)", "augurk": "GNIS (Jardiner Malin)", "courgette": "GNIS (Jardiner Malin)", "pompoen": "GNIS (Jardiner Malin)", "venkel": "GNIS (Jardiner Malin)", "tuinboon": "GNIS (Jardiner Malin)", "veldsla": "GNIS (Jardiner Malin)", "mais": "GNIS (Jardiner Malin)", "aardappel-vroeg": "GNIS (Jardiner Malin)", "aardappel-laat": "GNIS (Jardiner Malin)"},s:{
+  'sla':[["binnen", 6, 12], ["glas", 6, 12], ["buiten", 7, 43], ["uitplant", 12, 38], ["oogst", 10, 48]],
+  'snijbiet':[["buiten", 14, 34], ["oogst", 1, 9], ["oogst", 22, 51]],
+  'rucola':[["glas", 8, 11], ["buiten", 9, 39], ["oogst", 18, 48]],
+  'spinazie':[["glas", 1, 9], ["buiten", 6, 18], ["buiten", 31, 39], ["oogst", 1, 9], ["oogst", 14, 26], ["oogst", 36, 52]],
+  'stamslaboon':[["binnen", 16, 19], ["buiten", 18, 31], ["uitplant", 18, 31], ["oogst", 23, 39]],
+  'stokboon':[["buiten", 18, 31], ["oogst", 23, 39]],
+  'doperwt':[["buiten", 10, 31], ["oogst", 23, 39]],
+  'peterselie':[["glas", 9, 13], ["buiten", 14, 35], ["uitplant", 5, 44], ["oogst", 1, 52]],
+  'bloemkool':[["glas", 3, 12], ["uitplant", 9, 35], ["oogst", 18, 48]],
+  'broccoli':[["glas", 10, 14], ["uitplant", 9, 35], ["oogst", 18, 48]],
+  'wittekool':[["glas", 6, 13], ["uitplant", 9, 35], ["oogst", 31, 52]],
+  'rodekool':[["glas", 10, 14], ["uitplant", 9, 35], ["oogst", 31, 52]],
+  'chinesekool':[["buiten", 26, 35], ["oogst", 39, 52]],
+  'prei':[["binnen", 6, 13], ["buiten", 14, 21], ["uitplant", 18, 34], ["oogst", 1, 9], ["oogst", 31, 52]],
+  'bosui':[["buiten", 10, 26], ["oogst", 26, 39]],
+  'knoflook':[["buiten", 40, 48, "teentjes"], ["oogst", 14, 26]],
+  'ui':[["buiten", 10, 26], ["uitplant", 10, 26, "uitjes"], ["oogst", 22, 35]],
+  'komkommer':[["binnen", 16, 22], ["uitplant", 19, 35], ["oogst", 26, 39]],
+  'aubergine':[["binnen", 9, 13], ["uitplant", 22, 31], ["oogst", 31, 39]],
+  'paprika':[["binnen", 9, 22], ["uitplant", 22, 31], ["oogst", 31, 39]],
+  'peper':[["binnen", 16, 22], ["uitplant", 22, 31], ["oogst", 31, 39]],
+  'tomaat':[["binnen", 6, 19], ["glas", 12, 16], ["uitplant", 18, 34], ["oogst", 26, 39]],
+  'wortel':[["glas", 7, 10], ["buiten", 9, 26], ["oogst", 22, 52]],
+  'pastinaak':[["buiten", 9, 22], ["oogst", 31, 52]],
+  'radijs':[["glas", 7, 17], ["buiten", 5, 18], ["buiten", 31, 44], ["oogst", 14, 22], ["oogst", 36, 48]],
+  'biet':[["buiten", 9, 35], ["oogst", 18, 52]],
+  'selderij':[["glas", 10, 17], ["uitplant", 9, 22], ["oogst", 26, 52]]
+,
+  'andijvie':[["buiten", 5, 32], ["uitplant", 9, 35], ["oogst", 18, 52]],
+  'savooiekool':[["buiten", 5, 26], ["uitplant", 14, 30], ["oogst", 23, 52], ["oogst", 1, 13]],
+  'spruitkool':[["buiten", 9, 22], ["uitplant", 18, 26], ["oogst", 40, 52], ["oogst", 1, 8]],
+  'augurk':[["binnen", 9, 17], ["buiten", 14, 26], ["uitplant", 11, 19], ["oogst", 23, 43]],
+  'courgette':[["binnen", 9, 17], ["buiten", 14, 26], ["uitplant", 18, 26], ["oogst", 29, 48]],
+  'pompoen':[["binnen", 14, 22], ["uitplant", 18, 26], ["oogst", 36, 48]],
+  'venkel':[["buiten", 14, 32], ["uitplant", 18, 35], ["oogst", 31, 43]],
+  'tuinboon':[["buiten", 5, 17], ["oogst", 18, 26]],
+  'veldsla':[["buiten", 29, 43], ["oogst", 36, 52], ["oogst", 1, 13]],
+  'mais':[["glas", 9, 22], ["buiten", 23, 30], ["oogst", 22, 47]],
+  'aardappel-vroeg':[["buiten", 9, 17, "pootaardappelen"], ["oogst", 23, 35]],
+  'aardappel-laat':[["buiten", 9, 17, "pootaardappelen"], ["oogst", 36, 43]]
+}};
+
+/* Bron: tabel "Calendrier de semis et récolte au potager" van Jardiner Malin (bijgewerkt 24 april 2026), met als bron GNIS:
+   https://www.jardiner-malin.fr/fiche/calendrier-semis-recolte-potager.html . Landelijk Frans, niet per streek.
+   Omzetting: À l'intérieur = binnen, Sous abri = glas, Pleine terre en Pépinière = buiten, Repiquage = uitplanten, Récolte = oogst;
+   'mi-' = halverwege de maand, 'fin' = laatste 2 weken, 'début' = eerste 2 weken. Varianten voor zachte streken en het zuidwesten
+   niet overgenomen. Komkommer/augurk: repiquage "15 jours après le semis" = binnenzaai + 2 weken. Maïs: oogst "3-4 mois après le
+   semis" = zaaiperiode + 13 tot 17 weken. Details: notes/bronnen.md. */
+REGIONS.frn={src:'GNIS (Jardiner Malin)',s:{
+  'tomaat':[["binnen", 1, 13], ["glas", 9, 17], ["uitplant", 18, 22], ["oogst", 27, 43]],
+  'paprika':[["binnen", 5, 17], ["uitplant", 18, 22], ["oogst", 27, 39]],
+  'aubergine':[["binnen", 5, 17], ["uitplant", 14, 22], ["oogst", 27, 43]],
+  'biet':[["buiten", 9, 30], ["oogst", 27, 48]],
+  'wortel':[["glas", 5, 13], ["glas", 42, 48], ["buiten", 9, 30], ["oogst", 18, 48]],
+  'selderij':[["binnen", 5, 13], ["glas", 5, 13], ["buiten", 16, 22], ["uitplant", 14, 22], ["oogst", 31, 48]],
+  'andijvie':[["buiten", 5, 32], ["uitplant", 9, 35], ["oogst", 18, 52]],
+  'broccoli':[["buiten", 18, 26], ["uitplant", 23, 35], ["oogst", 40, 52], ["oogst", 1, 22]],
+  'wittekool':[["buiten", 5, 26], ["uitplant", 14, 30], ["oogst", 23, 52], ["oogst", 1, 13]],
+  'rodekool':[["buiten", 5, 26], ["uitplant", 14, 30], ["oogst", 23, 52], ["oogst", 1, 13]],
+  'savooiekool':[["buiten", 5, 26], ["uitplant", 14, 30], ["oogst", 23, 52], ["oogst", 1, 13]],
+  'spruitkool':[["buiten", 9, 22], ["uitplant", 18, 26], ["oogst", 40, 52], ["oogst", 1, 8]],
+  'bloemkool':[["buiten", 9, 26], ["uitplant", 23, 35], ["oogst", 27, 52], ["oogst", 9, 26]],
+  'komkommer':[["binnen", 9, 17], ["buiten", 14, 26], ["uitplant", 11, 19], ["oogst", 23, 43]],
+  'augurk':[["binnen", 9, 17], ["buiten", 14, 26], ["uitplant", 11, 19], ["oogst", 23, 43]],
+  'courgette':[["binnen", 9, 17], ["buiten", 14, 26], ["uitplant", 18, 26], ["oogst", 29, 48]],
+  'pompoen':[["binnen", 14, 22], ["uitplant", 18, 26], ["oogst", 36, 48]],
+  'spinazie':[["buiten", 31, 41], ["buiten", 5, 17], ["oogst", 40, 52], ["oogst", 1, 17], ["oogst", 18, 26]],
+  'venkel':[["buiten", 14, 32], ["uitplant", 18, 35], ["oogst", 31, 43]],
+  'tuinboon':[["buiten", 5, 17], ["oogst", 18, 26]],
+  'stamslaboon':[["buiten", 14, 32], ["oogst", 23, 41]],
+  'stokboon':[["buiten", 14, 28], ["oogst", 25, 41]],
+  'sla':[["glas", 44, 52], ["glas", 1, 4], ["buiten", 7, 43], ["uitplant", 1, 8], ["uitplant", 14, 43], ["oogst", 9, 43]],
+  'veldsla':[["buiten", 29, 43], ["oogst", 36, 52], ["oogst", 1, 13]],
+  'mais':[["glas", 9, 22], ["buiten", 23, 30], ["oogst", 22, 47]],
+  'ui':[["buiten", 5, 17], ["buiten", 33, 39], ["uitplant", 40, 52], ["uitplant", 1, 8], ["oogst", 27, 39], ["oogst", 14, 26]],
+  'radijs':[["buiten", 7, 39], ["oogst", 11, 48]],
+  'aardappel-vroeg':[["buiten", 9, 17, "pootaardappelen"], ["oogst", 23, 35]],
+  'aardappel-laat':[["buiten", 9, 17, "pootaardappelen"], ["oogst", 36, 43]]
+}};
+
 /* Taalpakket Nederlands (nl). Eén bestand per taal; structuur en perioden staan in data.js.
    Dit is de brontaal: andere talen vallen per tekst terug op Nederlands. Toepassen gebeurt in i18n.js. */
 const LANGS={nl:{
@@ -1061,10 +1150,14 @@ const LANGS={nl:{
   "lang.btn": "Taal: {name}",
   "langland.title": "Taal en land",
   "land.q": "Waar ligt je tuin?",
-  "note.partial": "Zaaitijden voor {land} (bron: {src}) zijn er voor {n} van de {t} gewassen; de andere komen uit Nederlandse en Belgische bronnen. Het zaadzakje blijft leidend.",
+  "note.partial": "Zaaitijden voor {land} (bron: {src}) zijn er voor {n} van de {t} gewassen. Voor de andere is er nog geen lokale bron; die zaaitijden zijn een algemene richtlijn. Het zaadzakje blijft leidend.",
   "src.local": "Zaaitijden voor {land}: {src}.",
-  "src.none": "Voor dit gewas nog geen bron uit {land}: zaaitijden uit Nederlandse en Belgische bronnen.",
-  "note.other": "Voor {land} zijn er nog geen lokale zaaitijden. Je ziet die voor Nederland en België; pas de laatste nachtvorst aan voor je streek. Het zaadzakje blijft leidend.",
+  "src.none": "Voor dit gewas is er nog geen bron uit {land}; de zaaitijden zijn een algemene richtlijn.",
+  "note.zone": "Voor {land} is er nog geen lokale bron. De zaaitijden zijn een algemene richtlijn; pas de laatste nachtvorst aan voor je streek. Het zaadzakje blijft leidend.",
+  "zone.FR-N": "Noord en west",
+  "zone.FR-C": "Midden en oost",
+  "zone.FR-S": "Zuid (mediterraan)",
+  "note.other": "Voor {land} is er nog geen lokale bron. De zaaitijden zijn een algemene richtlijn; pas de laatste nachtvorst aan voor je streek. Het zaadzakje blijft leidend.",
   "lang.title": "Taal",
   "lang.note": "Zaaitijden hangen af van het land, niet van de taal.",
   "set.btn": "Instellingen",
@@ -1465,10 +1558,14 @@ LANGS.en={
   "lang.btn": "Language: {name}",
   "langland.title": "Language and country",
   "land.q": "Where is your garden?",
-  "note.partial": "Sowing times for {land} (source: {src}) are available for {n} of the {t} crops; the others come from Dutch and Belgian sources. The seed packet has the final say.",
+  "note.partial": "Sowing times for {land} (source: {src}) are available for {n} of the {t} crops. For the others there is no local source yet; their sowing times are a general guide. The seed packet has the final say.",
   "src.local": "Sowing times for {land}: {src}.",
-  "src.none": "No source from {land} for this crop yet: sowing times from Dutch and Belgian sources.",
-  "note.other": "There are no local sowing times for {land} yet. You see those for the Netherlands and Belgium; adjust the last night frost for your area. The seed packet has the final say.",
+  "src.none": "No source from {land} for this crop yet; the sowing times are a general guide.",
+  "note.zone": "There is no local source for {land} yet. The sowing times are a general guide; adjust the last night frost for your area. The seed packet has the final say.",
+  "zone.FR-N": "North and west",
+  "zone.FR-C": "Centre and east",
+  "zone.FR-S": "South (Mediterranean)",
+  "note.other": "There is no local source for {land} yet. The sowing times are a general guide; adjust the last night frost for your area. The seed packet has the final say.",
   "lang.title": "Language",
   "lang.note": "Sowing times depend on the country, not the language.",
   "set.btn": "Settings",
@@ -1851,10 +1948,14 @@ LANGS.de={
   "lang.btn": "Sprache: {name}",
   "langland.title": "Sprache und Land",
   "land.q": "Wo liegt dein Garten?",
-  "note.partial": "Aussaatzeiten für {land} (Quelle: {src}) gibt es für {n} von {t} Kulturen; die übrigen stammen aus niederländischen und belgischen Quellen. Maßgeblich bleibt die Samentüte.",
+  "note.partial": "Aussaatzeiten für {land} (Quelle: {src}) gibt es für {n} von {t} Kulturen. Für die übrigen gibt es noch keine lokale Quelle; ihre Aussaatzeiten sind ein allgemeiner Richtwert. Maßgeblich bleibt die Samentüte.",
   "src.local": "Aussaatzeiten für {land}: {src}.",
-  "src.none": "Für diese Kultur noch keine Quelle aus {land}: Aussaatzeiten aus niederländischen und belgischen Quellen.",
-  "note.other": "Für {land} gibt es noch keine eigenen Aussaatzeiten. Du siehst die für die Niederlande und Belgien; passe den letzten Nachtfrost an deine Region an. Maßgeblich bleibt die Samentüte.",
+  "src.none": "Für diese Kultur gibt es noch keine Quelle aus {land}; die Aussaatzeiten sind ein allgemeiner Richtwert.",
+  "note.zone": "Für {land} gibt es noch keine lokale Quelle. Die Aussaatzeiten sind ein allgemeiner Richtwert; passe den letzten Nachtfrost an deine Region an. Maßgeblich bleibt die Samentüte.",
+  "zone.FR-N": "Nord und West",
+  "zone.FR-C": "Mitte und Ost",
+  "zone.FR-S": "Süd (Mittelmeer)",
+  "note.other": "Für {land} gibt es noch keine lokale Quelle. Die Aussaatzeiten sind ein allgemeiner Richtwert; passe den letzten Nachtfrost an deine Region an. Maßgeblich bleibt die Samentüte.",
   "lang.title": "Sprache",
   "lang.note": "Die Aussaatzeiten hängen vom Land ab, nicht von der Sprache.",
   "set.btn": "Einstellungen",
@@ -2237,10 +2338,14 @@ LANGS.fr={
   "lang.btn": "Langue : {name}",
   "langland.title": "Langue et pays",
   "land.q": "Où se trouve votre jardin ?",
-  "note.partial": "{land} : dates de semis (source : {src}) pour {n} des {t} cultures ; les autres viennent de sources néerlandaises et belges. Le sachet de graines fait foi.",
+  "note.partial": "{land} : dates de semis (source : {src}) pour {n} des {t} cultures. Pour les autres, pas encore de source locale ; leurs dates sont indicatives. Le sachet de graines fait foi.",
   "src.local": "{land} : dates de semis selon {src}.",
-  "src.none": "{land} : pas encore de source pour cette culture ; dates de semis de sources néerlandaises et belges.",
-  "note.other": "{land} : pas encore de dates de semis locales. Vous voyez celles des Pays-Bas et de la Belgique ; adaptez la dernière gelée nocturne à votre région. Le sachet de graines fait foi.",
+  "src.none": "{land} : pas encore de source pour cette culture ; les dates de semis sont indicatives.",
+  "note.zone": "{land} : pas encore de source locale. Les dates de semis sont indicatives ; adaptez la dernière gelée nocturne à votre région. Le sachet de graines fait foi.",
+  "zone.FR-N": "Nord et Ouest",
+  "zone.FR-C": "Centre et Est",
+  "zone.FR-S": "Sud (méditerranéen)",
+  "note.other": "{land} : pas encore de source locale. Les dates de semis sont indicatives ; adaptez la dernière gelée nocturne à votre région. Le sachet de graines fait foi.",
   "lang.title": "Langue",
   "lang.note": "Les dates de semis dépendent du pays, pas de la langue.",
   "set.btn": "Paramètres",
@@ -2623,10 +2728,14 @@ LANGS.es={
   "lang.btn": "Idioma: {name}",
   "langland.title": "Idioma y país",
   "land.q": "¿Dónde está tu huerto?",
-  "note.partial": "Hay fechas de siembra para {land} (fuente: {src}) para {n} de los {t} cultivos; los demás vienen de fuentes neerlandesas y belgas. Manda el sobre de semillas.",
+  "note.partial": "Hay fechas de siembra para {land} (fuente: {src}) para {n} de los {t} cultivos. Para los demás aún no hay fuente local; sus fechas son orientativas. Manda el sobre de semillas.",
   "src.local": "Fechas de siembra para {land}: {src}.",
-  "src.none": "Aún no hay fuente de {land} para este cultivo: fechas de siembra de fuentes neerlandesas y belgas.",
-  "note.other": "Todavía no hay fechas de siembra locales para {land}. Ves las de los Países Bajos y Bélgica; ajusta la última helada nocturna a tu zona. Manda el sobre de semillas.",
+  "src.none": "Aún no hay fuente de {land} para este cultivo; las fechas de siembra son orientativas.",
+  "note.zone": "Todavía no hay una fuente local para {land}. Las fechas de siembra son orientativas; ajusta la última helada nocturna a tu zona. Manda el sobre de semillas.",
+  "zone.FR-N": "Norte y oeste",
+  "zone.FR-C": "Centro y este",
+  "zone.FR-S": "Sur (mediterráneo)",
+  "note.other": "Todavía no hay una fuente local para {land}. Las fechas de siembra son orientativas; ajusta la última helada nocturna a tu zona. Manda el sobre de semillas.",
   "lang.title": "Idioma",
   "lang.note": "Las fechas de siembra dependen del país, no del idioma.",
   "set.btn": "Ajustes",
@@ -3009,10 +3118,14 @@ LANGS.it={
   "lang.btn": "Lingua: {name}",
   "langland.title": "Lingua e paese",
   "land.q": "Dove si trova il tuo orto?",
-  "note.partial": "{land}: periodi di semina (fonte: {src}) per {n} delle {t} colture; le altre seguono fonti olandesi e belghe. Fa fede la bustina dei semi.",
+  "note.partial": "{land}: periodi di semina (fonte: {src}) per {n} delle {t} colture. Per le altre non c'è ancora una fonte locale; i loro periodi sono indicativi. Fa fede la bustina dei semi.",
   "src.local": "{land}: periodi di semina secondo {src}.",
-  "src.none": "{land}: per questa coltura non c'è ancora una fonte; periodi di semina da fonti olandesi e belghe.",
-  "note.other": "{land}: non ci sono ancora periodi di semina locali. Vedi quelli dei Paesi Bassi e del Belgio; adatta l'ultima gelata notturna alla tua zona. Fa fede la bustina dei semi.",
+  "src.none": "{land}: per questa coltura non c'è ancora una fonte; i periodi di semina sono indicativi.",
+  "note.zone": "{land}: non c'è ancora una fonte locale. I periodi di semina sono indicativi; adatta l'ultima gelata notturna alla tua zona. Fa fede la bustina dei semi.",
+  "zone.FR-N": "Nord e ovest",
+  "zone.FR-C": "Centro ed est",
+  "zone.FR-S": "Sud (mediterraneo)",
+  "note.other": "{land}: non c'è ancora una fonte locale. I periodi di semina sono indicativi; adatta l'ultima gelata notturna alla tua zona. Fa fede la bustina dei semi.",
   "lang.title": "Lingua",
   "lang.note": "I periodi di semina dipendono dal paese, non dalla lingua.",
   "set.btn": "Impostazioni",
@@ -3259,18 +3372,24 @@ LANGS['fr-BE']=Object.assign({},LANGS.fr,{name:'Français (Belgique)',flag:'be'}
 const LANG_ORDER=['nl','nl-BE','fr','fr-BE','en','de','es','it'];
 const LANG_KEY='sowly.taal';
 /* ---- Land: los van de taal. Waarde = welke zaaigegevens gelden: nlbe = Nederlandse en Belgische bronnen, de = REGIONS.de, null = nog geen lokale bronnen ---- */
-const COUNTRIES={NL:'nlbe',BE:'nlbe',DE:'de',AT:null,CH:null,LU:null,FR:null,GB:null,IE:null,ES:null,IT:null,DK:null,SE:null,PL:null,CZ:null,SK:null};
+/* Frankrijk in klimaatzones (FR-N noord en west, FR-C midden en oost, FR-S zuid); '-' = zone zonder lokale bron */
+const COUNTRIES={NL:'nlbe',BE:'nlbe',DE:'de',AT:null,CH:null,LU:null,'FR-N':'frn','FR-C':'frc','FR-S':'-',GB:null,IE:null,ES:null,IT:null,DK:null,SE:null,PL:null,CZ:null,SK:null};
 const LAND_KEY='sowly.land';
-const LAND_OF_LANG={nl:'NL','nl-BE':'BE','fr-BE':'BE',fr:'FR',de:'DE',en:'GB',es:'ES',it:'IT'};
+const LAND_OF_LANG={nl:'NL','nl-BE':'BE','fr-BE':'BE',fr:'FR-N',de:'DE',en:'GB',es:'ES',it:'IT'};
 /* Eerder gekozen land, anders het land uit de browsertaal (de-AT -> AT), anders het land dat bij de taal hoort */
+/* Oude of grove waarden naar een land uit de lijst: FR (van vóór de zones) wordt Frankrijk noord en west */
+const normLand=c=>c=='FR'?'FR-N':c;
 function pickLand(){
-  try{const s=localStorage.getItem(LAND_KEY);if(s&&s in COUNTRIES)return s}catch(e){}
+  try{const s=normLand(localStorage.getItem(LAND_KEY));if(s&&s in COUNTRIES)return s}catch(e){}
   const nav=typeof navigator=='undefined'?[]:(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'']);
-  for(const l of nav){const r=(String(l).split('-')[1]||'').toUpperCase();if(r in COUNTRIES)return r}
+  for(const l of nav){const r=normLand((String(l).split('-')[1]||'').toUpperCase());if(r in COUNTRIES)return r}
   return LAND_OF_LANG[LANG]||'NL';
 }
 /* Landnaam in de gekozen taal, uit de browser zelf */
-function landName(c){try{return new Intl.DisplayNames([LANG],{type:'region'}).of(c)||c}catch(e){return c}}
+function landName(c){
+  let n;try{n=new Intl.DisplayNames([LANG],{type:'region'}).of(c.slice(0,2))||c}catch(e){n=c}
+  return c.length>2?n+' – '+tx('zone.'+c):n;
+}
 const CAL={m:[],m3:[],d:[],ini:'',lower:true};
 let LANG='nl',UI={};
 
@@ -3580,7 +3699,8 @@ function attach(db,onLost){
     db.doc('garden/settings').onSnapshot(sn=>{
       const d=sn.data();if(!d)return;
       if(d.frost)S.frost=d.frost;
-      if(d.land&&d.land in COUNTRIES){if(d.land!=S.land){S.land=d.land;applyStatic()}}
+      const dl=normLand(d.land);
+      if(dl&&dl in COUNTRIES){if(dl!=S.land){S.land=dl;applyStatic()}}
       else if(canEdit()&&!landTried){landTried=true;dbFrost()}/* tuin zonder land: één keer het land van dit apparaat vastleggen */
       render();
     },()=>{})
@@ -3818,12 +3938,15 @@ function openSamen(){openSheet(`<h2 id="sh-title" style="padding-right:48px">${t
 const isNLBE=()=>COUNTRIES[S.land]=='nlbe';
 const noteText=()=>{
   if(isNLBE())return tx('note');
+  if(COUNTRIES[S.land]=='-')return tx('note.zone',{land:landName(S.land)});
   const r=region(),land=landName(S.land);
-  return r?tx('note.partial',{land,src:r.src,n:CROPS.filter(c=>r.s[c.id]).length,t:CROPS.length}):tx('note.other',{land});
+  /* Alle bronnen van dit land (hoofdbron plus bron per gewas in cs) */
+  const srcs=r&&[...new Set([r.src,...Object.values(r.cs||{})])].join(', ');
+  return r?tx('note.partial',{land,src:srcs,n:CROPS.filter(c=>r.s[c.id]).length,t:CROPS.length}):tx('note.other',{land});
 };
 const landBanner=()=>isNLBE()?'':`<div class="card landnote small">${esc(noteText())}</div>`;
 /* Per gewas: waar komen de zaaitijden vandaan (alleen buiten NL/BE) */
-const cropSrc=id=>{if(isNLBE())return '';const r=region(),land=landName(S.land);return `<p class="small muted" style="margin:6px 0 0">${esc(r&&r.s[id]?tx('src.local',{land,src:r.src}):tx('src.none',{land}))}</p>`};
+const cropSrc=id=>{if(isNLBE()||COUNTRIES[S.land]=='-')return '';const r=region(),land=landName(S.land);return `<p class="small muted" style="margin:6px 0 0">${esc(r&&r.s[id]?tx('src.local',{land,src:(r.cs&&r.cs[id])||r.src}):tx('src.none',{land}))}</p>`};
 function setLand(c){
   if(!(c in COUNTRIES)||c==S.land)return;
   S.land=c;try{localStorage.setItem(LAND_KEY,c)}catch(e){}

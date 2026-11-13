@@ -12,6 +12,7 @@ for (const c of CROPS) {
 }
 for (const [land, r] of Object.entries(T.REGIONS)) {
   if (!r.src) fout('bron ontbreekt', land);
+  for (const id of Object.keys(r.cs || {})) if (!r.s[id]) fout('bron per gewas zonder periodes', land, id);
   for (const [id, s] of Object.entries(r.s)) {
     if (!ids.includes(id)) fout('onbekend gewas', land, id);
     for (const [t, a, b] of s) if (a > b || a < 1 || b > 52 || !['binnen', 'glas', 'verpot', 'buiten', 'uitplant', 'oogst'].includes(t)) fout('bereik', land, id, t, a, b);

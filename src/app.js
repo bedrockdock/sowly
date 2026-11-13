@@ -314,7 +314,9 @@ function setLand(c){
 /* ---- Rechtsboven: vlag (taal, altijd) en tandwiel (instellingen, alleen ingelogd) ---- */
 const loggedIn=()=>hasCloud()?!!C.user:S.shared;
 const GEAR='<svg class="gear" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
-const topBtns=()=>`<button class="icon-btn topb" data-a="langs" aria-label="${esc(tx('lang.btn',{name:LANGS[LANG].name}))}">${flagSVG(LANG)}</button>${loggedIn()?`<button class="icon-btn topb" data-a="settings" aria-label="${tx('set.btn')}">${GEAR}</button>`:''}`;
+/* App installeren: rechtsboven naast de vlag, op elk tabblad (alleen zolang installeren kan) */
+const INSTALL='<svg class="gear" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>';
+const topBtns=()=>(canInstall()?`<button class="icon-btn topb" data-a="app" aria-label="${tx('inst.btn')}" title="${tx('inst.btn')}">${INSTALL}</button>`:'')+`<button class="icon-btn topb" data-a="langs" aria-label="${esc(tx('lang.btn',{name:LANGS[LANG].name}))}">${flagSVG(LANG)}</button>${loggedIn()?`<button class="icon-btn topb" data-a="settings" aria-label="${tx('set.btn')}">${GEAR}</button>`:''}`;
 const langList=()=>`<div class="langs">${LANG_ORDER.filter(c=>LANGS[c]).map(c=>`<button class="btn ghost langb" data-a="lang" data-l="${c}" lang="${c}" aria-pressed="${c==LANG}">${flagSVG(c)}<span>${LANGS[c].name}</span></button>`).join('')}</div>`;
 const landSel=()=>`<div class="field" style="margin:12px 0 0"><label for="land-sel">${tx('land.q')}</label><select id="land-sel">${Object.keys(COUNTRIES).map(c=>[c,landName(c)]).sort((a,b)=>a[1].localeCompare(b[1],LANG)).map(([c,n])=>`<option value="${c}"${c==S.land?' selected':''}>${esc(n)}</option>`).join('')}</select></div><p class="small muted" style="margin:8px 0 0">${tx('lang.note')}</p>`;
 function openLangs(){openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('langland.title')}</h2><div id="lang-s">${langList()}</div>${landSel()}`)}
@@ -582,7 +584,7 @@ let instEv=null;
 const isIOS=()=>/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform=='MacIntel'&&navigator.maxTouchPoints>1);
 const isApp=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 const canInstall=()=>hasCloud()&&!isApp()&&(!!instEv||isIOS());
-addEventListener('beforeinstallprompt',e=>{e.preventDefault();instEv=e;if(S.view=='tuin')render()});
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();instEv=e;render()});
 addEventListener('appinstalled',()=>{instEv=null;render();toast(tx('inst.done'))});
 function installApp(){
   if(instEv){const e=instEv;e.prompt();e.userChoice.then(r=>{if(r.outcome=='accepted'){instEv=null;render()}}).catch(()=>{});return}
@@ -591,7 +593,7 @@ function installApp(){
 }
 function vTuin(){
   const inl=hasCloud()&&S.shared?`<div class="small muted inl">${tx('tuin.inl',{name:esc(myName())})}${C.role!='owner'&&C.gname?' · '+tx('tuin.inlGarden',{g:esc(C.gname)}):''} · <a href="#" data-a="logout">${tx('logout')}</a></div>`:'';
-  let h=`<div class="stack"><div class="row"><div class="grow1" style="flex:1 0 auto"><h2 style="white-space:nowrap;margin:0">${tx('tuin.title')}</h2>${inl}</div>${canEdit()&&!(C.wait&&!S.shared)?`<button class="btn" data-a="add">${tx('tuin.add')}</button>`:''}${S.shared&&mine().length?`<button class="btn sm ghost" data-a="year">${tx('tuin.year')}</button>`:''}${canInstall()?`<button class="btn sm ghost" data-a="app">${tx('inst.btn')}</button>`:''}${hasCloud()&&S.shared?samenBtn():''}</div>`;
+  let h=`<div class="stack"><div class="row"><div class="grow1" style="flex:1 0 auto"><h2 style="white-space:nowrap;margin:0">${tx('tuin.title')}</h2>${inl}</div>${canEdit()&&!(C.wait&&!S.shared)?`<button class="btn" data-a="add">${tx('tuin.add')}</button>`:''}${S.shared&&mine().length?`<button class="btn sm ghost" data-a="year">${tx('tuin.year')}</button>`:''}${hasCloud()&&S.shared?samenBtn():''}</div>`;
   /* Bovenaan: inloggen of het e-mailadres bevestigen, zolang er nog niets online staat */
   if(C.wait&&!S.shared)return h+`<div class="card empty"><b>${tx('tuin.loading')}</b></div></div>`;
   const top=hasCloud()&&!S.shared&&(!C.sb||!C.user);

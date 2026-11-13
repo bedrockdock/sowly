@@ -486,8 +486,11 @@ const LANGS={nl:{
   "privacy": "Privacy",
 
   "lang.btn": "Taal: {name}",
+  "langland.title": "Taal en land",
+  "land.q": "Waar ligt je tuin?",
+  "note.other": "Voor {land} zijn er nog geen lokale zaaitijden. Je ziet die voor Nederland en België; pas de laatste nachtvorst aan voor je streek. Het zaadzakje blijft leidend.",
   "lang.title": "Taal",
-  "lang.note": "Zaaitijden en verzorging komen uit Nederlandse en Belgische bronnen, ook in andere talen.",
+  "lang.note": "Zaaitijden hangen af van het land, niet van de taal.",
   "set.btn": "Instellingen",
   "set.title": "Instellingen",
   "set.lang": "Taal",

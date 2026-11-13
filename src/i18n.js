@@ -6,6 +6,19 @@ LANGS['nl-BE']=Object.assign({},LANGS.nl,{name:'Nederlands (België)',flag:'be'}
 LANGS['fr-BE']=Object.assign({},LANGS.fr,{name:'Français (Belgique)',flag:'be'});
 const LANG_ORDER=['nl','nl-BE','fr','fr-BE','en','de','es','it'];
 const LANG_KEY='sowly.taal';
+/* ---- Land: los van de taal. data = welke zaaigegevens gelden (nlbe = Nederlandse en Belgische bronnen; null = nog geen lokale bronnen) ---- */
+const COUNTRIES={NL:'nlbe',BE:'nlbe',DE:null,AT:null,CH:null,LU:null,FR:null,GB:null,IE:null,ES:null,IT:null,DK:null,SE:null,PL:null,CZ:null,SK:null};
+const LAND_KEY='sowly.land';
+const LAND_OF_LANG={nl:'NL','nl-BE':'BE','fr-BE':'BE',fr:'FR',de:'DE',en:'GB',es:'ES',it:'IT'};
+/* Eerder gekozen land, anders het land uit de browsertaal (de-AT -> AT), anders het land dat bij de taal hoort */
+function pickLand(){
+  try{const s=localStorage.getItem(LAND_KEY);if(s&&s in COUNTRIES)return s}catch(e){}
+  const nav=typeof navigator=='undefined'?[]:(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'']);
+  for(const l of nav){const r=(String(l).split('-')[1]||'').toUpperCase();if(r in COUNTRIES)return r}
+  return LAND_OF_LANG[LANG]||'NL';
+}
+/* Landnaam in de gekozen taal, uit de browser zelf */
+function landName(c){try{return new Intl.DisplayNames([LANG],{type:'region'}).of(c)||c}catch(e){return c}}
 const CAL={m:[],m3:[],d:[],ini:'',lower:true};
 let LANG='nl',UI={};
 

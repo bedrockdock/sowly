@@ -21,7 +21,7 @@ const rel=n=>n<=0?tx('rel.0'):n==1?tx('rel.1'):tx('rel.n',{n});
 
 /* ---- Staat ---- */
 const Y0=TODAY.getFullYear();
-const S={view:'maand',y:Y0,m:TODAY.getMonth(),frost:20,shift:0,plantings:null,confirm:null,shared:false,me:null,names:{},db:null};
+const S={land:pickLand(),view:'maand',y:Y0,m:TODAY.getMonth(),frost:20,shift:0,plantings:null,confirm:null,shared:false,me:null,names:{},db:null};
 /* Niets in localStorage: wie zijn cache leegt, zou zijn tuin kwijt zijn. Opslaan kan alleen online
    (inloggen in de webversie, de database van Claude in Claude). Tot dan zie je voorbeeldplanten. */
 function examples(){
@@ -282,22 +282,33 @@ function accountCard(){
 const samenBtn=()=>`<button class="btn sm ghost" data-a="samen" aria-label="${tx('samen.aria',{n:C.members.length,p:tx(C.members.length==1?'person1':'personN')})}">${tx('samen')} <span class="pill soft">${C.members.length}</span></button>`;
 function openSamen(){openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('samen.title')}</h2><div id="samen-b">${accountCard()}</div>`)}
 
+/* ---- Land: zijn er lokale zaaigegevens? Zo niet, dan eerlijk melden dat het NL/BE-gegevens zijn ---- */
+const localData=()=>!!COUNTRIES[S.land];
+const noteText=()=>localData()?tx('note'):tx('note.other',{land:landName(S.land)});
+const landBanner=()=>localData()?'':`<div class="card landnote small">${esc(noteText())}</div>`;
+function setLand(c){
+  if(!(c in COUNTRIES)||c==S.land)return;
+  S.land=c;try{localStorage.setItem(LAND_KEY,c)}catch(e){}
+  applyStatic();render();
+}
+
 /* ---- Rechtsboven: vlag (taal, altijd) en tandwiel (instellingen, alleen ingelogd) ---- */
 const loggedIn=()=>hasCloud()?!!C.user:S.shared;
 const GEAR='<svg class="gear" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
 const topBtns=()=>`<button class="icon-btn topb" data-a="langs" aria-label="${esc(tx('lang.btn',{name:LANGS[LANG].name}))}">${flagSVG(LANG)}</button>${loggedIn()?`<button class="icon-btn topb" data-a="settings" aria-label="${tx('set.btn')}">${GEAR}</button>`:''}`;
 const langList=()=>`<div class="langs">${LANG_ORDER.filter(c=>LANGS[c]).map(c=>`<button class="btn ghost langb" data-a="lang" data-l="${c}" lang="${c}" aria-pressed="${c==LANG}">${flagSVG(c)}<span>${LANGS[c].name}</span></button>`).join('')}</div>`;
-function openLangs(){openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('lang.title')}</h2><div id="lang-s">${langList()}</div><p class="small muted" style="margin:12px 0 0">${tx('lang.note')}</p>`)}
+const landSel=()=>`<div class="field" style="margin:12px 0 0"><label for="land-sel">${tx('land.q')}</label><select id="land-sel">${Object.keys(COUNTRIES).map(c=>[c,landName(c)]).sort((a,b)=>a[1].localeCompare(b[1],LANG)).map(([c,n])=>`<option value="${c}"${c==S.land?' selected':''}>${esc(n)}</option>`).join('')}</select></div><p class="small muted" style="margin:8px 0 0">${tx('lang.note')}</p>`;
+function openLangs(){openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('langland.title')}</h2><div id="lang-s">${langList()}</div>${landSel()}`)}
 function settingsBody(){
   const fd=dateOfDoy(Y0,S.frost*7-3);
   const acc=hasCloud()&&C.user?`<section class="card"><div class="sec-h"><h3>${tx('set.account')}</h3></div><p class="small" style="margin:0 0 10px">${tx('loggedAs',{name:`<b>${esc(myName())}</b>`})}${C.user.email?' ('+esc(C.user.email)+')':''}</p><div class="row" style="gap:8px;flex-wrap:wrap">${S.shared?`<button class="btn sm ghost" data-a="samen">${tx('set.samen')}</button>`:''}<button class="btn sm ghost" data-a="logout">${tx('logout')}</button></div></section>`:'';
-  return `<h2 id="sh-title" style="padding-right:48px">${tx('set.title')}</h2><div class="stack"><section class="card"><div class="sec-h"><h3>${tx('set.lang')}</h3></div>${langList()}<p class="small muted" style="margin:10px 0 0">${tx('lang.note')}</p></section><section class="card">${frostRow(fd)}${S.shared&&C.members.length>1?`<p class="small muted" style="margin:8px 0 0">${tx('set.frostShared')}</p>`:''}</section>${acc}</div>`;
+  return `<h2 id="sh-title" style="padding-right:48px">${tx('set.title')}</h2><div class="stack"><section class="card"><div class="sec-h"><h3>${tx('langland.title')}</h3></div>${langList()}${landSel()}</section><section class="card">${frostRow(fd)}${S.shared&&C.members.length>1?`<p class="small muted" style="margin:8px 0 0">${tx('set.frostShared')}</p>`:''}</section>${acc}</div>`;
 }
 function openSettings(){openSheet(`<div id="set-b">${settingsBody()}</div>`)}
 /* Vaste teksten in de pagina zelf (template.html): data-t vult de tekst, data-ta het aria-label */
 function applyStatic(){
   if(document.documentElement)document.documentElement.lang=LANG;
-  $$('[data-t]').forEach(el=>{el.textContent=tx(el.dataset.t)});
+  $$('[data-t]').forEach(el=>{el.textContent=el.dataset.t=='note'?noteText():tx(el.dataset.t)});
   $$('[data-ta]').forEach(el=>el.setAttribute('aria-label',tx(el.dataset.ta)));
   $('#today').textContent=tx('today',{day:cap(CAL.d[TODAY.getDay()]),d:TODAY.getDate(),month:CAL.m[TODAY.getMonth()],w:weekOf(TODAY)});
   const m=$('#mascot svg');if(m)m.setAttribute('aria-label',tx('mascot'));
@@ -402,7 +413,7 @@ function vMaand(){
   const g=monthTasks(S.y,S.m),order=Object.keys(ACT).sort((a,b)=>ACT[a].o-ACT[b].o);
   const fd=dateOfDoy(S.y,S.frost*7-3);
   let h=`<div class="stack"><div class="monthnav"><button class="icon-btn" data-a="mprev" aria-label="${tx('m.prev')}">‹</button><h2>${cap(CAL.m[S.m])} ${S.y}</h2><button class="icon-btn" data-a="mnext" aria-label="${tx('m.next')}">›</button></div>`;
-  h+=frostRow(fd);
+  h+=landBanner()+frostRow(fd);
   const cur=S.y==Y0&&S.m==TODAY.getMonth();
   if(COMMERCE&&cur)h+=zaadCard();
   let n=0;
@@ -453,7 +464,7 @@ function gridHTML(){
   return L.length?L.map(c=>`<button class="crop" data-a="crop" data-id="${c.id}"><div class="pp">${plantSVG(c,4)}</div><h3>${c.n}</h3><span class="small muted">${tx('g.sow',{r:ranges(c,['binnen','glas','buiten'])})}<br>${tx('g.harvest',{r:ranges(c,['oogst'])})}</span><span class="seedrow">${COMMERCE?`<span class="seedlink" role="button" data-a="seed" data-id="${c.id}">${tx('seed.find')}</span>`:''}<span class="seedlink plant" role="button" data-a="add" data-id="${c.id}">${tx('g.plus')}</span></span></button>`).join(''):`<p class="muted">${tx('g.none',{q:esc(S.q)})}</p>`;
 }
 function vGewassen(){
-  return `<div class="stack"><div class="row"><h2 class="grow1">${tx('g.title')}</h2><span class="muted small">${tx('g.count',{n:CROPS.length})}</span></div><div class="field" style="margin:0"><label for="q">${tx('g.search')}</label><input id="q" type="search" value="${esc(S.q||'')}" placeholder="${tx('g.ph')}" autocomplete="off"></div><div class="grid" id="grid">${gridHTML()}</div></div>`;
+  return `<div class="stack"><div class="row"><h2 class="grow1">${tx('g.title')}</h2><span class="muted small">${tx('g.count',{n:CROPS.length})}</span></div>${landBanner()}<div class="field" style="margin:0"><label for="q">${tx('g.search')}</label><input id="q" type="search" value="${esc(S.q||'')}" placeholder="${tx('g.ph')}" autocomplete="off"></div><div class="grid" id="grid">${gridHTML()}</div></div>`;
 }
 function ganttOf(p,ev){
   const seq=ev.filter(e=>e.k!='kiem'),t0=ev[0].dt,end=seq[seq.length-1].end,tot=Math.max(1,diff(t0,end));
@@ -509,7 +520,7 @@ function yearPlanHTML(y){
   const months=todo.map((L,m)=>L.length?`<section><h3>${cap(CAL.m[m])}</h3><ul>${L.sort((a,b)=>a.e.dt-b.e.dt).map(({p,e})=>`<li><span class="jp-box"></span><span>${e.end?`${fmt(e.dt)} – ${fmt(e.end)}`:fmt(e.dt)}</span><span class="pill" style="--pc:var(${e.k=='zaai'?ACT[p.method].c:ACT[e.k].c})">${e.l}</span><span>${nm(p)}${p.bed?' · '+esc(p.bed):''}</span></li>`).join('')}</ul></section>`:'').join('');
   const fd=dateOfDoy(y,S.frost*7-3);
   const today=tx('longdate',{d:TODAY.getDate(),month:CAL.m[TODAY.getMonth()],y:Y0});
-  return `<div class="jp"><h1>${tx('yp.title',{y})}</h1><p class="jp-s">${tx('yp.sub',{g:esc(C.gname||tx('garden.mine')),w:S.frost,d:fmt(fd),today})}</p><div class="jp-r jp-h"><span></span><div class="jp-t">${dim.map((d,i)=>`<span style="--d:${d}">${CAL.m3[i]}</span>`).join('')}</div></div>${rows.join('')}<p>${legend}</p><div class="jp-m"><h2>${tx('yp.month')}</h2>${months}</div><p class="jp-s">${tx('note')}</p></div>`;
+  return `<div class="jp"><h1>${tx('yp.title',{y})}</h1><p class="jp-s">${tx('yp.sub',{g:esc(C.gname||tx('garden.mine')),w:S.frost,d:fmt(fd),today})}</p><div class="jp-r jp-h"><span></span><div class="jp-t">${dim.map((d,i)=>`<span style="--d:${d}">${CAL.m3[i]}</span>`).join('')}</div></div>${rows.join('')}<p>${legend}</p><div class="jp-m"><h2>${tx('yp.month')}</h2>${months}</div><p class="jp-s">${esc(noteText())}</p></div>`;
 }
 function openYear(){
   const ys=planYears();
@@ -670,7 +681,7 @@ document.addEventListener('click',e=>{
     render();
   }
 });
-document.addEventListener('change',e=>{if(e.target.id=='t-sort'){S.sort=e.target.value;render();$('#t-sort').focus();return}if(e.target.id=='g-sel')switchGarden(e.target.value).catch(()=>toast(tx('switchFail')))});
+document.addEventListener('change',e=>{if(e.target.id=='t-sort'){S.sort=e.target.value;render();$('#t-sort').focus();return}if(e.target.id=='land-sel'){setLand(e.target.value);return}if(e.target.id=='g-sel')switchGarden(e.target.value).catch(()=>toast(tx('switchFail')))});
 document.addEventListener('input',e=>{if(e.target.id=='q'){S.q=e.target.value;$('#grid').innerHTML=gridHTML()}});
 $('#sh-close').onclick=closeSheet;
 document.addEventListener('keydown',e=>{if(e.key=='Escape'&&!$('#ov').hidden)closeSheet()});

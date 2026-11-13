@@ -1,19 +1,19 @@
 -- Sowly: tabellen en beveiligingsregels voor Supabase.
--- Plak dit in Supabase: SQL Editor > New query > Run. Opnieuw draaien mag: het script begint met opruimen.
+-- Alleen voor een NIEUW, leeg project: SQL Editor > New query > Run.
+-- Het bestaande project niet opnieuw hiermee vullen: het script stopt dan met een fout (tabellen bestaan al).
+-- Wijzigingen voor het bestaande project gaan via een los updatebestand (supabase-update-*.sql) dat de gegevens laat staan,
+-- en komen daarna ook hier in, zodat dit bestand altijd de volledige stand beschrijft.
 -- Rollen per tuin (members.role): owner (eigenaar), edit (werkt mee), view (kijkt mee).
 -- Inloggen kan pas na het bevestigen van het e-mailadres (Authentication > Sign In / Providers > Email > Confirm email aan),
 -- dus iedereen met een sessie heeft een bevestigd adres.
-
-drop table if exists public.invites, public.plantings, public.members, public.gardens, public.profiles cascade;
-drop function if exists public.is_member(uuid), public.can_edit(uuid), public.is_owner(uuid),
-  public.create_garden(text, int, text), public.join_invite(text, text), public.invite_info(text), public.planting_by() cascade;
 
 -- Eigen profiel: welke tuinen, welke tuin open staat
 create table public.profiles (
   id uuid primary key references auth.users on delete cascade,
   garden uuid,
   gardens jsonb not null default '{}'::jsonb,
-  name text not null default '' check (char_length(name) <= 60)
+  name text not null default '' check (char_length(name) <= 60),
+  constraint profiles_gardens_vorm check (jsonb_typeof(gardens) = 'object' and pg_column_size(gardens) <= 16384)
 );
 
 create table public.gardens (
@@ -34,10 +34,10 @@ create table public.members (
 
 create table public.plantings (
   garden uuid not null references public.gardens on delete cascade,
-  id text not null check (char_length(id) <= 40),
-  crop text not null check (char_length(crop) <= 40),
-  method text not null check (char_length(method) <= 20),
-  date text not null check (char_length(date) <= 10),
+  id text not null constraint plantings_id_vorm check (id ~ '^[A-Za-z0-9_-]{1,40}$'),
+  crop text not null constraint plantings_crop_vorm check (crop ~ '^[a-z0-9_-]{1,40}$'),
+  method text not null constraint plantings_method_vorm check (method in ('binnen', 'glas', 'buiten')),
+  date text not null constraint plantings_date_vorm check (date ~ '^\d{4}-\d{2}-\d{2}$'),
   label text not null default '' check (char_length(label) <= 30),
   bed text not null default '' check (char_length(bed) <= 30),
   by uuid,
@@ -95,6 +95,38 @@ begin
 end $$;
 create trigger planting_by before insert or update on public.plantings for each row execute function public.planting_by();
 
+-- Grenzen: 500 plantingen per tuin, 5 eigen tuinen per account, 50 leden per tuin, 50 open uitnodigingen per tuin
+create function public.grens() returns trigger language plpgsql security definer set search_path = '' as $$
+begin
+  if tg_table_name = 'plantings' then
+    -- Een upsert van een bestaande planting telt niet als nieuwe
+    if not exists (select 1 from public.plantings where garden = new.garden and id = new.id)
+       and (select count(*) from public.plantings where garden = new.garden) >= 500 then
+      raise exception 'maximaal 500 plantingen per tuin';
+    end if;
+  elsif tg_table_name = 'gardens' then
+    if (select count(*) from public.gardens where owner = new.owner) >= 5 then
+      raise exception 'maximaal 5 eigen tuinen per account';
+    end if;
+  elsif tg_table_name = 'members' then
+    if (select count(*) from public.members where garden = new.garden) >= 50 then
+      raise exception 'maximaal 50 leden per tuin';
+    end if;
+  elsif tg_table_name = 'invites' then
+    if (select count(*) from public.invites where garden = new.garden) >= 50 then
+      raise exception 'maximaal 50 open uitnodigingen per tuin';
+    end if;
+  end if;
+  return new;
+end $$;
+create trigger grens before insert on public.plantings for each row execute function public.grens();
+create trigger grens before insert on public.gardens for each row execute function public.grens();
+create trigger grens before insert on public.members for each row execute function public.grens();
+create trigger grens before insert on public.invites for each row execute function public.grens();
+
+revoke execute on function public.grens() from public, anon, authenticated;
+revoke execute on function public.is_member(uuid), public.can_edit(uuid), public.is_owner(uuid) from public, anon;
+grant execute on function public.is_member(uuid), public.can_edit(uuid), public.is_owner(uuid) to authenticated;
 revoke execute on function public.create_garden(text, int, text), public.join_invite(text, text) from public, anon;
 grant execute on function public.create_garden(text, int, text), public.join_invite(text, text) to authenticated;
 

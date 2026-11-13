@@ -1232,7 +1232,7 @@ function attach(db,onLost){
   S.db=db;S.shared=true;
   return [
     db.collection('plantings').onSnapshot(snap=>{
-      S.plantings=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(p=>CROP[p.crop]);
+      S.plantings=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(p=>CROP[p.crop]&&p.method in METHODS&&/^[A-Za-z0-9_-]{1,40}$/.test(p.id));
       render();if(!C.sb)loadNames();
     },onLost||(()=>{})),
     db.doc('garden/settings').onSnapshot(sn=>{const d=sn.data();if(d&&d.frost){S.frost=d.frost;render()}},()=>{})
@@ -1618,7 +1618,7 @@ function plantCard(p){
     steps+=`<li class="${cls}"><span class="dot">${over?'✓':''}</span><span><b>${e.l}</b><br><span class="small">${dt}</span>${sub}</span></li>`;
   });
   const status=firstOpen<0?'Seizoen afgerond':t<0?`Zaaien op ${fmt(parse(p.date))}`:`Dag ${t+1} · ${STAGE_NAMES[st].toLowerCase()}`;
-  return `<article class="card plant-card${S.newId==p.id?' pop':''}"><div class="plant-head"><div class="pp">${plantSVG(c,Math.max(0,st))}</div><div class="grow1"><h3>${dot(p)}${nm(p)}${p.ex?' <span class="pill soft">voorbeeld</span>':''}</h3><div class="small muted">${p.bed?esc(p.bed)+' · ':''}${METHODS[p.method]} op ${fmt(parse(p.date))}${S.shared&&p.by?' · door '+esc(whoName(p.by)):''}</div><div class="small"><b>${status}</b></div></div><div class="del row"><button class="btn sm ghost" data-a="edit" data-id="${p.id}">Wijzigen</button><button class="btn sm ghost" data-a="del" data-id="${p.id}">${S.confirm==p.id?'Zeker weten?':'Verwijderen'}</button></div></div>${ganttOf(p,ev)}<ol class="steps">${steps}</ol></article>`;
+  return `<article class="card plant-card${S.newId==p.id?' pop':''}"><div class="plant-head"><div class="pp">${plantSVG(c,Math.max(0,st))}</div><div class="grow1"><h3>${dot(p)}${nm(p)}${p.ex?' <span class="pill soft">voorbeeld</span>':''}</h3><div class="small muted">${p.bed?esc(p.bed)+' · ':''}${METHODS[p.method]} op ${fmt(parse(p.date))}${S.shared&&p.by?' · door '+esc(whoName(p.by)):''}</div><div class="small"><b>${status}</b></div></div><div class="del row"><button class="btn sm ghost" data-a="edit" data-id="${esc(p.id)}">Wijzigen</button><button class="btn sm ghost" data-a="del" data-id="${esc(p.id)}">${S.confirm==p.id?'Zeker weten?':'Verwijderen'}</button></div></div>${ganttOf(p,ev)}<ol class="steps">${steps}</ol></article>`;
 }
 function upcoming(){
   const L=[];

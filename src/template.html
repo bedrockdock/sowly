@@ -173,7 +173,11 @@ button{cursor:pointer}
 .note{font-size:.82rem;color:var(--muted);margin-top:16px}
 /* Rechtsboven: vlag (taal) en tandwiel (instellingen) */
 .topbtns{display:flex;gap:8px;align-self:flex-start;margin-left:auto}
+/* Past de titel met datum niet meer naast de knoppen, dan gaan de knoppen naar een eigen regel */
+.top{flex-wrap:wrap;row-gap:10px}
+.top>div:nth-child(2){flex:1 1 190px;min-width:190px}
 .topb .flag{width:24px;height:16px;border-radius:3px;border:1.5px solid var(--edge);display:block}
+.topinst{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px 0 10px;white-space:nowrap}
 .topb .gear{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .langs{display:flex;flex-wrap:wrap;gap:8px}
 .langb{display:inline-flex;align-items:center;gap:8px}

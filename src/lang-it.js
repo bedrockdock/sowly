@@ -348,6 +348,7 @@ LANGS.it={
   "sort.alfabet": "Alfabetico",
   "sort.label": "Etichetta",
   "sort.plek": "Posto",
+  "inst.short": "Installa l'app",
   "inst.btn": "Installa l'app Sowly",
   "inst.done": "Sowly ora è installato come app sul tuo dispositivo.",
   "inst.title": "Installa l'app Sowly",

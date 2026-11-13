@@ -348,6 +348,7 @@ LANGS.es={
   "sort.alfabet": "Alfabético",
   "sort.label": "Etiqueta",
   "sort.plek": "Lugar",
+  "inst.short": "Instalar app",
   "inst.btn": "Instalar la app de Sowly",
   "inst.done": "Sowly ya está instalado como app en tu dispositivo.",
   "inst.title": "Instalar la app de Sowly",

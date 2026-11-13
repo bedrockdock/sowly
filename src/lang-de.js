@@ -348,6 +348,7 @@ LANGS.de={
   "sort.alfabet": "Alphabet",
   "sort.label": "Kennzeichnung",
   "sort.plek": "Platz",
+  "inst.short": "App installieren",
   "inst.btn": "Sowly-App installieren",
   "inst.done": "Sowly ist jetzt als App auf deinem Gerät.",
   "inst.title": "Sowly-App installieren",

@@ -708,6 +708,7 @@ const LANGS={nl:{
   "sort.label": "Herkenning",
   "sort.plek": "Plek",
 
+  "inst.short": "App installeren",
   "inst.btn": "Installeer Sowly-app",
   "inst.done": "Sowly staat nu als app op je toestel.",
   "inst.title": "Sowly-app installeren",

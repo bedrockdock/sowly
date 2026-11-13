@@ -348,6 +348,7 @@ LANGS.en={
   "sort.alfabet": "Alphabetical",
   "sort.label": "Label",
   "sort.plek": "Location",
+  "inst.short": "Install app",
   "inst.btn": "Install Sowly app",
   "inst.done": "Sowly is now installed as an app on your device.",
   "inst.title": "Install the Sowly app",

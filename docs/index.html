@@ -196,7 +196,11 @@ button{cursor:pointer}
 .note{font-size:.82rem;color:var(--muted);margin-top:16px}
 /* Rechtsboven: vlag (taal) en tandwiel (instellingen) */
 .topbtns{display:flex;gap:8px;align-self:flex-start;margin-left:auto}
+/* Past de titel met datum niet meer naast de knoppen, dan gaan de knoppen naar een eigen regel */
+.top{flex-wrap:wrap;row-gap:10px}
+.top>div:nth-child(2){flex:1 1 190px;min-width:190px}
 .topb .flag{width:24px;height:16px;border-radius:3px;border:1.5px solid var(--edge);display:block}
+.topinst{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px 0 10px;white-space:nowrap}
 .topb .gear{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .langs{display:flex;flex-wrap:wrap;gap:8px}
 .langb{display:inline-flex;align-items:center;gap:8px}
@@ -1370,6 +1374,7 @@ const LANGS={nl:{
   "sort.label": "Herkenning",
   "sort.plek": "Plek",
 
+  "inst.short": "App installeren",
   "inst.btn": "Installeer Sowly-app",
   "inst.done": "Sowly staat nu als app op je toestel.",
   "inst.title": "Sowly-app installeren",
@@ -1763,6 +1768,7 @@ LANGS.en={
   "sort.alfabet": "Alphabetical",
   "sort.label": "Label",
   "sort.plek": "Location",
+  "inst.short": "Install app",
   "inst.btn": "Install Sowly app",
   "inst.done": "Sowly is now installed as an app on your device.",
   "inst.title": "Install the Sowly app",
@@ -2153,6 +2159,7 @@ LANGS.de={
   "sort.alfabet": "Alphabet",
   "sort.label": "Kennzeichnung",
   "sort.plek": "Platz",
+  "inst.short": "App installieren",
   "inst.btn": "Sowly-App installieren",
   "inst.done": "Sowly ist jetzt als App auf deinem Gerät.",
   "inst.title": "Sowly-App installieren",
@@ -2543,6 +2550,7 @@ LANGS.fr={
   "sort.alfabet": "Ordre alphabétique",
   "sort.label": "Repère",
   "sort.plek": "Emplacement",
+  "inst.short": "Installer l'app",
   "inst.btn": "Installer l'appli Sowly",
   "inst.done": "Sowly est maintenant installé comme appli sur votre appareil.",
   "inst.title": "Installer l'appli Sowly",
@@ -2933,6 +2941,7 @@ LANGS.es={
   "sort.alfabet": "Alfabético",
   "sort.label": "Etiqueta",
   "sort.plek": "Lugar",
+  "inst.short": "Instalar app",
   "inst.btn": "Instalar la app de Sowly",
   "inst.done": "Sowly ya está instalado como app en tu dispositivo.",
   "inst.title": "Instalar la app de Sowly",
@@ -3323,6 +3332,7 @@ LANGS.it={
   "sort.alfabet": "Alfabetico",
   "sort.label": "Etichetta",
   "sort.plek": "Posto",
+  "inst.short": "Installa l'app",
   "inst.btn": "Installa l'app Sowly",
   "inst.done": "Sowly ora è installato come app sul tuo dispositivo.",
   "inst.title": "Installa l'app Sowly",
@@ -3959,7 +3969,7 @@ const loggedIn=()=>hasCloud()?!!C.user:S.shared;
 const GEAR='<svg class="gear" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
 /* App installeren: rechtsboven naast de vlag, op elk tabblad (alleen zolang installeren kan) */
 const INSTALL='<svg class="gear" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>';
-const topBtns=()=>(canInstall()?`<button class="icon-btn topb" data-a="app" aria-label="${tx('inst.btn')}" title="${tx('inst.btn')}">${INSTALL}</button>`:'')+`<button class="icon-btn topb" data-a="langs" aria-label="${esc(tx('lang.btn',{name:LANGS[LANG].name}))}">${flagSVG(LANG)}</button>${loggedIn()?`<button class="icon-btn topb" data-a="settings" aria-label="${tx('set.btn')}">${GEAR}</button>`:''}`;
+const topBtns=()=>(canInstall()?`<button class="btn sm ghost topb topinst" data-a="app" title="${tx('inst.btn')}">${INSTALL}<span>${tx('inst.short')}</span></button>`:'')+`<button class="icon-btn topb" data-a="langs" aria-label="${esc(tx('lang.btn',{name:LANGS[LANG].name}))}">${flagSVG(LANG)}</button>${loggedIn()?`<button class="icon-btn topb" data-a="settings" aria-label="${tx('set.btn')}">${GEAR}</button>`:''}`;
 const langList=()=>`<div class="langs">${LANG_ORDER.filter(c=>LANGS[c]).map(c=>`<button class="btn ghost langb" data-a="lang" data-l="${c}" lang="${c}" aria-pressed="${c==LANG}">${flagSVG(c)}<span>${LANGS[c].name}</span></button>`).join('')}</div>`;
 const landSel=()=>`<div class="field" style="margin:12px 0 0"><label for="land-sel">${tx('land.q')}</label><select id="land-sel">${Object.keys(COUNTRIES).map(c=>[c,landName(c)]).sort((a,b)=>a[1].localeCompare(b[1],LANG)).map(([c,n])=>`<option value="${c}"${c==S.land?' selected':''}>${esc(n)}</option>`).join('')}</select></div><p class="small muted" style="margin:8px 0 0">${tx('lang.note')}</p>`;
 function openLangs(){openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('langland.title')}</h2><div id="lang-s">${langList()}</div>${landSel()}`)}

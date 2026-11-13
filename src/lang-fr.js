@@ -348,6 +348,7 @@ LANGS.fr={
   "sort.alfabet": "Ordre alphabétique",
   "sort.label": "Repère",
   "sort.plek": "Emplacement",
+  "inst.short": "Installer l'app",
   "inst.btn": "Installer l'appli Sowly",
   "inst.done": "Sowly est maintenant installé comme appli sur votre appareil.",
   "inst.title": "Installer l'appli Sowly",

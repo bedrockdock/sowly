@@ -171,6 +171,14 @@ button{cursor:pointer}
 .steps b{font-family:var(--head);font-weight:600}
 .empty{text-align:center;padding:26px 10px}
 .note{font-size:.82rem;color:var(--muted);margin-top:16px}
+/* Rechtsboven: vlag (taal) en tandwiel (instellingen) */
+.topbtns{display:flex;gap:8px;align-self:flex-start;margin-left:auto}
+.topb .flag{width:24px;height:16px;border-radius:3px;border:1.5px solid var(--edge);display:block}
+.topb .gear{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.langs{display:flex;flex-wrap:wrap;gap:8px}
+.langb{display:inline-flex;align-items:center;gap:8px}
+.langb .flag{width:24px;height:16px;border-radius:3px;border:1.5px solid var(--edge);flex:none}
+.langb[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
 .fx{position:fixed;inset:0;z-index:30;display:grid;place-content:center;justify-items:center;gap:6px;background:color-mix(in srgb,var(--bg) 84%,transparent);animation:fxin .25s both;transition:opacity .4s}
 .fx.out{opacity:0}
 @keyframes fxin{from{opacity:0}to{opacity:1}}
@@ -217,15 +225,15 @@ body>:not(#print){display:none!important}
 .jp-box{width:3mm;height:3mm;border:1.2px solid #2A3B2C;border-radius:.6mm}
 </style>
 <div class="app">
-<header class="top"><div class="mascot" id="mascot" aria-hidden="true"></div><div><h1>Sowly</h1><p class="sub" id="today"></p></div></header>
+<header class="top"><div class="mascot" id="mascot" aria-hidden="true"></div><div><h1>Sowly</h1><p class="sub" id="today"></p></div><div class="topbtns" id="topbtns"></div></header>
 <main id="main"></main>
-<p class="note">Zaaitijden zijn indicatief voor Nederland en België. Het zaadzakje blijft leidend.</p>
+<p class="note"><span data-t="note">Zaaitijden zijn indicatief voor Nederland en België. Het zaadzakje blijft leidend.</span></p>
 </div>
-<nav class="tabbar" aria-label="Hoofdmenu">
-<button class="tab" data-view="tuin"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="7.5" height="7.5" rx="2"/><rect x="13" y="4" width="7.5" height="7.5" rx="2"/><rect x="3.5" y="13.5" width="7.5" height="7.5" rx="2"/><path d="M16.8 14v6.5M13.6 17.2h6.4"/></svg><span>Mijn tuin</span></button>
-<button class="tab" data-view="maand"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg><span>Deze maand</span></button>
-<button class="tab" data-view="gewassen"><svg viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6zM12 14c0-3 2-5 6-5 0 3-2 5-6 5z"/></svg><span>Gewassen</span></button>
+<nav class="tabbar" aria-label="Hoofdmenu" data-ta="nav">
+<button class="tab" data-view="tuin"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="7.5" height="7.5" rx="2"/><rect x="13" y="4" width="7.5" height="7.5" rx="2"/><rect x="3.5" y="13.5" width="7.5" height="7.5" rx="2"/><path d="M16.8 14v6.5M13.6 17.2h6.4"/></svg><span data-t="tab.tuin">Mijn tuin</span></button>
+<button class="tab" data-view="maand"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg><span data-t="tab.maand">Deze maand</span></button>
+<button class="tab" data-view="gewassen"><svg viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6zM12 14c0-3 2-5 6-5 0 3-2 5-6 5z"/></svg><span data-t="tab.gewassen">Gewassen</span></button>
 </nav>
 <div id="print"></div>
-<div class="ov" id="ov" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title"><button class="x" id="sh-close" aria-label="Sluiten">×</button><div id="sh-body"></div></div></div>
+<div class="ov" id="ov" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title"><button class="x" id="sh-close" aria-label="Sluiten" data-ta="close">×</button><div id="sh-body"></div></div></div>
 <script>

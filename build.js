@@ -10,7 +10,9 @@ const artifact = process.argv.includes('--artifact');
 const template = src('template.html');
 // cloud.js (Supabase) alleen in de webversie; in Claude loopt samen tuinieren via de database van Claude.
 // Vóór app.js, anders valt SB_URL nog in de "temporal dead zone" als app.js start.
-const js = ['data.js', 'lang-nl.js', 'plants.js', ...(artifact ? [] : ['cloud.js']), 'app.js'].map(src).join('\n');
+// Talen: lang-nl.js eerst (maakt LANGS), dan de andere talen, dan i18n.js (taal kiezen en toepassen).
+const langs = ['nl', 'en', 'de', 'fr', 'es', 'it'].map(l => `lang-${l}.js`).filter(f => fs.existsSync(path.join(__dirname, 'src', f)));
+const js = ['data.js', ...langs, 'i18n.js', 'plants.js', ...(artifact ? [] : ['cloud.js']), 'app.js'].map(src).join('\n');
 
 const face = (family, weight, file, range) =>
   `@font-face{font-family:'${family}';font-style:normal;font-weight:${weight};font-display:swap;src:url(fonts/${file}.woff2) format('woff2');${range ? 'unicode-range:' + range + ';' : ''}}`;
@@ -42,10 +44,10 @@ if (artifact) {
 ${fonts}</style>
 `;
   // Link naar de privacyverklaring onderaan, alleen in de webversie (in Claude bestaat privacy.html niet)
-  const NOTE = 'Het zaadzakje blijft leidend.</p>';
+  const NOTE = 'Het zaadzakje blijft leidend.</span></p>';
   if (!template.includes(NOTE)) throw new Error('voetnoot niet gevonden in template.html');
   const body = template.replace('</style>', '</style>\n</head>\n<body>')
-    .replace(NOTE, 'Het zaadzakje blijft leidend. <a href="privacy.html">Privacy</a></p>');
+    .replace(NOTE, 'Het zaadzakje blijft leidend.</span> <a href="privacy.html" data-t="privacy">Privacy</a></p>');
   fs.mkdirSync(path.join(__dirname, 'docs'), { recursive: true });
   fs.writeFileSync(path.join(__dirname, 'docs', 'privacy.html'), src('privacy.html').replace('/*FONTS*/', fonts));
   console.log('docs/privacy.html');

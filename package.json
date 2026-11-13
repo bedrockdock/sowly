@@ -7,7 +7,7 @@
     "build": "node build.js",
     "build:artifact": "node build.js --artifact",
     "fonts": "node scripts/fonts.js",
-    "test": "node tests/data.test.js && node tests/shift.test.js",
+    "test": "node tests/data.test.js && node tests/shift.test.js && node tests/lang.test.js",
     "serve": "npx --yes serve docs"
   }
 }

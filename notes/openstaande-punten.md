@@ -54,9 +54,15 @@ Bijgewerkt: zaterdag 24 oktober 2026. Naam: **Sowly** (internationaal, van "to s
 
 ## Internationaal (Duitsland, Oostenrijk, Polen, Tsjechië, Slowakije, Zweden, Denemarken)
 Gedaan: alle weken staan relatief aan week 20, er is een verschuiving (`shift`) voor ander klimaat of halfrond, en namen, tips en verzorgingsteksten staan in een taalpakket (`lang-nl.js`).
-- [ ] **De rest van de interface-teksten** (knoppen, koppen, meldingen in `app.js`) ook naar het taalpakket verplaatsen.
-- [ ] **Taalkiezer** en keuze onthouden. Taal uit de browser als beginwaarde, Engels als terugval.
+- [x] **De rest van de interface-teksten** (13 november 2026) (knoppen, koppen, meldingen in `app.js`) ook naar het taalpakket verplaatsen.
+- [x] **Taalkiezer** en keuze onthouden (13 november 2026): vlaggetje rechtsboven, tandwiel met instellingen als je bent ingelogd. Taal uit de browser als beginwaarde, Engels als terugval; keuze in `localStorage` (`sowly.taal`), dus per apparaat en niet in je account.
 - [ ] **Vertalingen** (Engels, Duits, daarna Pools, Tsjechisch, Slowaaks, Zweeds, Deens). Door een moedertaalspreker laten nalezen, vooral verzorging en buren.
+- [ ] **Vertalingen nalezen** (Engels, Duits, Frans, Spaans, Italiaans staan erin sinds 13 november 2026, vertaald door Claude): door een moedertaalspreker laten nalezen, vooral verzorging, buren en gewasnamen (13 november nagezocht: Frans `andijvie` = chicorée scarole klopt (brede andijvie; frisée is de krulvorm); Spaans `winterpostelein` werd verdolaga de Cuba en `boerenkool` col rizada; Italiaans `winterpostelein` = Claytonia, geen gangbare Italiaanse volksnaam gevonden). Mascottenamen gekozen: Sprout, Spross, Pousse, Brotito, Germoglio.
+- [ ] **Teeltgegevens blijven NL/BE** in elke taal; de voetnoot en de taalkeuze zeggen dat. Voor een ander land eerst lokale bronnen (zie regels in CLAUDE.md).
+- [x] **België** (13 november 2026): `nl-BE` en `fr-BE` met Belgische vlag, zelfde teksten als NL en FR (aliassen in `i18n.js`).
+- [ ] **Mails van Supabase per taal** (nu alleen Engels). De app zet de taal in het account (`user_metadata.lang`: nl, en, de, fr, es, it), bij aanmaken en bij wisselen. In Authentication > Email Templates per taal een blok met `{{ if eq .Data.lang "nl" }}…{{ else if … }}…{{ else }}Engels{{ end }}`; nog niet getest. Accounts van vóór 13 november hebben nog geen taal: die krijgen Engels tot ze één keer van taal wisselen.
+- [ ] **Nog alleen Nederlands:** de privacyverklaring en de beschrijving in de `<head>` (zoekmachines).
+- [ ] **Paginagrootte:** alle zes talen zitten in `docs/index.html` (van 137 naar 303 kB, ongecomprimeerd). Bij meer talen per taal los laden.
 - [ ] **Eigen webadres per taal** (`/nl/`, `/de/`, …) met `hreflang` voor zoekmachines.
 - [ ] **Locatie kiezen** (plaats of postcode) en daaruit laatste en eerste vorstdatum bepalen. IP-locatie hooguit als voorstel.
 - [ ] **Regiogegevens per land met lokale bronnen** nalopen. Zweden en Noord-Polen hebben een latere voorjaarsvorst, Oostenrijk en Tsjechië strengere winters en warmere zomers.

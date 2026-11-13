@@ -1363,7 +1363,7 @@ async function enterCloud(){
 }
 async function joinInvite(code){
   const r=await C.sb.rpc('join_invite',{code,mname:myName()}),j=r.data&&r.data[0];
-  if(r.error||!j){toast('Deze uitnodiging bestaat niet meer.');return null}
+  if(r.error||!j){toast('Deze uitnodiging is verlopen of bestaat niet meer. Vraag een nieuwe aan.');return null}
   return {gid:j.garden,name:j.gname||'Gedeelde tuin'};
 }
 async function openGarden(gid){
@@ -1404,7 +1404,7 @@ async function makeInvite(role){
   const code=inviteCode();
   must(await C.sb.from('invites').insert({code,garden:C.gid,gname:C.gname||'Gedeelde tuin',role,by:C.user.id}));
   const url=here()+'?uitnodiging='+code;
-  openSheet(`<h2 id="sh-title" style="padding-right:48px">Uitnodiging gemaakt</h2><p>Wie deze link opent en inlogt, ${role=='edit'?'kan meewerken in je tuin: planten toevoegen, aanpassen en verwijderen':'kan meekijken in je tuin, maar niets aanpassen'}.</p><div class="field"><label for="inv-url">Link</label><input id="inv-url" readonly value="${esc(url)}"></div><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="copyinv">Kopiëren</button>${navigator.share?'<button class="btn ghost" data-a="shareinv">Delen</button>':''}</div><p class="small muted" style="margin-top:12px">Iedereen met deze link kan meedoen zolang de link bestaat. Deel hem alleen met wie je vertrouwt. Haal je iemand weg met het kruisje bij de naam, dan werkt de link waarmee die persoon binnenkwam ook niet meer.</p>`);
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">Uitnodiging gemaakt</h2><p>Wie deze link opent en inlogt, ${role=='edit'?'kan meewerken in je tuin: planten toevoegen, aanpassen en verwijderen':'kan meekijken in je tuin, maar niets aanpassen'}.</p><div class="field"><label for="inv-url">Link</label><input id="inv-url" readonly value="${esc(url)}"></div><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="copyinv">Kopiëren</button>${navigator.share?'<button class="btn ghost" data-a="shareinv">Delen</button>':''}</div><p class="small muted" style="margin-top:12px">Iedereen met deze link kan 14 dagen lang meedoen. Daarna verloopt hij; wie al meedoet, blijft erin. Deel hem alleen met wie je vertrouwt. Haal je iemand weg met het kruisje bij de naam, dan werkt de link waarmee die persoon binnenkwam ook niet meer.</p>`);
 }
 function openInvite(){
   openSheet(`<h2 id="sh-title" style="padding-right:48px">Iemand uitnodigen</h2><p>Wat mag de ander in je tuin?</p><div class="stack" style="gap:8px"><button class="btn" data-a="mkinv" data-m="edit">Meewerken: planten toevoegen, aanpassen en verwijderen</button><button class="btn ghost" data-a="mkinv" data-m="view">Meekijken: alleen bekijken</button></div><p class="small muted" style="margin-top:12px">Je krijgt een link die je zelf doorstuurt, bijvoorbeeld via WhatsApp of mail. De ander moet inloggen of een account maken.</p>`);

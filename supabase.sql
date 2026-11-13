@@ -45,21 +45,26 @@ create table public.plantings (
 );
 
 -- Uitnodigingen: de code is lang en willekeurig. Niemand kan ze opvragen behalve wie hem maakte;
--- meedoen gaat via join_invite() met de code zelf.
+-- meedoen gaat via join_invite() met de code zelf. Ze verlopen na 14 dagen (created_at zet de database zelf, zie grens()).
 create table public.invites (
   code text primary key check (char_length(code) between 16 and 64),
   garden uuid not null references public.gardens on delete cascade,
   gname text not null check (char_length(gname) <= 80),
   role text not null check (role in ('edit', 'view')),
-  by uuid not null default auth.uid() references auth.users on delete cascade
+  by uuid not null default auth.uid() references auth.users on delete cascade,
+  created_at timestamptz not null default now()
 );
 
 -- Hulpfuncties. security definer, zodat de regels op members niet naar zichzelf verwijzen.
-create function public.is_member(g uuid) returns boolean language sql stable security definer set search_path = '' as
+-- Ze staan in het schema private: dat biedt Supabase niet aan via de API, dus niemand kan ze los aanroepen.
+create schema if not exists private;
+revoke all on schema private from public, anon;
+grant usage on schema private to authenticated;
+create function private.is_member(g uuid) returns boolean language sql stable security definer set search_path = '' as
   $$ select exists (select 1 from public.members where garden = g and uid = auth.uid()) $$;
-create function public.can_edit(g uuid) returns boolean language sql stable security definer set search_path = '' as
+create function private.can_edit(g uuid) returns boolean language sql stable security definer set search_path = '' as
   $$ select exists (select 1 from public.members where garden = g and uid = auth.uid() and role in ('owner', 'edit')) $$;
-create function public.is_owner(g uuid) returns boolean language sql stable security definer set search_path = '' as
+create function private.is_owner(g uuid) returns boolean language sql stable security definer set search_path = '' as
   $$ select exists (select 1 from public.members where garden = g and uid = auth.uid() and role = 'owner') $$;
 
 -- Eigen tuin aanmaken, met jezelf als eigenaar, in één stap
@@ -73,12 +78,14 @@ begin
   return g;
 end $$;
 
--- Lid worden met een uitnodiging, met de rol uit die uitnodiging. Geeft de tuin en zijn naam terug.
+-- Lid worden met een uitnodiging (jonger dan 14 dagen), met de rol uit die uitnodiging. Geeft de tuin en zijn naam terug.
+-- Verlopen uitnodigingen worden meteen opgeruimd.
 create function public.join_invite(code text, mname text) returns table (garden uuid, gname text)
 language plpgsql security definer set search_path = '' as $$
 declare i public.invites;
 begin
   if auth.uid() is null then raise exception 'niet ingelogd'; end if;
+  delete from public.invites where created_at <= now() - interval '14 days';
   select * into i from public.invites where invites.code = join_invite.code;
   if not found then return; end if;
   insert into public.members (garden, uid, role, name, invite) values (i.garden, auth.uid(), i.role, left(mname, 60), i.code)
@@ -113,6 +120,9 @@ begin
       raise exception 'maximaal 50 leden per tuin';
     end if;
   elsif tg_table_name = 'invites' then
+    -- Het moment van aanmaken bepaalt de database; verlopen uitnodigingen tellen niet mee
+    new.created_at := now();
+    delete from public.invites where garden = new.garden and created_at <= now() - interval '14 days';
     if (select count(*) from public.invites where garden = new.garden) >= 50 then
       raise exception 'maximaal 50 open uitnodigingen per tuin';
     end if;
@@ -125,8 +135,9 @@ create trigger grens before insert on public.members for each row execute functi
 create trigger grens before insert on public.invites for each row execute function public.grens();
 
 revoke execute on function public.grens() from public, anon, authenticated;
-revoke execute on function public.is_member(uuid), public.can_edit(uuid), public.is_owner(uuid) from public, anon;
-grant execute on function public.is_member(uuid), public.can_edit(uuid), public.is_owner(uuid) to authenticated;
+revoke execute on function private.is_member(uuid), private.can_edit(uuid), private.is_owner(uuid) from public, anon;
+grant execute on function private.is_member(uuid), private.can_edit(uuid), private.is_owner(uuid) to authenticated;
+-- create_garden en join_invite zijn bewust aan te roepen door ingelogde gebruikers (Security Advisor meldt ze; dat klopt).
 revoke execute on function public.create_garden(text, int, text), public.join_invite(text, text) from public, anon;
 grant execute on function public.create_garden(text, int, text), public.join_invite(text, text) to authenticated;
 
@@ -140,27 +151,27 @@ create policy "eigen profiel lezen" on public.profiles for select to authenticat
 create policy "eigen profiel maken" on public.profiles for insert to authenticated with check (id = auth.uid());
 create policy "eigen profiel wijzigen" on public.profiles for update to authenticated using (id = auth.uid()) with check (id = auth.uid());
 
-create policy "leden lezen de tuin" on public.gardens for select to authenticated using (public.is_member(id));
-create policy "bewerkers wijzigen de vorstweek" on public.gardens for update to authenticated using (public.can_edit(id)) with check (public.can_edit(id));
-create policy "eigenaar verwijdert de tuin" on public.gardens for delete to authenticated using (public.is_owner(id));
+create policy "leden lezen de tuin" on public.gardens for select to authenticated using (private.is_member(id));
+create policy "bewerkers wijzigen de vorstweek" on public.gardens for update to authenticated using (private.can_edit(id)) with check (private.can_edit(id));
+create policy "eigenaar verwijdert de tuin" on public.gardens for delete to authenticated using (private.is_owner(id));
 -- Alleen de vorstweek is aan te passen; naam en eigenaar niet (aanmaken gaat via create_garden)
 revoke insert, update on public.gardens from anon, authenticated;
 grant update (frost) on public.gardens to authenticated;
 
 -- Je eigen lidmaatschap mag je altijd zien; leden zien elkaar
-create policy "leden zien elkaar" on public.members for select to authenticated using (uid = auth.uid() or public.is_member(garden));
+create policy "leden zien elkaar" on public.members for select to authenticated using (uid = auth.uid() or private.is_member(garden));
 -- Zelf vertrekken (niet als eigenaar), of de eigenaar haalt iemand anders weg. Lid worden gaat via create_garden of join_invite.
 create policy "vertrekken of weghalen" on public.members for delete to authenticated
-  using (uid = auth.uid() and role <> 'owner' or uid <> auth.uid() and public.is_owner(garden));
+  using (uid = auth.uid() and role <> 'owner' or uid <> auth.uid() and private.is_owner(garden));
 revoke insert, update on public.members from anon, authenticated;
 
-create policy "leden lezen plantingen" on public.plantings for select to authenticated using (public.is_member(garden));
-create policy "bewerkers maken plantingen" on public.plantings for insert to authenticated with check (public.can_edit(garden));
-create policy "bewerkers wijzigen plantingen" on public.plantings for update to authenticated using (public.can_edit(garden)) with check (public.can_edit(garden));
-create policy "bewerkers verwijderen plantingen" on public.plantings for delete to authenticated using (public.can_edit(garden));
+create policy "leden lezen plantingen" on public.plantings for select to authenticated using (private.is_member(garden));
+create policy "bewerkers maken plantingen" on public.plantings for insert to authenticated with check (private.can_edit(garden));
+create policy "bewerkers wijzigen plantingen" on public.plantings for update to authenticated using (private.can_edit(garden)) with check (private.can_edit(garden));
+create policy "bewerkers verwijderen plantingen" on public.plantings for delete to authenticated using (private.can_edit(garden));
 
 create policy "eigen uitnodigingen lezen" on public.invites for select to authenticated using (by = auth.uid());
-create policy "eigenaar nodigt uit" on public.invites for insert to authenticated with check (by = auth.uid() and public.is_owner(garden));
+create policy "eigenaar nodigt uit" on public.invites for insert to authenticated with check (by = auth.uid() and private.is_owner(garden));
 create policy "eigen uitnodiging intrekken" on public.invites for delete to authenticated using (by = auth.uid());
 revoke update on public.invites from anon, authenticated;
 

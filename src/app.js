@@ -40,19 +40,26 @@ S.plantings=examples();
 const whoName=id=>id&&id==S.me?tx('you'):(S.names[id]||tx('someone'));
 const dbSet=p=>{if(S.shared&&S.db)S.db.doc('plantings/'+p.id).set({crop:p.crop,method:p.method,date:p.date,label:p.label||'',bed:p.bed||'',by:p.by||S.me||''}).catch(()=>{})};
 const dbDel=id=>{if(S.shared&&S.db)S.db.doc('plantings/'+id).delete().catch(()=>{})};
-const dbFrost=()=>{if(S.shared&&S.db)S.db.doc('garden/settings').set({frost:S.frost}).catch(()=>{})};
+/* Vorstweek en land horen bij de tuin; altijd samen opslaan (set vervangt het hele document) */
+const dbFrost=()=>{if(S.shared&&S.db)S.db.doc('garden/settings').set({frost:S.frost,land:S.land}).catch(()=>{})};
 async function loadNames(){
   try{const u=await claude.use('user');if(!u)return;const ids=[...new Set(S.plantings.map(p=>p.by).filter(Boolean))];if(!ids.length)return;
     const ps=await u.profiles(ids);ids.forEach(i=>{if(ps[i]&&ps[i].name)S.names[i]=ps[i].name});render()}catch(e){}
 }
 function attach(db,onLost){
-  S.db=db;S.shared=true;
+  S.db=db;S.shared=true;let landTried=false;
   return [
     db.collection('plantings').onSnapshot(snap=>{
       S.plantings=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(p=>CROP[p.crop]&&p.method in METHODS&&/^[A-Za-z0-9_-]{1,40}$/.test(p.id));
       render();if(!C.sb)loadNames();
     },onLost||(()=>{})),
-    db.doc('garden/settings').onSnapshot(sn=>{const d=sn.data();if(d&&d.frost){S.frost=d.frost;render()}},()=>{})
+    db.doc('garden/settings').onSnapshot(sn=>{
+      const d=sn.data();if(!d)return;
+      if(d.frost)S.frost=d.frost;
+      if(d.land&&d.land in COUNTRIES){if(d.land!=S.land){S.land=d.land;applyStatic()}}
+      else if(canEdit()&&!landTried){landTried=true;dbFrost()}/* tuin zonder land: één keer het land van dit apparaat vastleggen */
+      render();
+    },()=>{})
   ];
 }
 async function startShared(){
@@ -105,8 +112,9 @@ function cloudDb(gid){
   return {
     doc:p=>{
       if(p=='garden/settings')return {
-        set:d=>sb.from('gardens').update({frost:d.frost}).eq('id',gid).then(must),
-        onSnapshot:cb=>live('gardens','id',gid,()=>sb.from('gardens').select('frost').eq('id',gid).maybeSingle(),d=>cb({data:()=>d}))
+        /* Zonder kolom land (SQL-update nog niet uitgevoerd) valt dit terug op alleen de vorstweek */
+        set:d=>sb.from('gardens').update({frost:d.frost,land:d.land}).eq('id',gid).then(r=>r.error?sb.from('gardens').update({frost:d.frost}).eq('id',gid):r).then(must),
+        onSnapshot:cb=>live('gardens','id',gid,()=>sb.from('gardens').select('frost,land').eq('id',gid).maybeSingle().then(r=>r.error?sb.from('gardens').select('frost').eq('id',gid).maybeSingle():r),d=>cb({data:()=>d}))
       };
       const id=p.split('/')[1];
       return {
@@ -283,12 +291,19 @@ const samenBtn=()=>`<button class="btn sm ghost" data-a="samen" aria-label="${tx
 function openSamen(){openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('samen.title')}</h2><div id="samen-b">${accountCard()}</div>`)}
 
 /* ---- Land: zijn er lokale zaaigegevens? Zo niet, dan eerlijk melden dat het NL/BE-gegevens zijn ---- */
-const localData=()=>!!COUNTRIES[S.land];
-const noteText=()=>localData()?tx('note'):tx('note.other',{land:landName(S.land)});
-const landBanner=()=>localData()?'':`<div class="card landnote small">${esc(noteText())}</div>`;
+const isNLBE=()=>COUNTRIES[S.land]=='nlbe';
+const noteText=()=>{
+  if(isNLBE())return tx('note');
+  const r=region(),land=landName(S.land);
+  return r?tx('note.partial',{land,src:r.src,n:CROPS.filter(c=>r.s[c.id]).length,t:CROPS.length}):tx('note.other',{land});
+};
+const landBanner=()=>isNLBE()?'':`<div class="card landnote small">${esc(noteText())}</div>`;
+/* Per gewas: waar komen de zaaitijden vandaan (alleen buiten NL/BE) */
+const cropSrc=id=>{if(isNLBE())return '';const r=region(),land=landName(S.land);return `<p class="small muted" style="margin:6px 0 0">${esc(r&&r.s[id]?tx('src.local',{land,src:r.src}):tx('src.none',{land}))}</p>`};
 function setLand(c){
   if(!(c in COUNTRIES)||c==S.land)return;
   S.land=c;try{localStorage.setItem(LAND_KEY,c)}catch(e){}
+  if(S.shared&&canEdit())dbFrost();
   applyStatic();render();
 }
 
@@ -331,6 +346,9 @@ function setLang(code){
    Vorstgevoelige gewassen schuiven mee met de gekozen vorstweek (S.frost). S.shift is een extra
    verschuiving voor een ander klimaat of halfrond (bijv. 26 weken op het zuidelijk halfrond); weken lopen rond. */
 const REF_FROST=20;
+/* Periodes van het gekozen land als er een lokale bron is, anders NL/BE */
+const region=()=>REGIONS[COUNTRIES[S.land]];
+const sOf=c=>{const r=region();return r&&r.s[c.id]||c.s};
 function stepsOf(c){
   const out=[];
   const add=(t,a,b,l)=>{
@@ -343,8 +361,9 @@ function stepsOf(c){
     const len=b-a;y=x+len;
     if(y>52){out.push({t,a:x,b:52,l});out.push({t,a:1,b:y-52,l})}else out.push({t,a:x,b:y,l});
   };
-  c.s.forEach(([t,a,b,l])=>add(t,a,b,l));
-  if(c.d.verpot){const w=Math.round(c.d.verpot/7);c.s.filter(x=>x[0]=='binnen'||x[0]=='glas').forEach(([t,a,b])=>add('verpot',a+w,b+w))}
+  const cs=sOf(c);
+  cs.forEach(([t,a,b,l])=>add(t,a,b,l));
+  if(c.d.verpot){const w=Math.round(c.d.verpot/7);cs.filter(x=>x[0]=='binnen'||x[0]=='glas').forEach(([t,a,b])=>add('verpot',a+w,b+w))}
   const by={};out.forEach(x=>(by[x.t]=by[x.t]||[]).push(x));
   return Object.values(by).flatMap(a=>{a.sort((p,q)=>p.a-q.a);const r=[];a.forEach(x=>{const l=r[r.length-1];if(l&&x.a<=l.b+1)l.b=Math.max(l.b,x.b);else r.push({...x})});return r});
 }
@@ -359,7 +378,7 @@ function monthTasks(y,m){
   CROPS.forEach(c=>stepsOf(c).forEach(st=>{if(st.a<=wB&&st.b>=wA){(g[st.t]=g[st.t]||[]);if(!g[st.t].some(x=>x.c==c))g[st.t].push({c,st,wA})}}));
   return g;
 }
-const methodsOf=c=>['binnen','glas','buiten'].filter(t=>c.s.some(x=>x[0]==t));
+const methodsOf=c=>['binnen','glas','buiten'].filter(t=>sOf(c).some(x=>x[0]==t));
 
 /* ---- Tijdlijn per plant ---- */
 function timeline(p){
@@ -598,7 +617,7 @@ function yearChart(c,mini){
 }
 function openCrop(id){
   const c=CROP[id];
-  openSheet(`<h2 id="sh-title" style="padding-right:48px">${c.n}</h2><div class="bigplant"><div class="pp" id="bigp">${plantSVG(c,4)}</div></div><div class="stages" role="group" aria-label="${tx('cs.stages')}">${STAGE_NAMES.map((n,i)=>`<button data-a="stage" data-s="${i}" data-id="${id}" aria-pressed="${i==4}">${n}</button>`).join('')}<button data-a="play" data-id="${id}">${tx('cs.play')}</button></div><p>${c.tip}</p>${careHTML(id)}<h3 style="margin-top:14px">${tx('cs.year')}</h3>${yearChart(c)}<p class="small muted">${tx('cs.today')}</p><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="add" data-id="${id}">${tx('cs.add')}</button>${COMMERCE?`<button class="btn ghost" data-a="seed" data-id="${id}">${tx('seed.find')}</button>`:''}</div>`);
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">${c.n}</h2><div class="bigplant"><div class="pp" id="bigp">${plantSVG(c,4)}</div></div><div class="stages" role="group" aria-label="${tx('cs.stages')}">${STAGE_NAMES.map((n,i)=>`<button data-a="stage" data-s="${i}" data-id="${id}" aria-pressed="${i==4}">${n}</button>`).join('')}<button data-a="play" data-id="${id}">${tx('cs.play')}</button></div><p>${c.tip}</p>${careHTML(id)}<h3 style="margin-top:14px">${tx('cs.year')}</h3>${yearChart(c)}<p class="small muted">${tx('cs.today')}</p>${cropSrc(id)}<div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="add" data-id="${id}">${tx('cs.add')}</button>${COMMERCE?`<button class="btn ghost" data-a="seed" data-id="${id}">${tx('seed.find')}</button>`:''}</div>`);
 }
 function setStage(id,s){
   $('#bigp').innerHTML=plantSVG(CROP[id],s);

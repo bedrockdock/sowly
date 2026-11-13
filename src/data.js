@@ -259,3 +259,5 @@ const BEV={
 };
 const NB={};
 for(const id in CARE){const c=CARE[id],[g,g2]=splitBr(id,c.g,SGOED),[s,s2]=splitBr(id,c.s,SSLECHT);NB[id]={l:c.l,w:c.w,v:c.v,g,g2,s,s2,b:{l:BEV.l.includes(id),w:BEV.w.includes(id),v:BEV.v.includes(id)}}}
+/* Zaaiperiodes per land uit lokale bronnen (src/region-xx.js vult dit aan). Zonder land-gegevens gelden de NL/BE-periodes hierboven. */
+const REGIONS={};

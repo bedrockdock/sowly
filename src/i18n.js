@@ -6,8 +6,8 @@ LANGS['nl-BE']=Object.assign({},LANGS.nl,{name:'Nederlands (België)',flag:'be'}
 LANGS['fr-BE']=Object.assign({},LANGS.fr,{name:'Français (Belgique)',flag:'be'});
 const LANG_ORDER=['nl','nl-BE','fr','fr-BE','en','de','es','it'];
 const LANG_KEY='sowly.taal';
-/* ---- Land: los van de taal. data = welke zaaigegevens gelden (nlbe = Nederlandse en Belgische bronnen; null = nog geen lokale bronnen) ---- */
-const COUNTRIES={NL:'nlbe',BE:'nlbe',DE:null,AT:null,CH:null,LU:null,FR:null,GB:null,IE:null,ES:null,IT:null,DK:null,SE:null,PL:null,CZ:null,SK:null};
+/* ---- Land: los van de taal. Waarde = welke zaaigegevens gelden: nlbe = Nederlandse en Belgische bronnen, de = REGIONS.de, null = nog geen lokale bronnen ---- */
+const COUNTRIES={NL:'nlbe',BE:'nlbe',DE:'de',AT:null,CH:null,LU:null,FR:null,GB:null,IE:null,ES:null,IT:null,DK:null,SE:null,PL:null,CZ:null,SK:null};
 const LAND_KEY='sowly.land';
 const LAND_OF_LANG={nl:'NL','nl-BE':'BE','fr-BE':'BE',fr:'FR',de:'DE',en:'GB',es:'ES',it:'IT'};
 /* Eerder gekozen land, anders het land uit de browsertaal (de-AT -> AT), anders het land dat bij de taal hoort */

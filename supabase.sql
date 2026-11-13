@@ -20,7 +20,8 @@ create table public.gardens (
   id uuid primary key default gen_random_uuid(),
   owner uuid not null references auth.users on delete cascade,
   name text not null check (char_length(name) <= 80),
-  frost int not null check (frost between 14 and 26)
+  frost int not null check (frost between 14 and 26),
+  land text check (land is null or land ~ '^[A-Z]{2}$')
 );
 
 create table public.members (
@@ -154,9 +155,9 @@ create policy "eigen profiel wijzigen" on public.profiles for update to authenti
 create policy "leden lezen de tuin" on public.gardens for select to authenticated using (private.is_member(id));
 create policy "bewerkers wijzigen de vorstweek" on public.gardens for update to authenticated using (private.can_edit(id)) with check (private.can_edit(id));
 create policy "eigenaar verwijdert de tuin" on public.gardens for delete to authenticated using (private.is_owner(id));
--- Alleen de vorstweek is aan te passen; naam en eigenaar niet (aanmaken gaat via create_garden)
+-- Alleen de vorstweek en het land zijn aan te passen; naam en eigenaar niet (aanmaken gaat via create_garden)
 revoke insert, update on public.gardens from anon, authenticated;
-grant update (frost) on public.gardens to authenticated;
+grant update (frost, land) on public.gardens to authenticated;
 
 -- Je eigen lidmaatschap mag je altijd zien; leden zien elkaar
 create policy "leden zien elkaar" on public.members for select to authenticated using (uid = auth.uid() or private.is_member(garden));

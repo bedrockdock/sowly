@@ -41,6 +41,11 @@ create table public.plantings (
   date text not null constraint plantings_date_vorm check (date ~ '^\d{4}-\d{2}-\d{2}$'),
   label text not null default '' check (char_length(label) <= 30),
   bed text not null default '' check (char_length(bed) <= 30),
+  -- Eigen plant (crop 'overig'): naam en data van de gebruiker; leeg bij gewone gewassen
+  name text not null default '' constraint plantings_name_lengte check (char_length(name) <= 30),
+  uit text not null default '' constraint plantings_uit_vorm check (uit = '' or uit ~ '^\d{4}-\d{2}-\d{2}$'),
+  oogst_van text not null default '' constraint plantings_oogst_van_vorm check (oogst_van = '' or oogst_van ~ '^\d{4}-\d{2}-\d{2}$'),
+  oogst_tot text not null default '' constraint plantings_oogst_tot_vorm check (oogst_tot = '' or oogst_tot ~ '^\d{4}-\d{2}-\d{2}$'),
   by uuid,
   primary key (garden, id)
 );

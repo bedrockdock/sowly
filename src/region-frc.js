@@ -6,7 +6,15 @@
    Niet overgenomen (bron maakt het onderscheid niet): aardappel (vroeg/laat), venkel (staat bij de kruiden), boerenkool en
    savooiekool ("chou frisé" is dubbelzinnig). Gewassen die CIVAM niet heeft, komen uit de landelijke GNIS-tabel (zie region-frn.js);
    die staan in cs (bron per gewas). Details: notes/bronnen.md. */
-REGIONS.frc={src:'CIVAM Auvergne-Rhône-Alpes',cs:{"andijvie": "GNIS (Jardiner Malin)", "savooiekool": "GNIS (Jardiner Malin)", "spruitkool": "GNIS (Jardiner Malin)", "augurk": "GNIS (Jardiner Malin)", "courgette": "GNIS (Jardiner Malin)", "pompoen": "GNIS (Jardiner Malin)", "venkel": "GNIS (Jardiner Malin)", "tuinboon": "GNIS (Jardiner Malin)", "veldsla": "GNIS (Jardiner Malin)", "mais": "GNIS (Jardiner Malin)", "aardappel-vroeg": "GNIS (Jardiner Malin)", "aardappel-laat": "GNIS (Jardiner Malin)", "rammenas": "GNIS (Jardiner Malin)"},s:{
+/* Aanvulling 15 november 2026: Vilmorin (zaadbedrijf, landelijk), productkaarten op eshop.vilmorin-jardin.fr met
+   "Mois de semis" en "Mois de récolte" (alleen maanden, geen methode). Eén ras per gewas, zie notes/bronnen.md. Methode zoals
+   de app het gewas zaait (direct gezaaid = buiten, voorgezaaid = binnen); uitplanten staat niet op de kaart: NL-weken. */
+REGIONS.frc={src:'CIVAM Auvergne-Rhône-Alpes',cs:{"andijvie": "GNIS (Jardiner Malin)", "savooiekool": "GNIS (Jardiner Malin)", "spruitkool": "GNIS (Jardiner Malin)", "augurk": "GNIS (Jardiner Malin)", "courgette": "GNIS (Jardiner Malin)", "pompoen": "GNIS (Jardiner Malin)", "venkel": "GNIS (Jardiner Malin)", "tuinboon": "GNIS (Jardiner Malin)", "veldsla": "GNIS (Jardiner Malin)", "mais": "GNIS (Jardiner Malin)", "aardappel-vroeg": "GNIS (Jardiner Malin)", "aardappel-laat": "GNIS (Jardiner Malin)", "rammenas": "GNIS (Jardiner Malin)", "boerenkool": "Vilmorin", "basilicum": "Vilmorin", "koolrabi": "Vilmorin", "sjalot": "Vilmorin", "pluksla": "Vilmorin"},s:{
+  'boerenkool':[["buiten", 14, 26], ["uitplant", 24, 30], ["oogst", 1, 8], ["oogst", 40, 52]],
+  'basilicum':[["binnen", 9, 22], ["uitplant", 20, 24], ["oogst", 18, 43]],
+  'koolrabi':[["buiten", 9, 26], ["uitplant", 14, 30], ["oogst", 27, 48]],
+  'sjalot':[["buiten", 1, 13, "plantsjalotten"], ["buiten", 44, 52, "plantsjalotten"], ["oogst", 23, 30]],
+  'pluksla':[["buiten", 9, 35], ["oogst", 14, 39]],
   'sla':[["binnen", 6, 12], ["glas", 6, 12], ["buiten", 7, 43], ["uitplant", 12, 38], ["oogst", 10, 48]],
   'rammenas':[["buiten", 23, 35], ["oogst", 44, 52]],
   'snijbiet':[["buiten", 14, 34], ["oogst", 1, 9], ["oogst", 22, 51]],

@@ -38,7 +38,9 @@ S.plantings=examples();
 
 /* ---- Samen tuinieren (gedeelde database; zonder database wordt niets opgeslagen) ---- */
 const whoName=id=>id&&id==S.me?tx('you'):(S.names[id]||tx('someone'));
-const dbSet=p=>{if(S.shared&&S.db)S.db.doc('plantings/'+p.id).set({crop:p.crop,method:p.method,date:p.date,label:p.label||'',bed:p.bed||'',by:p.by||S.me||''}).catch(()=>{})};
+/* Eigen plant (Overige): naam en data vult de gebruiker zelf in. Zonder de kolommen uit supabase-update-2026-11-15-overig.sql
+   lukt opslaan niet; dan een melding in plaats van stil verdwijnen. */
+const dbSet=p=>{if(S.shared&&S.db)S.db.doc('plantings/'+p.id).set(Object.assign({crop:p.crop,method:p.method,date:p.date,label:p.label||'',bed:p.bed||'',by:p.by||S.me||''},isOwn(p)?{name:p.name||'',uit:p.uit||'',oogst_van:p.oogst_van||'',oogst_tot:p.oogst_tot||''}:{})).catch(()=>{if(isOwn(p))toast(tx('fail'))})};
 const dbDel=id=>{if(S.shared&&S.db)S.db.doc('plantings/'+id).delete().catch(()=>{})};
 /* Vorstweek en land horen bij de tuin; altijd samen opslaan (set vervangt het hele document) */
 const dbFrost=()=>{if(S.shared&&S.db)S.db.doc('garden/settings').set({frost:S.frost,land:S.land}).catch(()=>{})};
@@ -50,7 +52,7 @@ function attach(db,onLost){
   S.db=db;S.shared=true;let landTried=false;
   return [
     db.collection('plantings').onSnapshot(snap=>{
-      S.plantings=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(p=>CROP[p.crop]&&p.method in METHODS&&/^[A-Za-z0-9_-]{1,40}$/.test(p.id));
+      S.plantings=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(p=>(CROP[p.crop]||isOwn(p))&&p.method in METHODS&&/^[A-Za-z0-9_-]{1,40}$/.test(p.id));
       render();if(!C.sb)loadNames();
     },onLost||(()=>{})),
     db.doc('garden/settings').onSnapshot(sn=>{
@@ -74,7 +76,7 @@ async function startShared(){
 /* ---- Account en samen tuinieren in de webversie (Supabase) ----
    Tabellen: profiles {id, garden, gardens:{gid:naam}, name}
              gardens {id, owner, name, frost}, members {garden, uid, role: owner|edit|view, name, invite?}
-             plantings {garden, id, crop, method, date, label, bed, by}, invites {code, garden, gname, role, by}
+             plantings {garden, id, crop, method, date, label, bed, by, en voor crop overig: name, uit, oogst_van, oogst_tot}, invites {code, garden, gname, role, by}
    Wie wat mag: zie supabase.sql. Inloggen kan pas na het bevestigen van het e-mailadres. */
 const C={sb:null,user:null,gid:null,gname:'',role:null,members:[],gardens:{},unsub:[],err:'',newName:'',pend:null,mail:''};
 const INV_KEY='sowly.uitnodiging';
@@ -386,10 +388,25 @@ function monthTasks(y,m){
 }
 const methodsOf=c=>['binnen','glas','buiten'].filter(t=>sOf(c).some(x=>x[0]==t));
 
+/* ---- Eigen plant (Overige): geen zaaitijden, verzorging of buren; alleen de data die de gebruiker opgeeft ---- */
+const OWN='overig';
+const isOwn=p=>p.crop==OWN;
+const DATUM=/^\d{4}-\d{2}-\d{2}$/;
+const ownDate=s=>typeof s=='string'&&DATUM.test(s)?s:'';
+/* Naam wordt ontsnapt: c.n komt in HTML terecht (kaart, tekening, jaarplanning) */
+const cropOf=p=>isOwn(p)?{id:OWN,n:esc(p.name||tx('f.other')),kind:'herb',tone:'',d:{kiem:0,oogst:[0,0]}}:CROP[p.crop];
+
 /* ---- Tijdlijn per plant ---- */
 function timeline(p){
-  const c=CROP[p.crop],d=c.d,t0=parse(p.date),ev=[];
+  const c=cropOf(p),d=c.d,t0=parse(p.date),ev=[];
   const A=(k,off,l,end)=>ev.push({k,dt:addDays(t0,off),l,end:end==null?null:addDays(t0,end)});
+  if(isOwn(p)){
+    const u=ownDate(p.uit),v=ownDate(p.oogst_van),w=ownDate(p.oogst_tot);
+    A('zaai',0,ACT[p.method].n);
+    if(u)ev.push({k:'uitplant',dt:parse(u),l:ACT.uitplant.n,end:null});
+    if(v)ev.push({k:'oogst',dt:parse(v),l:ACT.oogst.n,end:parse(w||v)});
+    return ev.sort((a,b)=>a.dt-b.dt);
+  }
   A('zaai',0,c.poten&&p.method=='buiten'?tx('tl.plant'):ACT[p.method].n);
   A('kiem',d.kiem,tx(c.poten?'tl.shoot':'tl.sprout'));
   if(p.method!='buiten'&&d.verpot)A('verpot',d.verpot,ACT.verpot.n);
@@ -398,6 +415,11 @@ function timeline(p){
   return ev.sort((a,b)=>a.dt-b.dt);
 }
 function stageOf(p){
+  if(isOwn(p)){
+    /* Alleen voor het plaatje: zonder oogstdatum blijft het een jonge plant */
+    const t=diff(parse(p.date),TODAY),v=ownDate(p.oogst_van),os=v?Math.max(1,diff(parse(p.date),parse(v))):0;
+    return t<0?0:!os?(t<14?1:2):t<.25*os?1:t<.6*os?2:t<os?3:4;
+  }
   const c=CROP[p.crop],t=diff(parse(p.date),TODAY),os=c.d.oogst[0];
   if(t<c.d.kiem)return 0;
   return t<.25*os?1:t<.6*os?2:t<os?3:4;
@@ -405,8 +427,9 @@ function stageOf(p){
 
 /* ---- Weergaves ---- */
 const TAGC=['#E5452E','#2B7FD6','#8E5BD6','#E09A00','#17A398','#D6478A'];
-const dot=p=>{const same=S.plantings.filter(x=>x.crop==p.crop);return same.length<2?'':`<span class="tagdot" style="--tg:${TAGC[same.indexOf(p)%TAGC.length]}"></span>`};
-const nm=p=>CROP[p.crop].n+(p.label?' · '+esc(p.label):'');
+const same=(a,b)=>a.crop==b.crop&&(!isOwn(a)||(a.name||'').toLowerCase()==(b.name||'').toLowerCase());
+const dot=p=>{const L=S.plantings.filter(x=>same(x,p));return L.length<2?'':`<span class="tagdot" style="--tg:${TAGC[L.indexOf(p)%TAGC.length]}"></span>`};
+const nm=p=>cropOf(p).n+(p.label?' · '+esc(p.label):'');
 const taskPlant=(c,st)=>`<div class="pp">${plantSVG(c,st)}</div>`;
 /* ---- Zaad kopen (voorbeeld: affiliate-links nog niet actief) ---- */
 /* Zaad-knoppen en advertenties uit tot de KvK-inschrijving rond is (zie notes/openstaande-punten.md) */
@@ -492,13 +515,13 @@ function vGewassen(){
   return `<div class="stack"><div class="row"><h2 class="grow1">${tx('g.title')}</h2><span class="muted small">${tx('g.count',{n:CROPS.length})}</span></div>${landBanner()}<div class="field" style="margin:0"><label for="q">${tx('g.search')}</label><input id="q" type="search" value="${esc(S.q||'')}" placeholder="${tx('g.ph')}" autocomplete="off"></div><div class="grid" id="grid">${gridHTML()}</div></div>`;
 }
 function ganttOf(p,ev){
-  const seq=ev.filter(e=>e.k!='kiem'),t0=ev[0].dt,end=seq[seq.length-1].end,tot=Math.max(1,diff(t0,end));
-  const segs=seq.map((e,i)=>{const to=seq[i+1]?seq[i+1].dt:e.end,w=Math.max(0,diff(e.dt,to))/tot*100,col=e.k=='zaai'?ACT[p.method].c:ACT[e.k].c;return `<i style="width:${w.toFixed(2)}%;--sc:var(${col})"></i>`}).join('');
+  const seq=ev.filter(e=>e.k!='kiem'),t0=ev[0].dt,last=seq[seq.length-1],end=last.end||last.dt,tot=Math.max(1,diff(t0,end));
+  const segs=seq.map((e,i)=>{const to=seq[i+1]?seq[i+1].dt:(e.end||e.dt),w=Math.max(0,diff(e.dt,to))/tot*100,col=e.k=='zaai'?ACT[p.method].c:ACT[e.k].c;return `<i style="width:${w.toFixed(2)}%;--sc:var(${col})"></i>`}).join('');
   const pos=Math.max(0,Math.min(100,diff(t0,TODAY)/tot*100));
   return `<div class="gantt" role="img" aria-label="${tx('gantt')}">${segs}<span class="t" style="left:calc(${pos.toFixed(1)}% - 1.5px)"></span></div>`;
 }
 function plantCard(p){
-  const c=CROP[p.crop],ev=timeline(p),st=stageOf(p),t=diff(parse(p.date),TODAY);
+  const c=cropOf(p),ev=timeline(p),st=stageOf(p),t=diff(parse(p.date),TODAY);
   const firstOpen=ev.findIndex(e=>TODAY<=(e.end||e.dt));
   let steps='';
   ev.forEach((e,i)=>{
@@ -507,8 +530,10 @@ function plantCard(p){
     const sub=i==firstOpen&&!over?` <span class="muted small">· ${e.end&&TODAY>=e.dt?tx('pc.busy'):rel(diff(TODAY,e.dt))}</span>`:'';
     steps+=`<li class="${cls}"><span class="dot">${over?'✓':''}</span><span><b>${e.l}</b><br><span class="small">${dt}</span>${sub}</span></li>`;
   });
-  const status=firstOpen<0?tx('pc.done'):t<0?tx('pc.sowOn',{d:fmt(parse(p.date))}):tx('pc.day',{n:t+1,stage:lc(STAGE_NAMES[st])});
-  return `<article class="card plant-card${S.newId==p.id?' pop':''}"><div class="plant-head"><div class="pp">${plantSVG(c,Math.max(0,st))}</div><div class="grow1"><h3>${dot(p)}${nm(p)}${p.ex?` <span class="pill soft">${tx('example')}</span>`:''}</h3><div class="small muted">${p.bed?esc(p.bed)+' · ':''}${tx('pc.methodOn',{m:METHODS[p.method],d:fmt(parse(p.date))})}${S.shared&&p.by?' · '+tx('pc.by',{name:esc(whoName(p.by))}):''}</div><div class="small"><b>${status}</b></div></div><div class="del row"><button class="btn sm ghost" data-a="edit" data-id="${esc(p.id)}">${tx('edit')}</button><button class="btn sm ghost" data-a="del" data-id="${esc(p.id)}">${tx(S.confirm==p.id?'del.yes':'del')}</button></div></div>${ganttOf(p,ev)}<ol class="steps">${steps}</ol></article>`;
+  /* Eigen plant zonder oogstdatum: er is geen einde bekend, dus niet "afgerond" */
+  const noEnd=isOwn(p)&&!ownDate(p.oogst_van);
+  const status=firstOpen<0&&!(noEnd&&t>=0)?tx('pc.done'):t<0?tx('pc.sowOn',{d:fmt(parse(p.date))}):tx('pc.day',{n:t+1,stage:lc(STAGE_NAMES[st])});
+  return `<article class="card plant-card${S.newId==p.id?' pop':''}"><div class="plant-head"><div class="pp">${plantSVG(c,Math.max(0,st))}</div><div class="grow1"><h3>${dot(p)}${nm(p)}${p.ex?` <span class="pill soft">${tx('example')}</span>`:''}</h3><div class="small muted">${p.bed?esc(p.bed)+' · ':''}${tx('pc.methodOn',{m:METHODS[p.method],d:fmt(parse(p.date))})}${S.shared&&p.by?' · '+tx('pc.by',{name:esc(whoName(p.by))}):''}</div><div class="small"><b>${status}</b></div></div><div class="del row"><button class="btn sm ghost" data-a="edit" data-id="${esc(p.id)}">${tx('edit')}</button><button class="btn sm ghost" data-a="del" data-id="${esc(p.id)}">${tx(S.confirm==p.id?'del.yes':'del')}</button></div></div>${ev.filter(e=>e.k!='kiem').length>1?ganttOf(p,ev):''}<ol class="steps">${steps}</ol></article>`;
 }
 function upcoming(){
   const L=[];
@@ -575,7 +600,7 @@ function needBy(p){
 }
 function sortPlantings(){
   const k=S.sort||'aandacht',need=new Map(S.plantings.map(p=>[p.id,needBy(p)]));
-  const byNeed=(a,b)=>need.get(a.id)-need.get(b.id)||0,byAlf=(a,b)=>cmpT(CROP[a.crop].n,CROP[b.crop].n)||cmpEmpty(a.label,b.label);
+  const byNeed=(a,b)=>need.get(a.id)-need.get(b.id)||0,byAlf=(a,b)=>cmpT(cropOf(a).n,cropOf(b).n)||cmpEmpty(a.label,b.label);
   const f={aandacht:(a,b)=>byNeed(a,b)||byAlf(a,b),alfabet:byAlf,label:(a,b)=>cmpEmpty(a.label,b.label)||byAlf(a,b),plek:(a,b)=>cmpEmpty(a.bed,b.bed)||byNeed(a,b)||byAlf(a,b)}[k]||byNeed;
   return [...S.plantings].sort(f);
 }
@@ -629,17 +654,32 @@ function setStage(id,s){
   $('#bigp').innerHTML=plantSVG(CROP[id],s);
   $$('.stages [data-s]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.s==s)));
 }
+/* Velden voor een eigen plant (Overige), in het toevoeg- en het wijzigformulier. pre = 'f' of 'e'. */
+const ownName=(pre,p)=>`<div class="field"><label for="${pre}-name">${tx('f.name')}</label><input id="${pre}-name" maxlength="30" placeholder="${tx('f.namePh')}" value="${esc((p&&p.name)||'')}"></div>`;
+const ownDates=(pre,p)=>`<div class="field"><label for="${pre}-uit">${tx('f.uit')}</label><input type="date" id="${pre}-uit" value="${esc((p&&ownDate(p.uit))||'')}"></div><div class="field"><label for="${pre}-ov">${tx('f.oogstVan')}</label><input type="date" id="${pre}-ov" value="${esc((p&&ownDate(p.oogst_van))||'')}"></div><div class="field"><label for="${pre}-ot">${tx('f.oogstTot')}</label><input type="date" id="${pre}-ot" value="${esc((p&&ownDate(p.oogst_tot))||'')}"></div><p class="small muted" style="margin:0 0 12px">${tx('f.ownNote')}</p>`;
+/* Leest de eigen velden; null (met melding) als de volgorde van de data niet klopt */
+function readOwn(pre,date){
+  const g=k=>ownDate($(`#${pre}-${k}`).value),r={name:$(`#${pre}-name`).value.trim().slice(0,30),uit:g('uit'),oogst_van:g('ov'),oogst_tot:g('ot')};
+  if(r.oogst_tot&&!r.oogst_van)r.oogst_van=r.oogst_tot;
+  if((r.uit&&r.uit<date)||(r.oogst_van&&r.oogst_van<date)||(r.oogst_tot<r.oogst_van&&r.oogst_tot)){toast(tx('f.order'));return null}
+  return r;
+}
 function openAdd(id,m){
-  const c=CROP[id||'tomaat'];
-  openSheet(`<h2 id="sh-title" style="padding-right:48px;margin-bottom:14px">${tx('add.title')}</h2><form id="addf"><div class="field"><label for="f-crop">${tx('f.crop')}</label><select id="f-crop">${[...CROPS].sort(byName).map(x=>`<option value="${x.id}"${x.id==c.id?' selected':''}>${x.n}</option>`).join('')}</select></div><div class="field"><label for="f-method">${tx('f.method')}</label><select id="f-method"></select></div><div class="field"><label for="f-date">${tx('f.date')}</label><input type="date" id="f-date" required value="${iso(TODAY)}"></div><div class="field"><label for="f-label">${tx('f.label')}</label><input id="f-label" maxlength="30" placeholder="${tx('f.labelPh')}"><span class="small muted" id="f-hint"></span></div><div class="field"><label for="f-bed">${tx('f.bed')}</label><input id="f-bed" maxlength="30" placeholder="${tx('f.bedPh')}"></div><div class="row"><button class="btn" type="submit">${tx('add')}</button><button class="btn ghost" type="button" data-a="close">${tx('cancel')}</button></div></form>`);
-  const fill=pref=>{const cc=CROP[$('#f-crop').value];$('#f-method').innerHTML=methodsOf(cc).map(t=>`<option value="${t}"${t==pref?' selected':''}>${METHODS[t]}</option>`).join('')};
-  const hint=()=>{const cc=CROP[$('#f-crop').value],n=S.plantings.filter(x=>x.crop==cc.id).length;$('#f-hint').textContent=n?tx('f.hint',{n,crop:lc(cc.n),next:n+1}):''};
-  fill(m);hint();$('#f-crop').onchange=()=>{fill();hint()};
+  const c=CROP[id]||(id==OWN?{id:OWN}:CROP.tomaat);
+  openSheet(`<h2 id="sh-title" style="padding-right:48px;margin-bottom:14px">${tx('add.title')}</h2><form id="addf"><div class="field"><label for="f-crop">${tx('f.crop')}</label><select id="f-crop">${[...CROPS].sort(byName).map(x=>`<option value="${x.id}"${x.id==c.id?' selected':''}>${x.n}</option>`).join('')}<option value="${OWN}"${c.id==OWN?' selected':''}>${tx('f.other')}</option></select></div><div class="f-own" style="display:none">${ownName('f')}</div><div class="field"><label for="f-method">${tx('f.method')}</label><select id="f-method"></select></div><div class="field"><label for="f-date">${tx('f.date')}</label><input type="date" id="f-date" required value="${iso(TODAY)}"></div><div class="f-own" style="display:none">${ownDates('f')}</div><div class="field"><label for="f-label">${tx('f.label')}</label><input id="f-label" maxlength="30" placeholder="${tx('f.labelPh')}"><span class="small muted" id="f-hint"></span></div><div class="field"><label for="f-bed">${tx('f.bed')}</label><input id="f-bed" maxlength="30" placeholder="${tx('f.bedPh')}"></div><div class="row"><button class="btn" type="submit">${tx('add')}</button><button class="btn ghost" type="button" data-a="close">${tx('cancel')}</button></div></form>`);
+  const own=()=>$('#f-crop').value==OWN;
+  const fill=pref=>{const ms=own()?Object.keys(METHODS):methodsOf(CROP[$('#f-crop').value]);$('#f-method').innerHTML=ms.map(t=>`<option value="${t}"${t==pref?' selected':''}>${METHODS[t]}</option>`).join('')};
+  const hint=()=>{if(own()){$('#f-hint').textContent='';return}const cc=CROP[$('#f-crop').value],n=S.plantings.filter(x=>x.crop==cc.id).length;$('#f-hint').textContent=n?tx('f.hint',{n,crop:lc(cc.n),next:n+1}):''};
+  const show=()=>{$$('.f-own').forEach(x=>x.style.display=own()?'':'none');$('#f-name').required=own()};
+  fill(m);hint();show();$('#f-crop').onchange=()=>{fill();hint();show();if(own())$('#f-name').focus()};
   $('#addf').onsubmit=e=>{
     e.preventDefault();
-    const cid=$('#f-crop').value,n=S.plantings.filter(x=>x.crop==cid).length;
-    S.plantings.push({id:'p'+Date.now()+Math.random().toString(36).slice(2,6),crop:cid,method:$('#f-method').value,date:$('#f-date').value,label:$('#f-label').value.trim()||(n?'#'+(n+1):''),bed:$('#f-bed').value.trim(),by:S.me||''});
-    dbSet(S.plantings[S.plantings.length-1]);closeSheet();S.view='tuin';S.newId=S.plantings[S.plantings.length-1].id;render();scrollTo(0,0);plantFx(CROP[cid]);setTimeout(()=>{S.newId=null;$$('.plant-card.pop').forEach(x=>x.classList.remove('pop'))},9000);
+    const cid=$('#f-crop').value,date=$('#f-date').value,o=cid==OWN?readOwn('f',date):{};
+    if(!o)return;
+    const n=cid==OWN?0:S.plantings.filter(x=>x.crop==cid).length;
+    S.plantings.push(Object.assign({id:'p'+Date.now()+Math.random().toString(36).slice(2,6),crop:cid,method:$('#f-method').value,date,label:$('#f-label').value.trim()||(n?'#'+(n+1):''),bed:$('#f-bed').value.trim(),by:S.me||''},o));
+    const np=S.plantings[S.plantings.length-1];
+    dbSet(np);closeSheet();S.view='tuin';S.newId=np.id;render();scrollTo(0,0);plantFx(cropOf(np));setTimeout(()=>{S.newId=null;$$('.plant-card.pop').forEach(x=>x.classList.remove('pop'))},9000);
   };
 }
 
@@ -651,8 +691,9 @@ function plantFx(c){
 }
 function openEdit(id){
   const p=S.plantings.find(x=>x.id==id);if(!p)return;
-  openSheet(`<h2 id="sh-title" style="padding-right:48px;margin-bottom:14px">${tx('edit.title',{crop:CROP[p.crop].n})}</h2><form id="editf"><div class="field"><label for="e-date">${tx('f.date')}</label><input type="date" id="e-date" required value="${esc(p.date)}"></div><div class="field"><label for="e-label">${tx('f.label2')}</label><input id="e-label" maxlength="30" value="${esc(p.label||'')}" placeholder="${tx('f.labelPh')}"></div><div class="field"><label for="e-bed">${tx('f.bed2')}</label><input id="e-bed" maxlength="30" value="${esc(p.bed||'')}"></div><div class="row"><button class="btn" type="submit">${tx('save')}</button><button class="btn ghost" type="button" data-a="close">${tx('cancel')}</button></div></form>`);
-  $('#editf').onsubmit=e=>{e.preventDefault();if($('#e-date').value)p.date=$('#e-date').value;p.label=$('#e-label').value.trim();p.bed=$('#e-bed').value.trim();dbSet(p);closeSheet();render()};
+  openSheet(`<h2 id="sh-title" style="padding-right:48px;margin-bottom:14px">${tx('edit.title',{crop:cropOf(p).n})}</h2><form id="editf">${isOwn(p)?ownName('e',p):''}<div class="field"><label for="e-date">${tx('f.date')}</label><input type="date" id="e-date" required value="${esc(p.date)}"></div>${isOwn(p)?ownDates('e',p):''}<div class="field"><label for="e-label">${tx('f.label2')}</label><input id="e-label" maxlength="30" value="${esc(p.label||'')}" placeholder="${tx('f.labelPh')}"></div><div class="field"><label for="e-bed">${tx('f.bed2')}</label><input id="e-bed" maxlength="30" value="${esc(p.bed||'')}"></div><div class="row"><button class="btn" type="submit">${tx('save')}</button><button class="btn ghost" type="button" data-a="close">${tx('cancel')}</button></div></form>`);
+  if(isOwn(p))$('#e-name').required=true;
+  $('#editf').onsubmit=e=>{e.preventDefault();const date=$('#e-date').value||p.date;if(isOwn(p)){const o=readOwn('e',date);if(!o)return;Object.assign(p,o)}p.date=date;p.label=$('#e-label').value.trim();p.bed=$('#e-bed').value.trim();dbSet(p);closeSheet();render()};
 }
 
 /* ---- Events ---- */

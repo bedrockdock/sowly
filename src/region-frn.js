@@ -4,7 +4,24 @@
    'mi-' = halverwege de maand, 'fin' = laatste 2 weken, 'début' = eerste 2 weken. Varianten voor zachte streken en het zuidwesten
    niet overgenomen. Komkommer/augurk: repiquage "15 jours après le semis" = binnenzaai + 2 weken. Maïs: oogst "3-4 mois après le
    semis" = zaaiperiode + 13 tot 17 weken. Details: notes/bronnen.md. */
-REGIONS.frn={src:'GNIS (Jardiner Malin)',s:{
+/* Aanvulling 15 november 2026: Vilmorin (zaadbedrijf, landelijk), productkaarten op eshop.vilmorin-jardin.fr met
+   "Mois de semis" en "Mois de récolte" (alleen maanden, geen methode). Eén ras per gewas, zie notes/bronnen.md. Methode zoals
+   de app het gewas zaait (direct gezaaid = buiten, voorgezaaid = binnen); uitplanten staat niet op de kaart: NL-weken. */
+REGIONS.frn={src:'GNIS (Jardiner Malin)',cs:{"knoflook": "Vilmorin", "prei": "Vilmorin", "doperwt": "Vilmorin", "boerenkool": "Vilmorin", "rucola": "Vilmorin", "snijbiet": "Vilmorin", "pastinaak": "Vilmorin", "peterselie": "Vilmorin", "basilicum": "Vilmorin", "koolrabi": "Vilmorin", "chinesekool": "Vilmorin", "peper": "Vilmorin", "sjalot": "Vilmorin", "pluksla": "Vilmorin"},s:{
+  'knoflook':[["buiten", 40, 48, "teentjes"], ["oogst", 23, 30]],
+  'prei':[["binnen", 6, 13], ["buiten", 9, 22], ["uitplant", 14, 28], ["oogst", 1, 13], ["oogst", 36, 52]],
+  'doperwt':[["buiten", 9, 26], ["oogst", 23, 35]],
+  'boerenkool':[["buiten", 14, 26], ["uitplant", 24, 30], ["oogst", 1, 8], ["oogst", 40, 52]],
+  'rucola':[["buiten", 9, 35], ["oogst", 18, 43]],
+  'snijbiet':[["buiten", 14, 30], ["oogst", 31, 48]],
+  'pastinaak':[["buiten", 5, 26], ["oogst", 1, 13], ["oogst", 31, 52]],
+  'peterselie':[["buiten", 5, 39], ["oogst", 1, 52]],
+  'basilicum':[["binnen", 9, 22], ["uitplant", 20, 24], ["oogst", 18, 43]],
+  'koolrabi':[["buiten", 9, 26], ["uitplant", 14, 30], ["oogst", 27, 48]],
+  'chinesekool':[["buiten", 27, 35], ["oogst", 36, 48]],
+  'peper':[["binnen", 5, 17], ["uitplant", 22, 26], ["oogst", 31, 48]],
+  'sjalot':[["buiten", 1, 13, "plantsjalotten"], ["buiten", 44, 52, "plantsjalotten"], ["oogst", 23, 30]],
+  'pluksla':[["buiten", 9, 35], ["oogst", 14, 39]],
   'tomaat':[["binnen", 1, 13], ["glas", 9, 17], ["uitplant", 18, 22], ["oogst", 27, 43]],
   'paprika':[["binnen", 5, 17], ["uitplant", 18, 22], ["oogst", 27, 39]],
   'aubergine':[["binnen", 5, 17], ["uitplant", 14, 22], ["oogst", 27, 43]],

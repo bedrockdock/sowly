@@ -11,7 +11,7 @@ const template = src('template.html');
 // cloud.js (Supabase) alleen in de webversie; in Claude loopt samen tuinieren via de database van Claude.
 // Vóór app.js, anders valt SB_URL nog in de "temporal dead zone" als app.js start.
 // Talen: lang-nl.js eerst (maakt LANGS), dan de andere talen, dan i18n.js (taal kiezen en toepassen).
-const langs = ['nl', 'en', 'de', 'fr', 'es', 'it'].map(l => `lang-${l}.js`).filter(f => fs.existsSync(path.join(__dirname, 'src', f)));
+const langs = ['nl', 'en', 'de', 'fr', 'es', 'it', 'pl'].map(l => `lang-${l}.js`).filter(f => fs.existsSync(path.join(__dirname, 'src', f)));
 // Zaaiperiodes per land (region-de.js, ...): na data.js, dat REGIONS aanmaakt
 const regions = fs.readdirSync(path.join(__dirname, 'src')).filter(f => /^region-[a-z]+\.js$/.test(f)).sort();
 const js = ['data.js', ...regions, ...langs, 'i18n.js', 'plants.js', ...(artifact ? [] : ['cloud.js']), 'app.js'].map(src).join('\n');

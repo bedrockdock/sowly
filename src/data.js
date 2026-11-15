@@ -29,6 +29,10 @@ const CROPS = [
    s:[['glas',7,17],['buiten',11,35],['oogst',14,43]],
    d:{kiem:4,oogst:[25,45]},
    tip:''},
+  {id:'rammenas',kind:'root',fruit:'rammenas',
+   s:[['buiten',24,32],['oogst',36,48]],
+   d:{kiem:5,oogst:[60,120]},
+   tip:''},
   {id:'pompoen',kind:'vine',fruit:'pompoen',tender:true,
    s:[['binnen',15,19],['buiten',20,22],['uitplant',20,26],['oogst',36,43]],
    d:{kiem:6,verpot:21,uit:35,oogst:[110,150]},
@@ -205,6 +209,7 @@ const CARE = {
   sla:{l:['zh',''],w:['gemiddeld',''],v:['licht',''],g:['radijs','wortel','ui','prei','biet','komkommer','Aardbei'],s:['peterselie']},
   wortel:{l:['zon',''],w:['gemiddeld',''],v:['middel',''],g:['ui','prei','radijs','sla','tomaat','Afrikaantjes'],s:['pastinaak']},
   radijs:{l:['zon',''],w:['gemiddeld',''],v:['licht',''],g:['sla','wortel','spinazie','doperwt','stamslaboon','peterselie'],s:['tomaat']},
+  rammenas:{l:['zon',''],w:['gemiddeld',''],v:['licht',''],g:[],s:[]},
   pompoen:{l:['zon',''],w:['veel',''],v:['zwaar',''],g:['stamslaboon','radijs','ui'],s:['aardappel']},
   stamslaboon:{l:['zon',''],w:['veel',''],v:['licht',''],g:['wortel','komkommer','courgette','aardappel','biet','koolrabi','bloemkool','Bonenkruid'],s:['ui','prei','knoflook','sjalot']},
   spinazie:{l:['zh',''],w:['gemiddeld',''],v:['middel',''],g:['radijs','doperwt','Aardbei'],s:['biet','snijbiet','bloemkool']},
@@ -254,8 +259,8 @@ const SGOED=new Set(BV_GOED.map(p=>pk(...p))),SSLECHT=new Set(BV_SLECHT.map(p=>p
 const splitBr=(id,arr,set)=>{const ok=[],rest=[];arr.forEach(x=>{const e=x=='aardappel'?['aardappel-vroeg','aardappel-laat']:x=='kool'?KOOLID:[x];(e.some(y=>set.has(pk(id,y)))?ok:rest).push(x)});return[ok,rest]};
 const BEV={
   l:['tomaat','rucola','prei','radijs','wortel','komkommer','basilicum','pompoen'],
-  w:['tomaat','rucola','komkommer','paprika'],
-  v:['tomaat','courgette','pompoen','paprika','aubergine','komkommer','prei','bloemkool','broccoli','rodekool','boerenkool','koolrabi','wortel','spinazie','stamslaboon','doperwt','tuinboon','ui','radijs','peterselie','basilicum','aardappel-vroeg','aardappel-laat','spruitkool','wittekool','savooiekool','chinesekool','sjalot','bosui']
+  w:['tomaat','rucola','komkommer','paprika','rammenas'],
+  v:['tomaat','courgette','pompoen','paprika','aubergine','komkommer','prei','bloemkool','broccoli','rodekool','boerenkool','koolrabi','wortel','spinazie','stamslaboon','doperwt','tuinboon','ui','radijs','rammenas','peterselie','basilicum','aardappel-vroeg','aardappel-laat','spruitkool','wittekool','savooiekool','chinesekool','sjalot','bosui']
 };
 const NB={};
 for(const id in CARE){const c=CARE[id],[g,g2]=splitBr(id,c.g,SGOED),[s,s2]=splitBr(id,c.s,SSLECHT);NB[id]={l:c.l,w:c.w,v:c.v,g,g2,s,s2,b:{l:BEV.l.includes(id),w:BEV.w.includes(id),v:BEV.v.includes(id)}}}

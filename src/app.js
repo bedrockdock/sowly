@@ -288,7 +288,7 @@ function accountCard(){
   return `${sel}<p class="small" style="margin:0 0 8px">${intro}</p>${who?`<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:10px">${who}</div>`:''}<div class="row" style="gap:8px;flex-wrap:wrap">${own?`<button class="btn sm" data-a="invite">${tx('acc.invite')}</button>`:`<button class="btn sm ghost" data-a="leave">${tx(S.confirm=='leave'?'leave.yes':'leave')}</button>`}</div><p class="small muted" style="margin:12px 0 0">${tx('loggedAs',{name:esc(myName())})}${C.user.email?' ('+esc(C.user.email)+')':''}. <a href="#" data-a="logout">${tx('logout')}</a></p>`;
 }
 /* Ingelogd met een online tuin: Samen tuinieren als knopje rechts bovenin, de inhoud in een blad */
-const samenBtn=()=>`<button class="btn sm ghost" data-a="samen" aria-label="${tx('samen.aria',{n:C.members.length,p:tx(C.members.length==1?'person1':'personN')})}">${tx('samen')} <span class="pill soft">${C.members.length}</span></button>`;
+const samenBtn=()=>`<button class="btn sm ghost" data-a="samen" aria-label="${tx('samen.aria',{n:C.members.length,p:plural(C.members.length,'person')})}">${tx('samen')} <span class="pill soft">${C.members.length}</span></button>`;
 function openSamen(){openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('samen.title')}</h2><div id="samen-b">${accountCard()}</div>`)}
 
 /* ---- Land: zijn er lokale zaaigegevens? Zo niet, dan eerlijk melden dat het NL/BE-gegevens zijn ---- */
@@ -331,7 +331,7 @@ function applyStatic(){
   if(document.documentElement)document.documentElement.lang=LANG;
   $$('[data-t]').forEach(el=>{el.textContent=el.dataset.t=='note'?noteText():tx(el.dataset.t)});
   $$('[data-ta]').forEach(el=>el.setAttribute('aria-label',tx(el.dataset.ta)));
-  $('#today').textContent=tx('today',{day:cap(CAL.d[TODAY.getDay()]),d:TODAY.getDate(),month:CAL.m[TODAY.getMonth()],w:weekOf(TODAY)});
+  $('#today').textContent=tx('today',{day:cap(CAL.d[TODAY.getDay()]),d:TODAY.getDate(),month:(CAL.mg||CAL.m)[TODAY.getMonth()],w:weekOf(TODAY)});
   const m=$('#mascot svg');if(m)m.setAttribute('aria-label',tx('mascot'));
 }
 /* Taal wisselen: onthouden in deze browser (alleen de taal, niet de tuin) */
@@ -444,7 +444,7 @@ function vMaand(){
   let n=0;
   order.forEach(k=>{
     const L=g[k];if(!L)return;n+=L.length;
-    h+=`<section class="card"><div class="sec-h"><span class="pill" style="--pc:var(${ACT[k].c})">${ACT[k].n}</span><span class="muted small">${L.length} ${tx(L.length==1?'crop1':'cropN')}</span></div>`;
+    h+=`<section class="card"><div class="sec-h"><span class="pill" style="--pc:var(${ACT[k].c})">${ACT[k].n}</span><span class="muted small">${L.length} ${plural(L.length,'crop')}</span></div>`;
     /* In de huidige maand: wat vóór vandaag is afgelopen grijs en onderaan */
     L.map(x=>{const ed=dateOfDoy(S.y,x.st.b*7);return {...x,ed,past:cur&&mid(ed)<mid(TODAY)}}).sort((p,q)=>p.past-q.past).forEach(({c,st,wA,ed,past})=>{
       const sd=dateOfDoy(S.y,(st.a-1)*7+1);
@@ -544,7 +544,7 @@ function yearPlanHTML(y){
   const legend=Object.keys(ACT).filter(k=>used.has(k)).sort((a,b)=>ACT[a].o-ACT[b].o).map(k=>`<span class="pill" style="--pc:var(${ACT[k].c})">${ACT[k].n}</span>`).join(' ');
   const months=todo.map((L,m)=>L.length?`<section><h3>${cap(CAL.m[m])}</h3><ul>${L.sort((a,b)=>a.e.dt-b.e.dt).map(({p,e})=>`<li><span class="jp-box"></span><span>${e.end?`${fmt(e.dt)} – ${fmt(e.end)}`:fmt(e.dt)}</span><span class="pill" style="--pc:var(${e.k=='zaai'?ACT[p.method].c:ACT[e.k].c})">${e.l}</span><span>${nm(p)}${p.bed?' · '+esc(p.bed):''}</span></li>`).join('')}</ul></section>`:'').join('');
   const fd=dateOfDoy(y,S.frost*7-3);
-  const today=tx('longdate',{d:TODAY.getDate(),month:CAL.m[TODAY.getMonth()],y:Y0});
+  const today=tx('longdate',{d:TODAY.getDate(),month:(CAL.mg||CAL.m)[TODAY.getMonth()],y:Y0});
   return `<div class="jp"><h1>${tx('yp.title',{y})}</h1><p class="jp-s">${tx('yp.sub',{g:esc(C.gname||tx('garden.mine')),w:S.frost,d:fmt(fd),today})}</p><div class="jp-r jp-h"><span></span><div class="jp-t">${dim.map((d,i)=>`<span style="--d:${d}">${CAL.m3[i]}</span>`).join('')}</div></div>${rows.join('')}<p>${legend}</p><div class="jp-m"><h2>${tx('yp.month')}</h2>${months}</div><p class="jp-s">${esc(noteText())}</p></div>`;
 }
 function openYear(){

@@ -6,8 +6,9 @@
    Niet overgenomen (bron maakt het onderscheid niet): aardappel (vroeg/laat), venkel (staat bij de kruiden), boerenkool en
    savooiekool ("chou frisé" is dubbelzinnig). Gewassen die CIVAM niet heeft, komen uit de landelijke GNIS-tabel (zie region-frn.js);
    die staan in cs (bron per gewas). Details: notes/bronnen.md. */
-REGIONS.frc={src:'CIVAM Auvergne-Rhône-Alpes',cs:{"andijvie": "GNIS (Jardiner Malin)", "savooiekool": "GNIS (Jardiner Malin)", "spruitkool": "GNIS (Jardiner Malin)", "augurk": "GNIS (Jardiner Malin)", "courgette": "GNIS (Jardiner Malin)", "pompoen": "GNIS (Jardiner Malin)", "venkel": "GNIS (Jardiner Malin)", "tuinboon": "GNIS (Jardiner Malin)", "veldsla": "GNIS (Jardiner Malin)", "mais": "GNIS (Jardiner Malin)", "aardappel-vroeg": "GNIS (Jardiner Malin)", "aardappel-laat": "GNIS (Jardiner Malin)"},s:{
+REGIONS.frc={src:'CIVAM Auvergne-Rhône-Alpes',cs:{"andijvie": "GNIS (Jardiner Malin)", "savooiekool": "GNIS (Jardiner Malin)", "spruitkool": "GNIS (Jardiner Malin)", "augurk": "GNIS (Jardiner Malin)", "courgette": "GNIS (Jardiner Malin)", "pompoen": "GNIS (Jardiner Malin)", "venkel": "GNIS (Jardiner Malin)", "tuinboon": "GNIS (Jardiner Malin)", "veldsla": "GNIS (Jardiner Malin)", "mais": "GNIS (Jardiner Malin)", "aardappel-vroeg": "GNIS (Jardiner Malin)", "aardappel-laat": "GNIS (Jardiner Malin)", "rammenas": "GNIS (Jardiner Malin)"},s:{
   'sla':[["binnen", 6, 12], ["glas", 6, 12], ["buiten", 7, 43], ["uitplant", 12, 38], ["oogst", 10, 48]],
+  'rammenas':[["buiten", 23, 35], ["oogst", 44, 52]],
   'snijbiet':[["buiten", 14, 34], ["oogst", 1, 9], ["oogst", 22, 51]],
   'rucola':[["glas", 8, 11], ["buiten", 9, 39], ["oogst", 18, 48]],
   'spinazie':[["glas", 1, 9], ["buiten", 6, 18], ["buiten", 31, 39], ["oogst", 1, 9], ["oogst", 14, 26], ["oogst", 36, 52]],

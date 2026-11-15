@@ -176,3 +176,51 @@ biet             NL: buiten 11-27 | oogst 27-44
 selderij         NL: glas 10-17 | uitplant 19-24 | oogst 39-48
                  FR: glas 10-17 | uitplant 9-22 | oogst 26-52
 ```
+
+## Polen (sinds 15 november 2026)
+Eén zone voor heel Polen (`PL`, `src/region-pl.js`), 40 van 45 gewassen: 28 uit KSOW, 12 aangevuld op 15 november 2026 (zie onder).
+- **Gebruikt:** *ABC ekologicznego ogródka przydomowego*, prof. dr hab. Bożena Łozowicka, in opdracht van het Urząd Marszałkowski Województwa Podlaskiego, uitgegeven binnen KSOW (Krajowa Sieć Obszarów Wiejskich, Programma voor plattelandsontwikkeling 2014-2020, beheerd door het ministerie van Landbouw), Białystok 2022. Tabel *Kalendarz siewu/sadzenia w ogrodzie*, blz. 39-41: https://podlaskie.ksow.pl/files/podlaskie/2023/wlasne/ABC_warzywniaka.pdf . De bron noemt de termijnen zelf "orientacyjne" (indicatief). Per maand, niet per week. Podlasie is de koudste streek van het Poolse laagland; de tabel noemt geen streek en wordt in de app voor heel Polen gebruikt.
+- **Omzetregels:** siew do gruntu = buiten, siew pod osłonami = onder glas, sadzenie rozsady = uitplanten, zbiór = oogst. Maanden naar weken zoals bij FR-N (I 1-4, II 5-8, III 9-13, IV 14-17, V 18-22, VI 23-26, VII 27-30, VIII 31-35, IX 36-39, X 40-43, XI 44-48, XII 49-52). Binnen voorzaaien staat niet in de tabel: NL-weken (zoals bij Duitsland).
+- **Koppeling:** Bakłażan = aubergine, Bób = tuinboon, Brokuł = broccoli, Brukselka = spruitkool, Burak ćwikłowy = biet, Burak liściowy = snijbiet, Cebula = ui (sadzenie rozsady = jonge planten, geen plantuitjes), Dynia zwyczajna = pompoen, Fasola szparagowa = stamslaboon én stokboon, Groch = doperwt, Kabaczek = courgette (zelfde soort en teelt, Cucurbita pepo; cukinia staat niet apart in de tabel), Kalafior = bloemkool, Kalarepa = koolrabi, Kapusta głowiasta = witte én rode kool, Marchew = wortel, Ogórek = komkommer én augurk, Papryka = paprika, Pomidor = tomaat, Por = prei, Rukola = rucola, Rzodkiewka = radijs, Sałata liściowa = pluksla, Sałata masłowa = sla, Seler korzeniowy = selderij, Szpinak = spinazie.
+- **Niet of anders overgenomen:**
+  - Pomidor, sadzenie rozsady IV-V: april is vóór de laatste vorst, en de brochure schrijft zelf (blz. 38) dat tomaten pas na de laatste vorst worden geplant. NL-weken (21-26).
+  - Kapusta głowiasta, papryka, por: geen uitplantperiode in de tabel. NL-weken.
+  - Rzodkiewka, zbiór "III–I": afgebroken in de PDF. Overgenomen als III-IX (poradnikogrodniczy.pl heeft dezelfde tabel met III-IX).
+  - Marchew, sadzenie rozsady V: wortels worden niet verplant. Weggelaten.
+  - Pietruszka: niet aangegeven of het wortel- of bladpeterselie is (in Polen meestal wortelpeterselie); de app heeft bladpeterselie. Niet overgenomen.
+  - Koper (dille) en rzodkiew (rammenas) staan niet in de app.
+  - De tabel is ruim, bijv. kalafior uitplanten III-V terwijl het zaaien onder glas in III valt. Zo overgenomen.
+- **Aanvulling (15 november 2026), bron per gewas in `cs`:**
+  - **PNOS Ożarów Mazowiecki** (Pools zaadbedrijf), productkaarten op pnos.pl met "Termin wysiewu / sadzenia / zbioru". Per gewas één ras; waar meerdere rassen dezelfde kaart hebben, staat dat erbij. Letterlijk:
+    - Roszponka VOLHART 3 (https://pnos.pl/pl/p/Roszponka-warzywna-VOLHART-3-2g/5644): wysiew III-IV; VII-VIII (grunt), zbiór II-IV; X_XII (gelezen als X-XII). Veldsla: buiten 9-17 en 27-35, oogst 5-17 en 40-52.
+    - Jarmuż niski DWARF GREEN CURLED (https://pnos.pl/pl/p/Jarmuz-niski-DWARF-GREEN-CURLED-5g/3586, gelijk aan Halbhoher Grüner Krauser): wysiew 2-3 dekada V-2 dekada VI, sadzenie 3 dekada VI-2 dekada VII, zbiór 2 dekada VII-1 dekada XI. Boerenkool: buiten 19-25, uitplant 25-29, oogst 28-45. (Scarlet en de mengsels: zbiór XI-III; niet gebruikt.)
+    - Pasternak PÓŁDŁUGI BIAŁY (https://pnos.pl/pl/p/Pasternak-POLDLUGI-BIALY-5g/5420): wysiew III-IV, zbiór VIII-X. Buiten 9-17, oogst 31-43.
+    - Pietruszka naciowa FESTIVAL 68 (https://pnos.pl/pl/p/Pietruszka-naciowa-FESTIVAL-68-FESTIVAL-PNE-5g/5487, vier verpakkingen gelijk): wysiew 2-3 dekada III-2 dekada VII, zbiór III-XI. Peterselie: buiten 10-29, oogst 9-48.
+    - Bazylia właściwa CYTRYNOWA (https://pnos.pl/pl/p/Bazylia-wlasciwa-CYTRYNOWA-0%2C5g/7470): wysiew połowa III-IV pod osłonami, połowa V wprost do gruntu; sadzenie połowa V-VII; zbiór VII-IX. Glas 11-17, buiten 20, uitplant 20-30, oogst 27-39; binnen NL-weken. Citroenbasilicum is dezelfde soort (Ocimum basilicum); de kaarten van gewone basilicum (Fine Verde) hebben geen termijnen.
+    - Kapusta włoska LANGEDIJSKA (https://pnos.pl/pl/p/Kapusta-wloska-LANGEDIJSKA-2g/4564): wysiew III-IV na rozsadniku, sadzenie V-VI, zbiór X-XI. Savooiekool: glas 9-17 (zaaibed in maart = onder glas), uitplant 18-26, oogst 40-48.
+    - Kapusta pekińska BRISTOL (https://pnos.pl/pl/p/Kapusta-pekinska-BRISTOL-2g/6685, gelijk aan Forco F1): wysiew II rozsada, VII grunt; sadzenie rozsady IV; geen oogst. Alleen de zomerzaai overgenomen: buiten 27-30, oogst NL-weken (38-46).
+    - Kukurydza cukrowa GUCIO F1 (https://pnos.pl/pl/p/Kukurydza-cukrowa-GUCIO-F1-20g/4679): wysiew V, zbiór IX-X. Buiten 18-22, oogst 36-43; binnen en uitplanten NL-weken.
+    - Papryka CYKLON (https://pnos.pl/pl/p/Papryka-CYKLON-0%2C5g/5389): wysiew 1,2 dekada III (pod osłonami), sadzenie V, zbiór VII-IX. Peper: glas 9-12, uitplant 18-22, oogst 27-39.
+  - **Czosnek:** Świętokrzyski ODR, Małgorzata Miłek, *Pora na sadzenie czosnku* (https://www.sodr.pl/pliki/Pora-na-sadzenie-czosnku--Malgorzata-Milek,814.pdf): "Najlepszym terminem do sadzenia czosnku ozimego jest okres od połowy września do końca października", "Zbiór czosnku ozimego przypada na lipiec". Knoflook: poten 37-43, oogst 27-30.
+  - **Ziemniak:** COBORU (Centralny Ośrodek Badania Odmian Roślin Uprawnych), *Wyniki porejestrowych doświadczeń odmianowych. Ziemniak 2025* (WPDO 224), tabellen 3 en 15, proeven op ongeveer 30 plaatsen in Polen, 2024 en 2025 samen: https://coboru.gov.pl/Publikacje_COBORU/Wyniki_PDO/WPDO_224_Ziemniak_2025.pdf
+    - Zeer vroege rassen (tabel 3): sadzenie 8.04-12.05, zbiór 40 dagen na opkomst 13.06-15.07. Aardappel vroeg: poten 14-19, oogst 24-28.
+    - Middenvroege en middenlate rassen (tabel 15): sadzenie 8.04-12.05, zbiór 27.08-27.10. Aardappel laat: poten 14-19, oogst 35-43.
+    - Ter controle: CDR Brwinów, *Ziemniaki na bardzo wczesny zbiór* (2010): poten als de grond op 10 cm 5-6 °C is (begin april in geschikte streken), oogst 60-75 dagen na poten. Klopt met COBORU.
+  - **Omrekening dekaden en data:** dag van het jaar / 7, naar boven afgerond, binnen de weken van die maand uit de tabel hierboven (1 dekada = dag 1-10, 2 = 11-20, 3 = 21-eind; połowa = de 15e).
+- **Nog zonder Poolse bron (algemene richtlijn, de app meldt dat):**
+  - Andijvie: PNOS Endywia DE MEAUX (de enige) heeft een kaart die niet klopt ("sadzenie koniec VII -VII", "zbiór XI-X").
+  - Venkel: PNOS Fenkuł ROMANESCO zaait ook in februari onder glas; dat botst met de tip "pas na 21 juni zaaien". Niet overgenomen tot dat is uitgezocht.
+  - Bosui: PNOS heeft alleen cebula siedmiolatka (stengelui, overjarig); de kaarten zijn onvolledig of geven de oogst van het jaar erna.
+  - Sjalot en winterpostelein: niet bij PNOS, geen andere Poolse bron gevonden.
+- **Bekeken, niet gebruikt:** DODR Wrocław, *Zrób sobie ogród* (2023) en *Ogród przydomowy* (2021): over tuinontwerp, geen zaaitabel. W. Legutko, *Kalendarium wysiewów* (zaadbedrijf, 2022): alleen per maand wat je zaait, geen uitplanten of oogst. poradnikogrodniczy.pl, *Kalendarz siewu warzyw*: dezelfde tabel als KSOW, met fouten (ogórek oogst "VI-XIII"), zonder auteur.
+- **Laatste nachtvorst:** in Polen rond half mei (de "zimni ogrodnicy", 12-15 mei), dus week 20 zoals in NL/BE. Het noordoosten kan later zijn; dat stelt de gebruiker zelf in.
+- **Verzorging en buren** blijven NL/BE-bronnen; geen Poolse bevestiging gezocht.
+
+## Rammenas (sinds 15 november 2026, alle landen)
+Nieuw gewas `rammenas` (Raphanus sativus, winterradijs). Per land een eigen bron:
+- **NL/BE (data.js):** Bolster (Nederlands zaadbedrijf), *Rammenas telen*, https://www.bolster.nl/rammenas-telen/t22294 : ras 'Ronde Zwarte', "ter plaatse zaaien vanaf half juni tot begin augustus", "kan geoogst worden van september tot en met november". Buiten 24-32, oogst 36-48. Pokon, *Winterrammenas: een extra pittige reuzenradijs*, https://www.pokon.nl/blog/winterrammenas-pittige-reuzenradijs/ zegt hetzelfde: "Je zaait rammenas in juli (al is laat in juni of vroeg in augustus ook nog mogelijk)", oogst "vanaf half september".
+  - **Bevestigd:** voeding (Bolster: "een basisgift compost of goed verteerde mest volstaat. Geef liever geen verse mest", in `BEV.v` als licht) en water (Pokon: "in de zomer zul je in droge perioden regelmatig water moeten geven", Bolster: "voldoende water geven"; in `BEV.w` als gemiddeld). Licht (zon) is niet bevestigd. Geen buurregels gevonden.
+  - Tip uit Pokon (koolgewas in de vruchtwisseling, kan tegen kou, in de grond tot de eerste vorst) en Bolster (insectengaas tegen koolvlieg). Bewust geen zaaimaand in de tip, omdat die per land verschilt.
+- **DE (region-de.js):** LWG, zelfde PDF als de rest, rij "Rettich", exact uit de lijnen gelezen (x-coördinaten, maand = 28,35 pt vanaf 219,7; week binnen de maand naar de weken van die maand, naar beneden afgerond). Controle: dezelfde rekenwijze geeft voor "Radies" precies de weken in region-de.js (buiten 11-38, oogst 16-42). Rettich: Saat ins Freiland 290,8-426,1 = buiten 11-32; Ernte 347,3-503,2 = oogst 20-43 (eindigt precies op de grens oktober/november). Erntebeginn bei Folie (337,1-347,3) niet overgenomen. In Duitsland is Rettich vooral de witte zomerrettich; daarom begint het zaaien al in maart.
+- **FR-N en FR-C (region-frn.js, region-frc.js):** GNIS (Jardiner Malin), rij Radis, variant "Hiver": semis juin-août, récolte novembre-décembre. Buiten 23-35, oogst 44-52. CIVAM (FR-C) heeft alleen "Radis" (radijs), dus FR-C gebruikt ook GNIS (in `cs`). De varianten "Tous les mois" (radijs) en "Été/automne" (semis mai-août, zonder eigen oogst) niet gebruikt.
+- **PL (region-pl.js):** KSOW-tabel, rij "Rzodkiew": siew do gruntu IV-VII, zbiór VI-X. Buiten 14-30, oogst 23-43. (PNOS Agata ter vergelijking: wysiew III-IV; VII-VIII, zbiór 2 dekada VI-2 dekada X.)

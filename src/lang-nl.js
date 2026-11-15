@@ -22,6 +22,10 @@ const LANGS={nl:{
    "n": "Radijs",
    "tip": "Het snelste gewas van de tuin: oogsten kan na vier tot zes weken. Zaai om de twee weken een stukje."
   },
+  "rammenas": {
+   "n": "Rammenas",
+   "tip": "Familie van de kool: zet rammenas in de vruchtwisseling bij de koolgewassen. Insectengaas houdt de koolvlieg weg. Rammenas kan tegen kou en mag in de grond blijven tot de eerste vorst."
+  },
   "pompoen": {
    "n": "Pompoen",
    "tip": "Vorstgevoelig en hongerig: geef veel compost. Oogst als de steel verhout is."
@@ -208,6 +212,11 @@ const LANGS={nl:{
    "l": "Volle zon. Zaai in de zomer vaker en houd de grond vochtig.",
    "w": "Gelijkmatig vochtig voor snelle, knapperige radijsjes.",
    "v": "Geen extra voeding nodig."
+  },
+  "rammenas": {
+   "l": "Zon, op luchtige grond die niet te zwaar is.",
+   "w": "In droge perioden in de zomer regelmatig water geven. Vanaf de nazomer kan rammenas goed tegen regen.",
+   "v": "Weinig nodig: een basisgift compost of goed verteerde mest is genoeg. Geen verse mest."
   },
   "pompoen": {
    "l": "Volle zon en veel ruimte.",
@@ -594,6 +603,7 @@ const LANGS={nl:{
   "samen.aria": "Samen tuinieren, {n} {p}",
   "person1": "persoon",
   "personN": "personen",
+  "personFew": "personen",
   "samen.title": "Samen tuinieren",
   "viewOnly": "Je kijkt mee in deze tuin. Aanpassen kan alleen de eigenaar of wie meewerkt.",
   "checkFail": "Controleren lukte niet. Probeer het opnieuw.",
@@ -627,6 +637,7 @@ const LANGS={nl:{
   "frost.later": "Een week later",
   "crop1": "gewas",
   "cropN": "gewassen",
+  "cropFew": "gewassen",
   "past": "voorbij",
   "from": "vanaf {d}",
   "until": "t/m {d}",

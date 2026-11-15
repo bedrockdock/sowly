@@ -1,7 +1,7 @@
 /* Controleert dat elke taal dezelfde teksten heeft als Nederlands, met dezelfde {plekhouders} en HTML-tags. */
 const fs = require('fs'), path = require('path'), vm = require('vm');
 const src = f => fs.readFileSync(path.join(__dirname, '..', 'src', f), 'utf8');
-const files = ['nl', 'en', 'de', 'fr', 'es', 'it'].map(l => `lang-${l}.js`).filter(f => fs.existsSync(path.join(__dirname, '..', 'src', f)));
+const files = ['nl', 'en', 'de', 'fr', 'es', 'it', 'pl'].map(l => `lang-${l}.js`).filter(f => fs.existsSync(path.join(__dirname, '..', 'src', f)));
 const ctx = {};
 vm.createContext(ctx);
 vm.runInContext(files.map(src).join('\n') + ';globalThis.L=LANGS', ctx);
@@ -25,7 +25,7 @@ for (const code of Object.keys(L)) {
   for (const id of Object.keys(nl.methods)) same(code, 'methods.' + id, nl.methods[id], (x.methods || {})[id]);
   if (!x.stages || x.stages.length != 5) fout(code, 'stadia');
   const c = x.cal || {};
-  if ((c.m || []).length != 12 || (c.m3 || []).length != 12 || (c.d || []).length != 7 || (c.ini || '').length != 12 || typeof c.lower != 'boolean') fout(code, 'kalender');
+  if ((c.m || []).length != 12 || (c.m3 || []).length != 12 || (c.d || []).length != 7 || (c.ini || '').length != 12 || typeof c.lower != 'boolean' || (c.mg && c.mg.length != 12)) fout(code, 'kalender');
 }
 console.log(`${Object.keys(L).length} talen, ${fouten} fouten`);
 process.exit(fouten ? 1 : 0);

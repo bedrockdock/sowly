@@ -4,13 +4,13 @@
 /* België: dezelfde teksten als Nederlands en Frans, met de Belgische vlag */
 LANGS['nl-BE']=Object.assign({},LANGS.nl,{name:'Nederlands (België)',flag:'be'});
 LANGS['fr-BE']=Object.assign({},LANGS.fr,{name:'Français (Belgique)',flag:'be'});
-const LANG_ORDER=['nl','nl-BE','fr','fr-BE','en','de','es','it'];
+const LANG_ORDER=['nl','nl-BE','fr','fr-BE','en','de','pl','es','it'];
 const LANG_KEY='sowly.taal';
 /* ---- Land: los van de taal. Waarde = welke zaaigegevens gelden: nlbe = Nederlandse en Belgische bronnen, de = REGIONS.de, null = nog geen lokale bronnen ---- */
 /* Frankrijk in klimaatzones (FR-N noord en west, FR-C midden en oost, FR-S zuid); '-' = zone zonder lokale bron */
-const COUNTRIES={NL:'nlbe',BE:'nlbe',DE:'de',AT:null,CH:null,LU:null,'FR-N':'frn','FR-C':'frc','FR-S':'-',GB:null,IE:null,ES:null,IT:null,DK:null,SE:null,PL:null,CZ:null,SK:null};
+const COUNTRIES={NL:'nlbe',BE:'nlbe',DE:'de',AT:null,CH:null,LU:null,'FR-N':'frn','FR-C':'frc','FR-S':'-',GB:null,IE:null,ES:null,IT:null,DK:null,SE:null,PL:'pl',CZ:null,SK:null};
 const LAND_KEY='sowly.land';
-const LAND_OF_LANG={nl:'NL','nl-BE':'BE','fr-BE':'BE',fr:'FR-N',de:'DE',en:'GB',es:'ES',it:'IT'};
+const LAND_OF_LANG={nl:'NL','nl-BE':'BE','fr-BE':'BE',fr:'FR-N',de:'DE',en:'GB',es:'ES',it:'IT',pl:'PL'};
 /* Eerder gekozen land, anders het land uit de browsertaal (de-AT -> AT), anders het land dat bij de taal hoort */
 /* Oude of grove waarden naar een land uit de lijst: FR (van vóór de zones) wordt Frankrijk noord en west */
 const normLand=c=>c=='FR'?'FR-N':c;
@@ -25,7 +25,8 @@ function landName(c){
   let n;try{n=new Intl.DisplayNames([LANG],{type:'region'}).of(c.slice(0,2))||c}catch(e){n=c}
   return c.length>2?n+' – '+tx('zone.'+c):n;
 }
-const CAL={m:[],m3:[],d:[],ini:'',lower:true};
+/* mg (optioneel): maandnaam in een datum, voor talen met een naamval (Pools "15 listopada"); anders m */
+const CAL={m:[],m3:[],d:[],ini:'',lower:true,mg:null};
 let LANG='nl',UI={};
 
 /* Tekst uit de interface, met {plekhouders}. Waarden worden niet ontsnapt: doe dat zelf met esc() waar nodig. */
@@ -35,6 +36,8 @@ function tx(k,v){
 }
 /* Kleine letter midden in een zin; niet in het Duits (zelfstandige naamwoorden met hoofdletter) */
 const lc=s=>CAL.lower?s.toLowerCase():s;
+/* Woord na een getal: k1 bij 1, kFew bij de 'few'-vorm (Pools 2-4, 22-24), anders kN */
+function plural(n,k){let c='other';try{c=new Intl.PluralRules(LANG).select(n)}catch(e){}return tx(n==1?k+'1':c=='few'?k+'Few':k+'N')}
 
 /* Eerder gekozen taal, anders de taal van de browser, anders Engels */
 function pickLang(){
@@ -56,7 +59,7 @@ function applyLang(code){
   for(const k in ACT){const x=(L.act||{})[k]||{},y=F.act[k]||{};ACT[k].n=g(x,y,'n');ACT[k].s=g(x,y,'s')}
   for(const k in METHODS)METHODS[k]=((L.methods||{})[k])||F.methods[k];
   STAGE_NAMES.forEach((_,i)=>{STAGE_NAMES[i]=((L.stages||[])[i])||F.stages[i]});
-  Object.assign(CAL,F.cal,L.cal);
+  Object.assign(CAL,{mg:null},F.cal,L.cal);
   UI=L.ui||{};
 }
 
@@ -71,6 +74,7 @@ function flagSVG(code){
   else if(code=='fr')b=v('#002654',0)+v('#fff',20)+v('#CE1126',40);
   else if(code=='be')b=v('#000',0)+v('#FDDA24',20)+v('#EF3340',40);
   else if(code=='it')b=v('#009246',0)+v('#fff',20)+v('#CE2B37',40);
+  else if(code=='pl')b=r('#fff',0,20)+r('#DC143C',20,20);
   else if(code=='es')b=r('#AA151B',0,40)+r('#F1BF00',10,20);
   else{const id='uj'+(++flagN);b=`<rect width="60" height="40" fill="#012169"/><clipPath id="${id}"><path d="M30,20h30v20zv20h-30zh-30v-20zv-20h30z"/></clipPath><path d="M0,0L60,40M60,0L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0L60,40M60,0L0,40" clip-path="url(#${id})" stroke="#C8102E" stroke-width="4"/><path d="M30,0v40M0,20h60" stroke="#fff" stroke-width="12"/><path d="M30,0v40M0,20h60" stroke="#C8102E" stroke-width="7"/>`}
   return `<svg class="flag" viewBox="0 0 60 40" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${b}</svg>`;

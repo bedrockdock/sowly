@@ -8,6 +8,7 @@ REGIONS.de={src:'Bayerische Gartenakademie (LWG)',s:{
   'courgette':[["binnen", 15, 19], ["uitplant", 20, 22], ["oogst", 29, 40]],
   'sla':[["binnen", 6, 12], ["glas", 14, 18], ["glas", 6, 12], ["buiten", 18, 29], ["uitplant", 11, 34], ["oogst", 22, 39]],
   'wortel':[["glas", 7, 10], ["buiten", 9, 24], ["oogst", 27, 42]],
+  'rammenas':[["buiten", 11, 32], ["oogst", 20, 43]],
   'radijs':[["glas", 7, 17], ["buiten", 11, 38], ["oogst", 16, 42]],
   'stamslaboon':[["binnen", 16, 19], ["buiten", 20, 29], ["uitplant", 20, 24], ["oogst", 29, 40]],
   'spinazie':[["glas", 1, 9], ["buiten", 9, 16], ["buiten", 31, 38], ["oogst", 11, 18], ["oogst", 40, 46]],

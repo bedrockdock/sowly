@@ -31,6 +31,7 @@ REGIONS.frn={src:'GNIS (Jardiner Malin)',s:{
   'veldsla':[["buiten", 29, 43], ["oogst", 36, 52], ["oogst", 1, 13]],
   'mais':[["glas", 9, 22], ["buiten", 23, 30], ["oogst", 22, 47]],
   'ui':[["buiten", 5, 17], ["buiten", 33, 39], ["uitplant", 40, 52], ["uitplant", 1, 8], ["oogst", 27, 39], ["oogst", 14, 26]],
+  'rammenas':[["buiten", 23, 35], ["oogst", 44, 52]],
   'radijs':[["buiten", 7, 39], ["oogst", 11, 48]],
   'aardappel-vroeg':[["buiten", 9, 17, "pootaardappelen"], ["oogst", 23, 35]],
   'aardappel-laat':[["buiten", 9, 17, "pootaardappelen"], ["oogst", 36, 43]]

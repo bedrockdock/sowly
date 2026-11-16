@@ -98,7 +98,7 @@ button{cursor:pointer}
 .muted{color:var(--muted)}
 .small{font-size:.86rem}
 .btn{background:var(--accent);color:var(--accent-ink);border:2px solid var(--edge);border-radius:999px;padding:8px 16px;font:600 .95rem var(--head);box-shadow:0 2px 0 var(--edge)}
-.btn.shop{display:block;width:100%;text-align:center;text-decoration:none}
+.btn.shop,.sheet a.btn.shop{display:block;width:100%;text-align:center;text-decoration:none;color:var(--accent-ink)}
 .btn:active{transform:translateY(2px);box-shadow:none}
 .btn.ghost{background:var(--surface);color:var(--ink)}
 .btn.sm{padding:4px 12px;font-size:.85rem}
@@ -1423,11 +1423,10 @@ const LANGS={nl:{
   "seed.from": "zaaien vanaf {d}",
   "seed.now": "nu zaaien",
   "seed.find": "Zaad zoeken",
-  "seed.aff": "Links naar webwinkels zijn affiliate-links: de planner krijgt een kleine vergoeding als je koopt. Dat kost jou niets extra.",
+  "seed.aff": "Links naar webwinkels zijn affiliate-links: de planner krijgt een kleine vergoeding als je koopt. Dat kost jou niets extra, maar ondersteunt deze site.",
   "seed.sheet": "Zaad zoeken: {c}",
   "seed.pick": "Je gaat naar de zoekresultaten voor {q}. Je koopt bij de webwinkel zelf, niet bij Sowly.",
   "seed.at": "Bekijk bij {shop}",
-  "seed.afflabel": "(affiliate-link)",
 
   "m.prev": "Vorige maand",
   "m.next": "Volgende maand",
@@ -1839,11 +1838,10 @@ LANGS.en={
   "seed.from": "sow from {d}",
   "seed.now": "sow now",
   "seed.find": "Find seeds",
-  "seed.aff": "Links to web shops are affiliate links: the planner gets a small fee if you buy. It costs you nothing extra.",
+  "seed.aff": "Links to web shops are affiliate links: the planner gets a small fee if you buy. It costs you nothing extra, but it supports this site.",
   "seed.sheet": "Find seeds: {c}",
   "seed.pick": "You will go to the search results for {q}. You buy from the web shop itself, not from Sowly.",
   "seed.at": "View at {shop}",
-  "seed.afflabel": "(affiliate link)",
   "m.prev": "Previous month",
   "m.next": "Next month",
   "frost.title": "Last night frost: week {w}",
@@ -2244,11 +2242,10 @@ LANGS.de={
   "seed.from": "säen ab {d}",
   "seed.now": "jetzt säen",
   "seed.find": "Saatgut suchen",
-  "seed.aff": "Links zu Onlineshops sind Affiliate-Links: Der Planer erhält eine kleine Vergütung, wenn du kaufst. Das kostet dich nichts extra.",
+  "seed.aff": "Links zu Onlineshops sind Affiliate-Links: Der Planer erhält eine kleine Vergütung, wenn du kaufst. Das kostet dich nichts extra, unterstützt aber diese Seite.",
   "seed.sheet": "Saatgut suchen: {c}",
   "seed.pick": "Du gelangst zu den Suchergebnissen für {q}. Du kaufst beim Onlineshop selbst, nicht bei Sowly.",
   "seed.at": "Bei {shop} ansehen",
-  "seed.afflabel": "(Affiliate-Link)",
   "m.prev": "Vorheriger Monat",
   "m.next": "Nächster Monat",
   "frost.title": "Letzter Nachtfrost: Woche {w}",
@@ -2649,11 +2646,10 @@ LANGS.fr={
   "seed.from": "semer dès le {d}",
   "seed.now": "semer maintenant",
   "seed.find": "Chercher des graines",
-  "seed.aff": "Les liens vers les boutiques en ligne sont des liens d'affiliation : le planificateur reçoit une petite commission si vous achetez. Cela ne vous coûte rien de plus.",
+  "seed.aff": "Les liens vers les boutiques en ligne sont des liens d'affiliation : le planificateur reçoit une petite commission si vous achetez. Cela ne vous coûte rien de plus, mais soutient ce site.",
   "seed.sheet": "Chercher des graines : {c}",
   "seed.pick": "Vous arriverez aux résultats de recherche pour {q}. Vous achetez auprès de la boutique en ligne, pas auprès de Sowly.",
   "seed.at": "Voir sur {shop}",
-  "seed.afflabel": "(lien d'affiliation)",
   "m.prev": "Mois précédent",
   "m.next": "Mois suivant",
   "frost.title": "Dernière gelée nocturne : semaine {w}",
@@ -3054,11 +3050,10 @@ LANGS.es={
   "seed.from": "sembrar desde el {d}",
   "seed.now": "sembrar ahora",
   "seed.find": "Buscar semillas",
-  "seed.aff": "Los enlaces a tiendas en línea son enlaces de afiliado: el planificador recibe una pequeña comisión si compras. A ti no te cuesta nada más.",
+  "seed.aff": "Los enlaces a tiendas en línea son enlaces de afiliado: el planificador recibe una pequeña comisión si compras. A ti no te cuesta nada más, pero apoya este sitio.",
   "seed.sheet": "Buscar semillas: {c}",
   "seed.pick": "Irás a los resultados de búsqueda de {q}. Compras en la propia tienda en línea, no en Sowly.",
   "seed.at": "Ver en {shop}",
-  "seed.afflabel": "(enlace de afiliado)",
   "m.prev": "Mes anterior",
   "m.next": "Mes siguiente",
   "frost.title": "Última helada nocturna: semana {w}",
@@ -3459,11 +3454,10 @@ LANGS.it={
   "seed.from": "seminare dal {d}",
   "seed.now": "seminare ora",
   "seed.find": "Cerca semi",
-  "seed.aff": "I link ai negozi online sono link di affiliazione: il planner riceve un piccolo compenso se acquisti. A te non costa nulla in più.",
+  "seed.aff": "I link ai negozi online sono link di affiliazione: il planner riceve un piccolo compenso se acquisti. A te non costa nulla in più, ma sostiene questo sito.",
   "seed.sheet": "Cerca semi: {c}",
   "seed.pick": "Andrai ai risultati di ricerca per {q}. Acquisti dal negozio online, non da Sowly.",
   "seed.at": "Vedi su {shop}",
-  "seed.afflabel": "(link di affiliazione)",
   "m.prev": "Mese precedente",
   "m.next": "Mese successivo",
   "frost.title": "Ultima gelata notturna: settimana {w}",
@@ -3865,11 +3859,10 @@ LANGS.pl={
   "seed.from": "siew od {d}",
   "seed.now": "siej teraz",
   "seed.find": "Szukaj nasion",
-  "seed.aff": "Linki do sklepów internetowych to linki afiliacyjne: planer dostaje niewielką prowizję, jeśli coś kupisz. Nic cię to nie kosztuje.",
+  "seed.aff": "Linki do sklepów internetowych to linki afiliacyjne: planer dostaje niewielką prowizję, jeśli coś kupisz. Nic cię to nie kosztuje, a wspiera tę stronę.",
   "seed.sheet": "Szukaj nasion: {c}",
   "seed.pick": "Przejdziesz do wyników wyszukiwania dla {q}. Kupujesz w samym sklepie internetowym, nie w Sowly.",
   "seed.at": "Zobacz w {shop}",
-  "seed.afflabel": "(link afiliacyjny)",
   "m.prev": "Poprzedni miesiąc",
   "m.next": "Następny miesiąc",
   "frost.title": "Ostatni przymrozek: tydzień {w}",
@@ -4753,7 +4746,7 @@ function zaadCard(){
 }
 function openSeed(id){
   const c=CROP[id],q=seedQ(c);
-  openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('seed.sheet',{c:c.n})}</h2><div class="bigplant"><div class="pp">${plantSVG(c,4)}</div></div><p style="margin:12px 0 8px">${tx('seed.pick',{q:`<b>${esc(q)}</b>`})}</p><div class="stack" style="gap:8px">${shopsHere().map(s=>`<a class="btn shop" href="${esc(s.link(q))}" target="_blank" rel="sponsored noopener">${tx('seed.at',{shop:esc(s.n)})} <span class="small">${tx('seed.afflabel')}</span></a>`).join('')}</div><p class="muted small" style="margin:12px 0 0">${tx('seed.aff')}</p>`);
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('seed.sheet',{c:c.n})}</h2><div class="bigplant"><div class="pp">${plantSVG(c,4)}</div></div><p style="margin:12px 0 8px">${tx('seed.pick',{q:`<b>${esc(q)}</b>`})}</p><div class="stack" style="gap:8px">${shopsHere().map(s=>`<a class="btn shop" href="${esc(s.link(q))}" target="_blank" rel="sponsored noopener">${tx('seed.at',{shop:esc(s.n)})}</a>`).join('')}</div><p class="muted small" style="margin:12px 0 0">${tx('seed.aff')}</p>`);
 }
 /* Laatste nachtvorst: in Deze maand en in de instellingen */
 function frostRow(fd){

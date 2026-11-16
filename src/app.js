@@ -463,7 +463,7 @@ function zaadCard(){
 }
 function openSeed(id){
   const c=CROP[id],q=seedQ(c);
-  openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('seed.sheet',{c:c.n})}</h2><div class="bigplant"><div class="pp">${plantSVG(c,4)}</div></div><p style="margin:12px 0 8px">${tx('seed.pick',{q:`<b>${esc(q)}</b>`})}</p><div class="stack" style="gap:8px">${shopsHere().map(s=>`<a class="btn shop" href="${esc(s.link(q))}" target="_blank" rel="sponsored noopener">${tx('seed.at',{shop:esc(s.n)})} <span class="small">${tx('seed.afflabel')}</span></a>`).join('')}</div><p class="muted small" style="margin:12px 0 0">${tx('seed.aff')}</p>`);
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('seed.sheet',{c:c.n})}</h2><div class="bigplant"><div class="pp">${plantSVG(c,4)}</div></div><p style="margin:12px 0 8px">${tx('seed.pick',{q:`<b>${esc(q)}</b>`})}</p><div class="stack" style="gap:8px">${shopsHere().map(s=>`<a class="btn shop" href="${esc(s.link(q))}" target="_blank" rel="sponsored noopener">${tx('seed.at',{shop:esc(s.n)})}</a>`).join('')}</div><p class="muted small" style="margin:12px 0 0">${tx('seed.aff')}</p>`);
 }
 /* Laatste nachtvorst: in Deze maand en in de instellingen */
 function frostRow(fd){

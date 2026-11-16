@@ -29,7 +29,7 @@ Moestuinplanner (NL/BE, later internationaal). Eigenaar: Titus, Nederlandstalig,
 - De privacyverklaring staat in `src/privacy.html`; `build.js` kopieert hem naar `docs/privacy.html` en zet de link onderaan de webversie. Komt er een dienst bij die gegevens verwerkt (advertenties, affiliate, analytics, mail), werk hem dan bij, inclusief de datum.
 
 ## Affiliate en advertenties
-- Zaad-knoppen gebruiken `SHOPS` in `app.js` (nu bol.com voor NL en BE, alleen in het Nederlands, Frans of Engels; `shopsHere()`). Een land zonder winkel toont geen zaad-knoppen. Elke link moet zichtbaar als affiliate-link zijn gemarkeerd. Advertenties staan uit (`ADS=false`). Teeltgegevens mogen niet door commissie beïnvloed worden.
+- Zaad-knoppen gebruiken `SHOPS` in `app.js` (nu bol.com voor NL en BE, alleen in het Nederlands, Frans of Engels; `shopsHere()`). Een land zonder winkel toont geen zaad-knoppen. Elke link moet zichtbaar als affiliate-link zijn gemarkeerd: de zin `seed.aff` staat direct onder de knoppen (geen label in de knop zelf, besluit eigenaar). Advertenties staan uit (`ADS=false`). Teeltgegevens mogen niet door commissie beïnvloed worden.
 - Voor het web: cookiebanner en privacyverklaring vóór advertenties.
 
 ## Nog te doen

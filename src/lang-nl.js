@@ -638,11 +638,10 @@ const LANGS={nl:{
   "seed.from": "zaaien vanaf {d}",
   "seed.now": "nu zaaien",
   "seed.find": "Zaad zoeken",
-  "seed.aff": "Links naar webwinkels zijn affiliate-links: de planner krijgt een kleine vergoeding als je koopt. Dat kost jou niets extra.",
+  "seed.aff": "Links naar webwinkels zijn affiliate-links: de planner krijgt een kleine vergoeding als je koopt. Dat kost jou niets extra, maar ondersteunt deze site.",
   "seed.sheet": "Zaad zoeken: {c}",
   "seed.pick": "Je gaat naar de zoekresultaten voor {q}. Je koopt bij de webwinkel zelf, niet bij Sowly.",
   "seed.at": "Bekijk bij {shop}",
-  "seed.afflabel": "(affiliate-link)",
 
   "m.prev": "Vorige maand",
   "m.next": "Volgende maand",

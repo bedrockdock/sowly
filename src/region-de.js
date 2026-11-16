@@ -3,11 +3,12 @@
    Overgenomen per gewas (zie notes/bronnen.md): Saat ins Freiland = buiten, Saat ins Frühbeet = glas, Pflanzung = uitplant,
    Ernte = oogst. Folie-teelt (stippellijnen bij Pflanzung en Erntebeginn) niet overgenomen. Binnen voorzaaien staat niet in de
    tabel: daarvoor blijven de NL-weken. Gewassen die niet in de tabel staan, volgen de NL/BE-gegevens (de app meldt dat). */
-REGIONS.de={src:'Bayerische Gartenakademie (LWG)',s:{
+REGIONS.de={src:'Bayerische Gartenakademie (LWG)',cs:{"raap": "Hortipendium (Gartenakademie Rheinland-Pfalz)"},s:{
   'tomaat':[["binnen", 6, 19], ["glas", 12, 16], ["uitplant", 20, 25], ["oogst", 28, 42]],
   'courgette':[["binnen", 15, 19], ["uitplant", 20, 22], ["oogst", 29, 40]],
   'sla':[["binnen", 6, 12], ["glas", 14, 18], ["glas", 6, 12], ["buiten", 18, 29], ["uitplant", 11, 34], ["oogst", 22, 39]],
   'wortel':[["glas", 7, 10], ["buiten", 9, 24], ["oogst", 27, 42]],
+  'raap':[["buiten", 11, 32], ["oogst", 23, 46]],
   'rammenas':[["buiten", 11, 32], ["oogst", 20, 43]],
   'radijs':[["glas", 7, 17], ["buiten", 11, 38], ["oogst", 16, 42]],
   'stamslaboon':[["binnen", 16, 19], ["buiten", 20, 29], ["uitplant", 20, 24], ["oogst", 29, 40]],

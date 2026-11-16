@@ -44,11 +44,12 @@ Bijgewerkt: zaterdag 24 oktober 2026. Naam: **Sowly** (internationaal, van "to s
 
 ## Inkomsten
 - [x] **KvK-inschrijving** (12 november 2026): Bedrockdock, KvK 42216279.
-- [ ] **Zaad-knoppen en advertenties aanzetten.** Staan nog uit (`COMMERCE=false` in `src/app.js`). Op `true` zetten samen met echte links in `SHOPS` en, voor advertenties, een cookiebanner en een bijgewerkte privacyverklaring.
-- [ ] **Daisycon:** aanmelden bij de zaadwinkels van je keuze, wachten op goedkeuring (meestal is een live website nodig).
+- [x] **Zaad-knoppen live** (16 november 2026) met het bol Affiliate Programma (websitecode 1560075), alleen voor land NL en BE in het Nederlands, Frans of Engels (voorwaarden bol art. 3.16). Zoeklink per gewas met de Nederlandse naam plus "zaden". Privacyverklaring bijgewerkt.
+- [ ] **Controleren in het bol-dashboard** of klikken en verkopen binnenkomen. Bol noemt zoekresultaatpagina's niet letterlijk als toegestaan linkdoel (wel producten, homepages, merk- en lijstpagina's); navragen bij bol.
+- [ ] **Advertenties aanzetten:** `ADS=false` in `src/app.js`. Pas met cookiebanner en bijgewerkte privacyverklaring.
+- [ ] **Daisycon:** account actief (november 2026), maar geen campagnes van moestuinzaadwinkels gevonden (wel Blossombs, De tuin op tafel, planten en bloembollen). Later opnieuw kijken.
 - [ ] **Affiliate per land uitzoeken.** Daisycon heeft kantoren in NL, BE, DE, DK, SE, FI en RO (niet bevestigd voor PL, CZ, SK, AT). Voor die landen een ander netwerk of directe partnerprogramma's zoeken. Per land een eigen lijst `SHOPS`, met winkels in de eigen taal.
 - [ ] **Werkvolgorde per land:** eerst NL en BE (Daisycon), daarna DE, DK en SE (Daisycon, alleen als er zaadwinkels in hun lijst staan). Voor elk volgend land (PL, CZ, SK, AT): eerst vaststellen of er een netwerk met zaadwinkels is, daarna pas taal en planning toevoegen. Zonder werkende affiliate start dat land zonder zaad-knoppen of met advertenties.
-- [ ] **Links invullen** in de lijst `SHOPS` in de code (nu drie grijze voorbeeldknoppen). Zoeklink per gewas in plaats van vaste productpagina's.
 - [ ] **Altijd markeren als affiliate-link.** Teeltgegevens blijven onafhankelijk van wie commissie geeft.
 - [ ] **Advertenties:** AdSense voor het web, AdMob voor de Android-app. Hiervoor zijn een cookiebanner en privacyverklaring nodig.
 - [ ] Mogelijk: winkelmandje/zaadlijst voor het hele voorjaar in plaats van losse knoppen.
@@ -82,11 +83,12 @@ Gedaan: alle weken staan relatief aan week 20, er is een verschuiving (`shift`) 
 - [ ] Mogelijk Frans voor Wallonië en Brussel.
 
 ## Gegevens en inhoud (NL/BE)
+- [ ] **Maand naar week klopt niet overal** (gevonden 15 november 2026): de tabel I 1-4, II 5-8, III 9-13, ... (region-frn.js, region-pl.js en de aanvullingen) laat maart, augustus en november een week te vroeg beginnen. De app toont week 9 als februari, week 31 als juli en week 44 als oktober (`wm()` in app.js). Gevolg: bijv. raap in NL "Zaaien: feb–jun" terwijl Welkoop maart zegt. Oplossen door de tabel gelijk te trekken met `wm()` (III 10-13, VIII 32-35, XI 45-48, en II, VII, X een week langer) en de regiobestanden na te lopen.
 - [ ] **Paprika zaaivenster:** bronnen verschillen (Praxis: maart t/m april; Publitas: vanaf half april; app: voorzaaien vanaf week 9). Nader controleren.
 - [ ] **Buurregels:** de meeste staan nog als "niet bevestigd door een Nederlandse of Belgische bron". Bij Wageningen University staat dat ze niet wetenschappelijk bewezen zijn.
 - [ ] **Water- en lichtregels** zonder bronmarkering nalopen (bevestigd zijn nu o.a. tomaat, rucola, komkommer, paprika en de zon-eis van prei, radijs, wortel, basilicum en pompoen).
 - [ ] **Zaaitijden aardbei en kruiden** zonder Nederlandse bron.
-- [ ] **Extra gewassen:** dille, koriander, bieslook, munt, spitskool, schorseneer, raapstelen (rammenas toegevoegd op 15 november 2026, met bron per land, zie `notes/bronnen.md`), met "nog niet bevestigd" waar nodig.
+- [ ] **Extra gewassen:** dille, koriander, bieslook, munt, spitskool, schorseneer, raapstelen (rammenas, raap en meloen toegevoegd op 15 november 2026, met bron per land, zie `notes/bronnen.md`; meloen heeft nog geen Duitse bron), met "nog niet bevestigd" waar nodig.
 - [ ] **Najaarszaai** als aparte methode (nu weggelaten).
 - [ ] **Een pagina per gewas** voor zoekmachines (SEO).
 

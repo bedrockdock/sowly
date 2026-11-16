@@ -98,6 +98,7 @@ button{cursor:pointer}
 .muted{color:var(--muted)}
 .small{font-size:.86rem}
 .btn{background:var(--accent);color:var(--accent-ink);border:2px solid var(--edge);border-radius:999px;padding:8px 16px;font:600 .95rem var(--head);box-shadow:0 2px 0 var(--edge)}
+.btn.shop{display:block;width:100%;text-align:center;text-decoration:none}
 .btn:active{transform:translateY(2px);box-shadow:none}
 .btn.ghost{background:var(--surface);color:var(--ink)}
 .btn.sm{padding:4px 12px;font-size:.85rem}
@@ -299,9 +300,17 @@ const CROPS = [
    s:[['glas',7,17],['buiten',11,35],['oogst',14,43]],
    d:{kiem:4,oogst:[25,45]},
    tip:''},
+  {id:'raap',kind:'root',fruit:'raap',
+   s:[['buiten',10,26],['oogst',18,39]],
+   d:{kiem:5,oogst:[60,90]},
+   tip:''},
   {id:'rammenas',kind:'root',fruit:'rammenas',
    s:[['buiten',24,32],['oogst',36,48]],
    d:{kiem:5,oogst:[60,120]},
+   tip:''},
+  {id:'meloen',kind:'vine',fruit:'meloen',tender:true,
+   s:[['glas',14,26],['uitplant',20,22],['oogst',27,39]],
+   d:{kiem:7,uit:42,oogst:[100,140]},
    tip:''},
   {id:'pompoen',kind:'vine',fruit:'pompoen',tender:true,
    s:[['binnen',15,19],['buiten',20,22],['uitplant',20,26],['oogst',36,43]],
@@ -479,6 +488,8 @@ const CARE = {
   sla:{l:['zh',''],w:['gemiddeld',''],v:['licht',''],g:['radijs','wortel','ui','prei','biet','komkommer','Aardbei'],s:['peterselie']},
   wortel:{l:['zon',''],w:['gemiddeld',''],v:['middel',''],g:['ui','prei','radijs','sla','tomaat','Afrikaantjes'],s:['pastinaak']},
   radijs:{l:['zon',''],w:['gemiddeld',''],v:['licht',''],g:['sla','wortel','spinazie','doperwt','stamslaboon','peterselie'],s:['tomaat']},
+  raap:{l:['zh',''],w:['gemiddeld',''],v:['middel',''],g:['tomaat','stamslaboon','spinazie','sla','doperwt','snijbiet','Dille'],s:[]},
+  meloen:{l:['zon',''],w:['veel',''],v:['middel',''],g:[],s:[]},
   rammenas:{l:['zon',''],w:['gemiddeld',''],v:['licht',''],g:[],s:[]},
   pompoen:{l:['zon',''],w:['veel',''],v:['zwaar',''],g:['stamslaboon','radijs','ui'],s:['aardappel']},
   stamslaboon:{l:['zon',''],w:['veel',''],v:['licht',''],g:['wortel','komkommer','courgette','aardappel','biet','koolrabi','bloemkool','Bonenkruid'],s:['ui','prei','knoflook','sjalot']},
@@ -529,8 +540,8 @@ const SGOED=new Set(BV_GOED.map(p=>pk(...p))),SSLECHT=new Set(BV_SLECHT.map(p=>p
 const splitBr=(id,arr,set)=>{const ok=[],rest=[];arr.forEach(x=>{const e=x=='aardappel'?['aardappel-vroeg','aardappel-laat']:x=='kool'?KOOLID:[x];(e.some(y=>set.has(pk(id,y)))?ok:rest).push(x)});return[ok,rest]};
 const BEV={
   l:['tomaat','rucola','prei','radijs','wortel','komkommer','basilicum','pompoen'],
-  w:['tomaat','rucola','komkommer','paprika','rammenas'],
-  v:['tomaat','courgette','pompoen','paprika','aubergine','komkommer','prei','bloemkool','broccoli','rodekool','boerenkool','koolrabi','wortel','spinazie','stamslaboon','doperwt','tuinboon','ui','radijs','rammenas','peterselie','basilicum','aardappel-vroeg','aardappel-laat','spruitkool','wittekool','savooiekool','chinesekool','sjalot','bosui']
+  w:['tomaat','rucola','komkommer','paprika','rammenas','meloen'],
+  v:['tomaat','courgette','pompoen','paprika','aubergine','komkommer','prei','bloemkool','broccoli','rodekool','boerenkool','koolrabi','wortel','spinazie','stamslaboon','doperwt','tuinboon','ui','radijs','rammenas','meloen','peterselie','basilicum','aardappel-vroeg','aardappel-laat','spruitkool','wittekool','savooiekool','chinesekool','sjalot','bosui']
 };
 const NB={};
 for(const id in CARE){const c=CARE[id],[g,g2]=splitBr(id,c.g,SGOED),[s,s2]=splitBr(id,c.s,SSLECHT);NB[id]={l:c.l,w:c.w,v:c.v,g,g2,s,s2,b:{l:BEV.l.includes(id),w:BEV.w.includes(id),v:BEV.v.includes(id)}}}
@@ -542,11 +553,12 @@ const REGIONS={};
    Overgenomen per gewas (zie notes/bronnen.md): Saat ins Freiland = buiten, Saat ins Frühbeet = glas, Pflanzung = uitplant,
    Ernte = oogst. Folie-teelt (stippellijnen bij Pflanzung en Erntebeginn) niet overgenomen. Binnen voorzaaien staat niet in de
    tabel: daarvoor blijven de NL-weken. Gewassen die niet in de tabel staan, volgen de NL/BE-gegevens (de app meldt dat). */
-REGIONS.de={src:'Bayerische Gartenakademie (LWG)',s:{
+REGIONS.de={src:'Bayerische Gartenakademie (LWG)',cs:{"raap": "Hortipendium (Gartenakademie Rheinland-Pfalz)"},s:{
   'tomaat':[["binnen", 6, 19], ["glas", 12, 16], ["uitplant", 20, 25], ["oogst", 28, 42]],
   'courgette':[["binnen", 15, 19], ["uitplant", 20, 22], ["oogst", 29, 40]],
   'sla':[["binnen", 6, 12], ["glas", 14, 18], ["glas", 6, 12], ["buiten", 18, 29], ["uitplant", 11, 34], ["oogst", 22, 39]],
   'wortel':[["glas", 7, 10], ["buiten", 9, 24], ["oogst", 27, 42]],
+  'raap':[["buiten", 11, 32], ["oogst", 23, 46]],
   'rammenas':[["buiten", 11, 32], ["oogst", 20, 43]],
   'radijs':[["glas", 7, 17], ["buiten", 11, 38], ["oogst", 16, 42]],
   'stamslaboon':[["binnen", 16, 19], ["buiten", 20, 29], ["uitplant", 20, 24], ["oogst", 29, 40]],
@@ -592,13 +604,15 @@ REGIONS.de={src:'Bayerische Gartenakademie (LWG)',s:{
 /* Aanvulling 15 november 2026: Vilmorin (zaadbedrijf, landelijk), productkaarten op eshop.vilmorin-jardin.fr met
    "Mois de semis" en "Mois de récolte" (alleen maanden, geen methode). Eén ras per gewas, zie notes/bronnen.md. Methode zoals
    de app het gewas zaait (direct gezaaid = buiten, voorgezaaid = binnen); uitplanten staat niet op de kaart: NL-weken. */
-REGIONS.frc={src:'CIVAM Auvergne-Rhône-Alpes',cs:{"andijvie": "GNIS (Jardiner Malin)", "savooiekool": "GNIS (Jardiner Malin)", "spruitkool": "GNIS (Jardiner Malin)", "augurk": "GNIS (Jardiner Malin)", "courgette": "GNIS (Jardiner Malin)", "pompoen": "GNIS (Jardiner Malin)", "venkel": "GNIS (Jardiner Malin)", "tuinboon": "GNIS (Jardiner Malin)", "veldsla": "GNIS (Jardiner Malin)", "mais": "GNIS (Jardiner Malin)", "aardappel-vroeg": "GNIS (Jardiner Malin)", "aardappel-laat": "GNIS (Jardiner Malin)", "rammenas": "GNIS (Jardiner Malin)", "boerenkool": "Vilmorin", "basilicum": "Vilmorin", "koolrabi": "Vilmorin", "sjalot": "Vilmorin", "pluksla": "Vilmorin"},s:{
+REGIONS.frc={src:'CIVAM Auvergne-Rhône-Alpes',cs:{"andijvie": "GNIS (Jardiner Malin)", "savooiekool": "GNIS (Jardiner Malin)", "spruitkool": "GNIS (Jardiner Malin)", "augurk": "GNIS (Jardiner Malin)", "courgette": "GNIS (Jardiner Malin)", "pompoen": "GNIS (Jardiner Malin)", "venkel": "GNIS (Jardiner Malin)", "tuinboon": "GNIS (Jardiner Malin)", "veldsla": "GNIS (Jardiner Malin)", "mais": "GNIS (Jardiner Malin)", "aardappel-vroeg": "GNIS (Jardiner Malin)", "aardappel-laat": "GNIS (Jardiner Malin)", "rammenas": "GNIS (Jardiner Malin)", "raap": "GNIS (Jardiner Malin)", "meloen": "GNIS (Jardiner Malin)", "boerenkool": "Vilmorin", "basilicum": "Vilmorin", "koolrabi": "Vilmorin", "sjalot": "Vilmorin", "pluksla": "Vilmorin"},s:{
   'boerenkool':[["buiten", 14, 26], ["uitplant", 24, 30], ["oogst", 1, 8], ["oogst", 40, 52]],
   'basilicum':[["binnen", 9, 22], ["uitplant", 20, 24], ["oogst", 18, 43]],
   'koolrabi':[["buiten", 9, 26], ["uitplant", 14, 30], ["oogst", 27, 48]],
   'sjalot':[["buiten", 1, 13, "plantsjalotten"], ["buiten", 44, 52, "plantsjalotten"], ["oogst", 23, 30]],
   'pluksla':[["buiten", 9, 35], ["oogst", 14, 39]],
   'sla':[["binnen", 6, 12], ["glas", 6, 12], ["buiten", 7, 43], ["uitplant", 12, 38], ["oogst", 10, 48]],
+  'raap':[["buiten", 10, 22], ["buiten", 27, 39], ["oogst", 18, 28], ["oogst", 36, 48]],
+  'meloen':[["binnen", 5, 17], ["buiten", 18, 22], ["uitplant", 16, 22], ["oogst", 23, 39]],
   'rammenas':[["buiten", 23, 35], ["oogst", 44, 52]],
   'snijbiet':[["buiten", 14, 34], ["oogst", 1, 9], ["oogst", 22, 51]],
   'rucola':[["glas", 8, 11], ["buiten", 9, 39], ["oogst", 18, 48]],
@@ -650,7 +664,7 @@ REGIONS.frc={src:'CIVAM Auvergne-Rhône-Alpes',cs:{"andijvie": "GNIS (Jardiner M
 /* Aanvulling 15 november 2026: Vilmorin (zaadbedrijf, landelijk), productkaarten op eshop.vilmorin-jardin.fr met
    "Mois de semis" en "Mois de récolte" (alleen maanden, geen methode). Eén ras per gewas, zie notes/bronnen.md. Methode zoals
    de app het gewas zaait (direct gezaaid = buiten, voorgezaaid = binnen); uitplanten staat niet op de kaart: NL-weken. */
-REGIONS.frn={src:'GNIS (Jardiner Malin)',cs:{"knoflook": "Vilmorin", "prei": "Vilmorin", "doperwt": "Vilmorin", "boerenkool": "Vilmorin", "rucola": "Vilmorin", "snijbiet": "Vilmorin", "pastinaak": "Vilmorin", "peterselie": "Vilmorin", "basilicum": "Vilmorin", "koolrabi": "Vilmorin", "chinesekool": "Vilmorin", "peper": "Vilmorin", "sjalot": "Vilmorin", "pluksla": "Vilmorin"},s:{
+REGIONS.frn={src:'GNIS (Jardiner Malin)',cs:{"raap": "GNIS (Jardiner Malin)", "meloen": "GNIS (Jardiner Malin)", "knoflook": "Vilmorin", "prei": "Vilmorin", "doperwt": "Vilmorin", "boerenkool": "Vilmorin", "rucola": "Vilmorin", "snijbiet": "Vilmorin", "pastinaak": "Vilmorin", "peterselie": "Vilmorin", "basilicum": "Vilmorin", "koolrabi": "Vilmorin", "chinesekool": "Vilmorin", "peper": "Vilmorin", "sjalot": "Vilmorin", "pluksla": "Vilmorin"},s:{
   'knoflook':[["buiten", 40, 48, "teentjes"], ["oogst", 23, 30]],
   'prei':[["binnen", 6, 13], ["buiten", 9, 22], ["uitplant", 14, 28], ["oogst", 1, 13], ["oogst", 36, 52]],
   'doperwt':[["buiten", 9, 26], ["oogst", 23, 35]],
@@ -691,6 +705,8 @@ REGIONS.frn={src:'GNIS (Jardiner Malin)',cs:{"knoflook": "Vilmorin", "prei": "Vi
   'veldsla':[["buiten", 29, 43], ["oogst", 36, 52], ["oogst", 1, 13]],
   'mais':[["glas", 9, 22], ["buiten", 23, 30], ["oogst", 22, 47]],
   'ui':[["buiten", 5, 17], ["buiten", 33, 39], ["uitplant", 40, 52], ["uitplant", 1, 8], ["oogst", 27, 39], ["oogst", 14, 26]],
+  'raap':[["buiten", 10, 22], ["buiten", 27, 39], ["oogst", 18, 28], ["oogst", 36, 48]],
+  'meloen':[["binnen", 5, 17], ["buiten", 18, 22], ["uitplant", 16, 22], ["oogst", 23, 39]],
   'rammenas':[["buiten", 23, 35], ["oogst", 44, 52]],
   'radijs':[["buiten", 7, 39], ["oogst", 11, 48]],
   'aardappel-vroeg':[["buiten", 9, 17, "pootaardappelen"], ["oogst", 23, 35]],
@@ -721,7 +737,7 @@ REGIONS.frn={src:'GNIS (Jardiner Malin)',cs:{"knoflook": "Vilmorin", "prei": "Vi
    Gewassen zonder Poolse bron volgen de algemene gegevens (de app meldt dat). */
 REGIONS.pl={src:'KSOW Podlaskie',cs:{"veldsla": "PNOS Ożarów", "boerenkool": "PNOS Ożarów", "pastinaak": "PNOS Ożarów",
   "peterselie": "PNOS Ożarów", "basilicum": "PNOS Ożarów", "savooiekool": "PNOS Ożarów", "chinesekool": "PNOS Ożarów",
-  "mais": "PNOS Ożarów", "peper": "PNOS Ożarów", "knoflook": "SODR", "aardappel-vroeg": "COBORU", "aardappel-laat": "COBORU"},s:{
+  "mais": "PNOS Ożarów", "peper": "PNOS Ożarów", "knoflook": "SODR", "raap": "PNOS Ożarów", "meloen": "PNOS Ożarów", "aardappel-vroeg": "COBORU", "aardappel-laat": "COBORU"},s:{
   'veldsla':[["buiten", 9, 17], ["buiten", 27, 35], ["oogst", 5, 17], ["oogst", 40, 52]],
   'boerenkool':[["buiten", 19, 25], ["uitplant", 25, 29], ["oogst", 28, 45]],
   'pastinaak':[["buiten", 9, 17], ["oogst", 31, 43]],
@@ -739,6 +755,8 @@ REGIONS.pl={src:'KSOW Podlaskie',cs:{"veldsla": "PNOS Ożarów", "boerenkool": "
   'sla':[["binnen", 6, 12], ["glas", 5, 17], ["glas", 27, 35], ["buiten", 14, 26], ["uitplant", 18, 22], ["oogst", 18, 43]],
   'pluksla':[["glas", 5, 30], ["buiten", 14, 26], ["uitplant", 18, 22], ["oogst", 18, 39]],
   'wortel':[["buiten", 9, 26], ["oogst", 23, 43]],
+  'raap':[["buiten", 10, 17], ["buiten", 29, 32], ["oogst", 23, 30], ["oogst", 36, 43]],
+  'meloen':[["glas", 16, 17], ["uitplant", 21, 23], ["oogst", 31, 39]],
   'rammenas':[["buiten", 14, 30], ["oogst", 23, 43]],
   'radijs':[["buiten", 5, 39], ["oogst", 9, 39]],
   'pompoen':[["binnen", 15, 19], ["glas", 14, 17], ["buiten", 18, 22], ["uitplant", 18, 22], ["oogst", 36, 43]],
@@ -788,6 +806,14 @@ const LANGS={nl:{
   "radijs": {
    "n": "Radijs",
    "tip": "Het snelste gewas van de tuin: oogsten kan na vier tot zes weken. Zaai om de twee weken een stukje."
+  },
+  "raap": {
+   "n": "Raap",
+   "tip": "Familie van de kool: zet raap in de vruchtwisseling bij de koolgewassen. Zaai direct op de plek, dun uit en oogst de rapen jong, op 6 tot 8 cm doorsnede."
+  },
+  "meloen": {
+   "n": "Meloen",
+   "tip": "Vraagt veel warmte: kweek meloen in een kas of koude bak. Top de hoofdscheut na het vierde of vijfde blad, want alleen de zijscheuten dragen vruchten. Een meloen is rijp als er een scheurtje ontstaat waar hij aan de steel vastzit."
   },
   "rammenas": {
    "n": "Rammenas",
@@ -979,6 +1005,16 @@ const LANGS={nl:{
    "l": "Volle zon. Zaai in de zomer vaker en houd de grond vochtig.",
    "w": "Gelijkmatig vochtig voor snelle, knapperige radijsjes.",
    "v": "Geen extra voeding nodig."
+  },
+  "raap": {
+   "l": "Zon tot halfschaduw.",
+   "w": "Gelijkmatig vochtig houden. In een droge zomer water geven, anders schieten de rapen door.",
+   "v": "Matig: compost vooraf is genoeg."
+  },
+  "meloen": {
+   "l": "Volle zon en veel warmte, bij voorkeur in een kas of koude bak.",
+   "w": "Veel water, maar voorzichtig met koud water en koel weer: de wortels zijn gevoelig voor kou en nattigheid.",
+   "v": "Compost of half verteerde stalmest vooraf en bijmesten bij het begin van de bloei. Niet te zwaar bemesten."
   },
   "rammenas": {
    "l": "Zon, op luchtige grond die niet te zwaar is.",
@@ -1383,17 +1419,15 @@ const LANGS={nl:{
   "tl.sprout": "Kiemt",
 
   "ad": "Hier komt later een advertentie (AdMob in de Android-app).",
-  "shop": "Zaadwinkel {n}",
   "seed.title": "Zaad halen voor de komende weken",
   "seed.from": "zaaien vanaf {d}",
   "seed.now": "nu zaaien",
   "seed.find": "Zaad zoeken",
   "seed.aff": "Links naar webwinkels zijn affiliate-links: de planner krijgt een kleine vergoeding als je koopt. Dat kost jou niets extra.",
   "seed.sheet": "Zaad zoeken: {c}",
-  "seed.pick": "Kies een webwinkel. Je gaat naar de zoekresultaten voor {q}.",
-  "seed.q": "{c}zaad",
+  "seed.pick": "Je gaat naar de zoekresultaten voor {q}. Je koopt bij de webwinkel zelf, niet bij Sowly.",
+  "seed.at": "Bekijk bij {shop}",
   "seed.afflabel": "(affiliate-link)",
-  "seed.example": "<b>Voorbeeld:</b> hier komen de echte winkelknoppen met jouw Daisycon-links zodra je programma's zijn goedgekeurd. Elke knop wordt zichtbaar gemarkeerd als affiliate-link.",
 
   "m.prev": "Vorige maand",
   "m.next": "Volgende maand",
@@ -1547,6 +1581,8 @@ LANGS.en={
   "sla": {"n": "Lettuce", "tip": "Sow a small patch every two weeks for a continuous harvest. In the heat, lettuce bolts."},
   "wortel": {"n": "Carrot", "tip": "Do not transplant. Sow thinly and keep the soil moist until the seeds come up."},
   "radijs": {"n": "Radish", "tip": "The fastest crop in the garden: you can harvest after four to six weeks. Sow a small patch every two weeks."},
+  "raap": {"n": "Turnip", "tip": "A member of the cabbage family: put turnips in the brassica bed in your crop rotation. Sow directly where they will grow, thin out and harvest young, at 6 to 8 cm across."},
+  "meloen": {"n": "Melon", "tip": "Needs a lot of warmth: grow melons in a greenhouse or cold frame. Pinch out the main shoot after the fourth or fifth leaf, because only the side shoots bear fruit. A melon is ripe when a small crack appears where it joins the stalk."},
   "rammenas": {"n": "Winter radish", "tip": "A member of the cabbage family: put winter radish in the brassica bed in your crop rotation. Insect mesh keeps the cabbage root fly away. Winter radish tolerates cold and can stay in the ground until the first frost."},
   "pompoen": {"n": "Pumpkin", "tip": "Frost-tender and hungry: give plenty of compost. Harvest when the stem has turned woody."},
   "stamslaboon": {"n": "Dwarf French bean", "tip": "Frost-tender. Raw beans are poisonous, so always cook them through."},
@@ -1595,6 +1631,8 @@ LANGS.en={
   "sla": {"l": "Sun in spring, partial shade in summer. Then lettuce bolts less quickly.", "w": "Regularly and in small amounts. In drought, lettuce turns bitter.", "v": "A light feeder: compost beforehand is enough."},
   "wortel": {"l": "Sun, or light partial shade.", "w": "Keep the soil moist until the seedlings appear, then moderately. Changing moisture makes carrots split.", "v": "A moderate feeder; extra manure is usually not needed. No fresh manure: it gives forked carrots."},
   "radijs": {"l": "Full sun. In summer sow more often and keep the soil moist.", "w": "Evenly moist for fast, crunchy radishes.", "v": "No extra feeding needed."},
+  "raap": {"l": "Sun to partial shade.", "w": "Keep evenly moist. Water in a dry summer, otherwise the turnips bolt.", "v": "Moderate: compost beforehand is enough."},
+  "meloen": {"l": "Full sun and lots of warmth, preferably in a greenhouse or cold frame.", "w": "Plenty of water, but be careful with cold water and cool weather: the roots are sensitive to cold and wet.", "v": "Compost or half-rotted manure beforehand and extra feed when flowering starts. Do not overfeed."},
   "rammenas": {"l": "Sun, on loose soil that is not too heavy.", "w": "Water regularly in dry spells in summer. From late summer on, winter radish copes well with rain.", "v": "Needs little: a basic dose of compost or well-rotted manure is enough. No fresh manure."},
   "pompoen": {"l": "Full sun and lots of space.", "w": "Plenty of water, especially while the fruits are growing.", "v": "A hungry plant: plant in a pit with lots of compost."},
   "stamslaboon": {"l": "Sun and a warm, sheltered spot.", "w": "Water mainly during flowering and pod set.", "v": "Beans take nitrogen from the air themselves. Do not give nitrogen-rich fertiliser."},
@@ -1797,17 +1835,15 @@ LANGS.en={
   "tl.shoot": "First shoot",
   "tl.sprout": "Germinates",
   "ad": "An advertisement will appear here later (AdMob in the Android app).",
-  "shop": "Seed shop {n}",
   "seed.title": "Get seeds for the coming weeks",
   "seed.from": "sow from {d}",
   "seed.now": "sow now",
   "seed.find": "Find seeds",
   "seed.aff": "Links to web shops are affiliate links: the planner gets a small fee if you buy. It costs you nothing extra.",
   "seed.sheet": "Find seeds: {c}",
-  "seed.pick": "Choose a web shop. You will go to the search results for {q}.",
-  "seed.q": "{c} seeds",
+  "seed.pick": "You will go to the search results for {q}. You buy from the web shop itself, not from Sowly.",
+  "seed.at": "View at {shop}",
   "seed.afflabel": "(affiliate link)",
-  "seed.example": "<b>Example:</b> the real shop buttons with your Daisycon links will appear here once your programmes are approved. Each button will be clearly marked as an affiliate link.",
   "m.prev": "Previous month",
   "m.next": "Next month",
   "frost.title": "Last night frost: week {w}",
@@ -1950,6 +1986,8 @@ LANGS.de={
   "sla": {"n": "Kopfsalat", "tip": "Alle zwei Wochen ein Stück säen für eine fortlaufende Ernte. Bei Hitze schießt Salat."},
   "wortel": {"n": "Möhre", "tip": "Nicht verpflanzen. Dünn säen und den Boden feucht halten, bis die Samen aufgehen."},
   "radijs": {"n": "Radieschen", "tip": "Die schnellste Kultur im Garten: Ernte nach vier bis sechs Wochen möglich. Alle zwei Wochen ein Stück säen."},
+  "raap": {"n": "Speiserübe", "tip": "Ein Kreuzblütler: Speiserüben gehören in der Fruchtfolge zu den Kohlarten. Direkt an Ort und Stelle säen, vereinzeln und jung ernten, bei 6 bis 8 cm Durchmesser."},
+  "meloen": {"n": "Zuckermelone", "tip": "Braucht viel Wärme: Melonen im Gewächshaus oder Frühbeet ziehen. Den Haupttrieb nach dem vierten oder fünften Blatt entspitzen, denn nur die Seitentriebe tragen Früchte. Eine Melone ist reif, wenn dort, wo sie am Stiel sitzt, ein kleiner Riss entsteht."},
   "rammenas": {"n": "Rettich", "tip": "Ein Kreuzblütler: Rettich gehört in der Fruchtfolge zu den Kohlarten. Ein Insektenschutznetz hält die Kohlfliege fern. Rettich verträgt Kälte und kann bis zum ersten Frost im Boden bleiben."},
   "pompoen": {"n": "Kürbis", "tip": "Frostempfindlich und hungrig: viel Kompost geben. Ernten, wenn der Stiel verholzt ist."},
   "stamslaboon": {"n": "Buschbohne", "tip": "Frostempfindlich. Rohe Bohnen sind giftig, also immer gar kochen."},
@@ -1998,6 +2036,8 @@ LANGS.de={
   "sla": {"l": "Sonne im Frühjahr, Halbschatten im Sommer. Dann schießt Salat weniger schnell.", "w": "Regelmäßig und in kleinen Mengen. Bei Trockenheit wird Salat bitter.", "v": "Ein Schwachzehrer: Kompost vorab reicht."},
   "wortel": {"l": "Sonne oder leichter Halbschatten.", "w": "Den Boden bis zum Aufgehen feucht halten, danach mäßig. Wechselnde Feuchtigkeit lässt Möhren platzen.", "v": "Ein Mittelzehrer, zusätzlicher Dünger ist meist nicht nötig. Kein frischer Mist: der gibt verzweigte Möhren."},
   "radijs": {"l": "Volle Sonne. Im Sommer öfter säen und den Boden feucht halten.", "w": "Gleichmäßig feucht für schnelle, knackige Radieschen.", "v": "Keine zusätzliche Düngung nötig."},
+  "raap": {"l": "Sonne bis Halbschatten.", "w": "Gleichmäßig feucht halten. In einem trockenen Sommer gießen, sonst schießen die Rüben.", "v": "Mäßig: vorher Kompost genügt."},
+  "meloen": {"l": "Volle Sonne und viel Wärme, am besten im Gewächshaus oder Frühbeet.", "w": "Viel Wasser, aber vorsichtig mit kaltem Wasser und kühlem Wetter: die Wurzeln sind empfindlich gegen Kälte und Nässe.", "v": "Vorher Kompost oder halb verrotteter Mist und zu Beginn der Blüte nachdüngen. Nicht zu stark düngen."},
   "rammenas": {"l": "Sonne, auf lockerem Boden, der nicht zu schwer ist.", "w": "In Trockenperioden im Sommer regelmäßig gießen. Ab dem Spätsommer verträgt Rettich Regen gut.", "v": "Braucht wenig: eine Grundgabe Kompost oder gut verrotteter Mist genügt. Kein frischer Mist."},
   "pompoen": {"l": "Volle Sonne und viel Platz.", "w": "Viel Wasser, besonders während die Früchte wachsen.", "v": "Eine hungrige Pflanze: in eine Grube mit viel Kompost pflanzen."},
   "stamslaboon": {"l": "Sonne und ein warmer, geschützter Platz.", "w": "Vor allem während der Blüte und des Hülsenansatzes gießen.", "v": "Bohnen holen sich Stickstoff selbst aus der Luft. Keinen stickstoffreichen Dünger geben."},
@@ -2200,17 +2240,15 @@ LANGS.de={
   "tl.shoot": "Erster Trieb",
   "tl.sprout": "Keimt",
   "ad": "Hier erscheint später eine Anzeige (AdMob in der Android-App).",
-  "shop": "Samenladen {n}",
   "seed.title": "Saatgut für die nächsten Wochen besorgen",
   "seed.from": "säen ab {d}",
   "seed.now": "jetzt säen",
   "seed.find": "Saatgut suchen",
   "seed.aff": "Links zu Onlineshops sind Affiliate-Links: Der Planer erhält eine kleine Vergütung, wenn du kaufst. Das kostet dich nichts extra.",
   "seed.sheet": "Saatgut suchen: {c}",
-  "seed.pick": "Wähle einen Onlineshop. Du gelangst zu den Suchergebnissen für {q}.",
-  "seed.q": "{c} Samen",
+  "seed.pick": "Du gelangst zu den Suchergebnissen für {q}. Du kaufst beim Onlineshop selbst, nicht bei Sowly.",
+  "seed.at": "Bei {shop} ansehen",
   "seed.afflabel": "(Affiliate-Link)",
-  "seed.example": "<b>Beispiel:</b> Hier erscheinen die echten Shop-Schaltflächen mit deinen Daisycon-Links, sobald deine Programme genehmigt sind. Jede Schaltfläche wird sichtbar als Affiliate-Link gekennzeichnet.",
   "m.prev": "Vorheriger Monat",
   "m.next": "Nächster Monat",
   "frost.title": "Letzter Nachtfrost: Woche {w}",
@@ -2353,6 +2391,8 @@ LANGS.fr={
   "sla": {"n": "Laitue", "tip": "Semez un petit carré toutes les deux semaines pour une récolte continue. Par forte chaleur, la laitue monte en graines."},
   "wortel": {"n": "Carotte", "tip": "Ne pas repiquer. Semez clair et gardez le sol humide jusqu'à la levée."},
   "radijs": {"n": "Radis", "tip": "La culture la plus rapide du jardin : récolte possible après quatre à six semaines. Semez un petit carré toutes les deux semaines."},
+  "raap": {"n": "Navet", "tip": "De la famille du chou : placez le navet avec les choux dans la rotation des cultures. Semez en place, éclaircissez et récoltez jeune, à 6 à 8 cm de diamètre."},
+  "meloen": {"n": "Melon", "tip": "Demande beaucoup de chaleur : cultivez le melon en serre ou sous châssis. Pincez la tige principale après la quatrième ou cinquième feuille, car seules les tiges secondaires portent des fruits. Un melon est mûr quand une petite fissure apparaît à l'attache du pédoncule."},
   "rammenas": {"n": "Radis d'hiver", "tip": "De la famille du chou : placez le radis d'hiver avec les choux dans la rotation des cultures. Un filet anti-insectes éloigne la mouche du chou. Le radis d'hiver supporte le froid et peut rester en terre jusqu'aux premières gelées."},
   "pompoen": {"n": "Courge", "tip": "Craint le gel et gourmande : donnez beaucoup de compost. Récoltez quand le pédoncule est devenu ligneux."},
   "stamslaboon": {"n": "Haricot nain", "tip": "Craint le gel. Les haricots crus sont toxiques : faites-les toujours bien cuire."},
@@ -2401,6 +2441,8 @@ LANGS.fr={
   "sla": {"l": "Soleil au printemps, mi-ombre en été. Ainsi la laitue monte moins vite.", "w": "Régulièrement et par petites doses. En cas de sécheresse, la laitue devient amère.", "v": "Peu exigeante : du compost au départ suffit."},
   "wortel": {"l": "Soleil, ou légère mi-ombre.", "w": "Gardez le sol humide jusqu'à la levée, puis modérément. Une humidité irrégulière fait éclater les carottes.", "v": "Moyennement exigeante, un apport en plus est rarement utile. Pas de fumier frais : il donne des carottes fourchues."},
   "radijs": {"l": "Plein soleil. En été, semez plus souvent et gardez le sol humide.", "w": "Régulièrement humide pour des radis rapides et croquants.", "v": "Pas d'apport nécessaire."},
+  "raap": {"l": "Soleil à mi-ombre.", "w": "Maintenez le sol régulièrement humide. Arrosez par été sec, sinon les navets montent en graines.", "v": "Modéré : un apport de compost avant suffit."},
+  "meloen": {"l": "Plein soleil et beaucoup de chaleur, de préférence en serre ou sous châssis.", "w": "Beaucoup d'eau, mais attention à l'eau froide et au temps frais : les racines craignent le froid et l'humidité.", "v": "Compost ou fumier à moitié décomposé avant, et un apport au début de la floraison. Ne pas trop fertiliser."},
   "rammenas": {"l": "Soleil, sur un sol meuble et pas trop lourd.", "w": "Arrosez régulièrement en période sèche l'été. À partir de la fin de l'été, le radis d'hiver supporte bien la pluie.", "v": "Peu exigeant : un apport de base de compost ou de fumier bien décomposé suffit. Pas de fumier frais."},
   "pompoen": {"l": "Plein soleil et beaucoup de place.", "w": "Beaucoup d'eau, surtout pendant la croissance des fruits.", "v": "Une plante gourmande : plantez dans une fosse avec beaucoup de compost."},
   "stamslaboon": {"l": "Soleil et un endroit chaud et abrité.", "w": "Arrosez surtout pendant la floraison et la formation des gousses.", "v": "Les haricots captent eux-mêmes l'azote de l'air. Pas d'engrais riche en azote."},
@@ -2603,17 +2645,15 @@ LANGS.fr={
   "tl.shoot": "Première pousse",
   "tl.sprout": "Germe",
   "ad": "Une publicité apparaîtra ici plus tard (AdMob dans l'application Android).",
-  "shop": "Graineterie {n}",
   "seed.title": "Acheter des graines pour les semaines à venir",
   "seed.from": "semer dès le {d}",
   "seed.now": "semer maintenant",
   "seed.find": "Chercher des graines",
   "seed.aff": "Les liens vers les boutiques en ligne sont des liens d'affiliation : le planificateur reçoit une petite commission si vous achetez. Cela ne vous coûte rien de plus.",
   "seed.sheet": "Chercher des graines : {c}",
-  "seed.pick": "Choisissez une boutique en ligne. Vous arriverez aux résultats de recherche pour {q}.",
-  "seed.q": "graines de {c}",
+  "seed.pick": "Vous arriverez aux résultats de recherche pour {q}. Vous achetez auprès de la boutique en ligne, pas auprès de Sowly.",
+  "seed.at": "Voir sur {shop}",
   "seed.afflabel": "(lien d'affiliation)",
-  "seed.example": "<b>Exemple :</b> les vrais boutons de boutique avec vos liens Daisycon apparaîtront ici une fois vos programmes approuvés. Chaque bouton sera clairement signalé comme lien d'affiliation.",
   "m.prev": "Mois précédent",
   "m.next": "Mois suivant",
   "frost.title": "Dernière gelée nocturne : semaine {w}",
@@ -2756,6 +2796,8 @@ LANGS.es={
   "sla": {"n": "Lechuga", "tip": "Siembra un poco cada dos semanas para una cosecha continua. Con calor, la lechuga se espiga."},
   "wortel": {"n": "Zanahoria", "tip": "No trasplantar. Siembra claro y mantén la tierra húmeda hasta que nazcan las semillas."},
   "radijs": {"n": "Rábano", "tip": "El cultivo más rápido del huerto: se puede cosechar a las cuatro a seis semanas. Siembra un poco cada dos semanas."},
+  "raap": {"n": "Nabo", "tip": "Pertenece a la familia de la col: en la rotación, ponlo con las coles. Siembra directamente en su sitio, aclara y cosecha joven, con 6 a 8 cm de diámetro."},
+  "meloen": {"n": "Melón", "tip": "Necesita mucho calor: cultiva el melón en invernadero o cajonera. Despunta el tallo principal después de la cuarta o quinta hoja, porque solo los brotes laterales dan fruto. Un melón está maduro cuando aparece una pequeña grieta donde se une al tallo."},
   "rammenas": {"n": "Rábano de invierno", "tip": "Pertenece a la familia de la col: en la rotación, ponlo con las coles. Una malla antiinsectos aleja la mosca de la col. El rábano de invierno aguanta el frío y puede quedarse en la tierra hasta la primera helada."},
   "pompoen": {"n": "Calabaza", "tip": "Sensible a las heladas y muy exigente: añade mucho compost. Cosecha cuando el tallo se haya lignificado."},
   "stamslaboon": {"n": "Judía enana", "tip": "Sensible a las heladas. Las judías crudas son tóxicas, así que cuécelas siempre bien."},
@@ -2804,6 +2846,8 @@ LANGS.es={
   "sla": {"l": "Sol en primavera, media sombra en verano. Así la lechuga se espiga menos.", "w": "Con regularidad y en pequeñas dosis. Con sequía, la lechuga se vuelve amarga.", "v": "Poco exigente: con compost al principio basta."},
   "wortel": {"l": "Sol, o media sombra ligera.", "w": "Mantén la tierra húmeda hasta la nascencia, después con moderación. La humedad irregular hace que las zanahorias se agrieten.", "v": "Medianamente exigente, normalmente no hace falta abono extra. Nada de estiércol fresco: da zanahorias ramificadas."},
   "radijs": {"l": "Pleno sol. En verano siembra más a menudo y mantén la tierra húmeda.", "w": "Uniformemente húmedo para rábanos rápidos y crujientes.", "v": "No necesita abono extra."},
+  "raap": {"l": "Sol a semisombra.", "w": "Mantén el suelo uniformemente húmedo. Riega en un verano seco, si no los nabos se espigan.", "v": "Moderado: basta con compost antes de sembrar."},
+  "meloen": {"l": "Pleno sol y mucho calor, mejor en invernadero o cajonera.", "w": "Mucha agua, pero con cuidado con el agua fría y el tiempo fresco: las raíces son sensibles al frío y a la humedad.", "v": "Compost o estiércol medio descompuesto antes, y un aporte al inicio de la floración. No abonar en exceso."},
   "rammenas": {"l": "Sol, en suelo suelto y no demasiado pesado.", "w": "Riega con regularidad en los periodos secos del verano. Desde finales del verano aguanta bien la lluvia.", "v": "Necesita poco: basta un aporte de compost o estiércol bien descompuesto. Nada de estiércol fresco."},
   "pompoen": {"l": "Pleno sol y mucho espacio.", "w": "Mucha agua, sobre todo mientras crecen los frutos.", "v": "Una planta muy exigente: plántala en un hoyo con mucho compost."},
   "stamslaboon": {"l": "Sol y un lugar cálido y resguardado.", "w": "Riega sobre todo durante la floración y el cuajado de las vainas.", "v": "Las judías toman el nitrógeno del aire por sí mismas. No uses abono rico en nitrógeno."},
@@ -3006,17 +3050,15 @@ LANGS.es={
   "tl.shoot": "Primer brote",
   "tl.sprout": "Germina",
   "ad": "Aquí aparecerá más adelante un anuncio (AdMob en la app de Android).",
-  "shop": "Tienda de semillas {n}",
   "seed.title": "Comprar semillas para las próximas semanas",
   "seed.from": "sembrar desde el {d}",
   "seed.now": "sembrar ahora",
   "seed.find": "Buscar semillas",
   "seed.aff": "Los enlaces a tiendas en línea son enlaces de afiliado: el planificador recibe una pequeña comisión si compras. A ti no te cuesta nada más.",
   "seed.sheet": "Buscar semillas: {c}",
-  "seed.pick": "Elige una tienda en línea. Irás a los resultados de búsqueda de {q}.",
-  "seed.q": "semillas de {c}",
+  "seed.pick": "Irás a los resultados de búsqueda de {q}. Compras en la propia tienda en línea, no en Sowly.",
+  "seed.at": "Ver en {shop}",
   "seed.afflabel": "(enlace de afiliado)",
-  "seed.example": "<b>Ejemplo:</b> aquí aparecerán los botones reales de las tiendas con tus enlaces de Daisycon cuando se aprueben tus programas. Cada botón se marcará claramente como enlace de afiliado.",
   "m.prev": "Mes anterior",
   "m.next": "Mes siguiente",
   "frost.title": "Última helada nocturna: semana {w}",
@@ -3159,6 +3201,8 @@ LANGS.it={
   "sla": {"n": "Lattuga", "tip": "Semina un po' ogni due settimane per un raccolto continuo. Con il caldo la lattuga va in seme."},
   "wortel": {"n": "Carota", "tip": "Non trapiantare. Semina rado e tieni il terreno umido finché i semi non spuntano."},
   "radijs": {"n": "Ravanello", "tip": "La coltura più veloce dell'orto: si raccoglie dopo quattro-sei settimane. Semina un po' ogni due settimane."},
+  "raap": {"n": "Rapa", "tip": "Della famiglia del cavolo: nella rotazione mettila insieme ai cavoli. Semina direttamente a dimora, dirada e raccogli giovane, a 6-8 cm di diametro."},
+  "meloen": {"n": "Melone", "tip": "Vuole molto calore: coltiva il melone in serra o in cassone. Cima il fusto principale dopo la quarta o quinta foglia, perché solo i getti laterali portano frutti. Un melone è maturo quando si forma una piccola crepa dove si attacca al picciolo."},
   "rammenas": {"n": "Ramolaccio", "tip": "Della famiglia del cavolo: nella rotazione mettilo insieme ai cavoli. Una rete antinsetto tiene lontana la mosca del cavolo. Il ramolaccio sopporta il freddo e può restare nel terreno fino alla prima gelata."},
   "pompoen": {"n": "Zucca", "tip": "Teme il gelo ed è esigente: dai molto compost. Raccogli quando il peduncolo è diventato legnoso."},
   "stamslaboon": {"n": "Fagiolino nano", "tip": "Teme il gelo. I fagioli crudi sono tossici, quindi cuocili sempre bene."},
@@ -3207,6 +3251,8 @@ LANGS.it={
   "sla": {"l": "Sole in primavera, mezz'ombra in estate. Così la lattuga va meno in seme.", "w": "Regolarmente e a piccole dosi. Con la siccità la lattuga diventa amara.", "v": "Poco esigente: basta compost all'inizio."},
   "wortel": {"l": "Sole o leggera mezz'ombra.", "w": "Tieni il terreno umido fino alla nascita, poi con moderazione. L'umidità irregolare fa spaccare le carote.", "v": "Mediamente esigente, di solito non serve concime extra. Niente letame fresco: dà carote biforcate."},
   "radijs": {"l": "Pieno sole. In estate semina più spesso e tieni il terreno umido.", "w": "Uniformemente umido per ravanelli rapidi e croccanti.", "v": "Non serve concime extra."},
+  "raap": {"l": "Sole o mezz’ombra.", "w": "Mantieni il terreno uniformemente umido. Annaffia in un’estate secca, altrimenti le rape vanno a seme.", "v": "Moderata: basta del compost prima della semina."},
+  "meloen": {"l": "Pieno sole e molto calore, meglio in serra o in cassone.", "w": "Molta acqua, ma attenzione all’acqua fredda e al tempo fresco: le radici temono il freddo e l’umidità.", "v": "Compost o letame semimaturo prima, e una concimazione all’inizio della fioritura. Non concimare troppo."},
   "rammenas": {"l": "Sole, su terreno sciolto e non troppo pesante.", "w": "Annaffia regolarmente nei periodi secchi d'estate. Da fine estate sopporta bene la pioggia.", "v": "Ha poche esigenze: basta una concimazione di base con compost o letame ben maturo. Niente letame fresco."},
   "pompoen": {"l": "Pieno sole e molto spazio.", "w": "Molta acqua, soprattutto mentre crescono i frutti.", "v": "Una pianta esigente: pianta in una buca con molto compost."},
   "stamslaboon": {"l": "Sole e un posto caldo e riparato.", "w": "Annaffia soprattutto durante la fioritura e la formazione dei baccelli.", "v": "I fagioli prendono da soli l'azoto dall'aria. Non dare concime ricco di azoto."},
@@ -3409,17 +3455,15 @@ LANGS.it={
   "tl.shoot": "Primo germoglio",
   "tl.sprout": "Germina",
   "ad": "Qui comparirà più avanti una pubblicità (AdMob nell'app Android).",
-  "shop": "Negozio di semi {n}",
   "seed.title": "Comprare semi per le prossime settimane",
   "seed.from": "seminare dal {d}",
   "seed.now": "seminare ora",
   "seed.find": "Cerca semi",
   "seed.aff": "I link ai negozi online sono link di affiliazione: il planner riceve un piccolo compenso se acquisti. A te non costa nulla in più.",
   "seed.sheet": "Cerca semi: {c}",
-  "seed.pick": "Scegli un negozio online. Andrai ai risultati di ricerca per {q}.",
-  "seed.q": "semi di {c}",
+  "seed.pick": "Andrai ai risultati di ricerca per {q}. Acquisti dal negozio online, non da Sowly.",
+  "seed.at": "Vedi su {shop}",
   "seed.afflabel": "(link di affiliazione)",
-  "seed.example": "<b>Esempio:</b> qui compariranno i veri pulsanti dei negozi con i tuoi link Daisycon quando i tuoi programmi saranno approvati. Ogni pulsante sarà chiaramente indicato come link di affiliazione.",
   "m.prev": "Mese precedente",
   "m.next": "Mese successivo",
   "frost.title": "Ultima gelata notturna: settimana {w}",
@@ -3562,6 +3606,8 @@ LANGS.pl={
   "sla": {"n": "Sałata głowiasta", "tip": "Wysiewaj mały zagon co dwa tygodnie, a zbiory będą ciągłe. W upale sałata wybija w pędy kwiatostanowe."},
   "wortel": {"n": "Marchew", "tip": "Nie przesadzaj. Siej rzadko i utrzymuj wilgotną glebę, aż nasiona wzejdą."},
   "radijs": {"n": "Rzodkiewka", "tip": "Najszybsza uprawa w ogrodzie: zbierasz już po czterech do sześciu tygodniach. Wysiewaj mały zagon co dwa tygodnie."},
+  "raap": {"n": "Rzepa", "tip": "Należy do rodziny kapustnych: w płodozmianie sadź rzepę razem z kapustnymi. Siej od razu na miejsce stałe, przerywaj i zbieraj młodą, przy średnicy 6–8 cm."},
+  "meloen": {"n": "Melon", "tip": "Potrzebuje dużo ciepła: uprawiaj melona w szklarni lub inspekcie. Uszczyknij pęd główny nad czwartym lub piątym liściem, bo owocują tylko pędy boczne. Melon jest dojrzały, gdy w miejscu przyczepu szypułki pojawia się małe pęknięcie."},
   "rammenas": {"n": "Rzodkiew", "tip": "Należy do rodziny kapustnych: w płodozmianie sadź rzodkiew razem z kapustnymi. Siatka przeciw owadom chroni przed śmietką kapuścianą. Rzodkiew znosi chłód i może zostać w gruncie do pierwszego mrozu."},
   "pompoen": {"n": "Dynia", "tip": "Wrażliwa na mróz i żarłoczna: daj dużo kompostu. Zbieraj, gdy szypułka zdrewnieje."},
   "stamslaboon": {"n": "Fasola szparagowa karłowa", "tip": "Wrażliwa na mróz. Surowa fasola jest trująca, więc zawsze ją dobrze gotuj."},
@@ -3610,6 +3656,8 @@ LANGS.pl={
   "sla": {"l": "Wiosną słońce, latem półcień. Wtedy sałata wolniej wybija w pędy.", "w": "Regularnie i po trochu. W suszy sałata robi się gorzka.", "v": "Mało wymagająca: wystarczy kompost przed uprawą."},
   "wortel": {"l": "Słońce lub lekki półcień.", "w": "Utrzymuj wilgotną glebę, aż pojawią się siewki, potem umiarkowanie. Zmienna wilgotność sprawia, że marchew pęka.", "v": "Średnio wymagająca; dodatkowy nawóz zwykle niepotrzebny. Bez świeżego obornika: marchew się rozwidla."},
   "radijs": {"l": "Pełne słońce. Latem siej częściej i utrzymuj wilgotną glebę.", "w": "Równomiernie wilgotno, a rzodkiewki będą szybkie i chrupiące.", "v": "Dodatkowe nawożenie niepotrzebne."},
+  "raap": {"l": "Słońce do półcienia.", "w": "Utrzymuj równą wilgotność. W suche lato podlewaj, inaczej rzepa wybija w pędy.", "v": "Umiarkowanie: wystarczy kompost przed uprawą."},
+  "meloen": {"l": "Pełne słońce i dużo ciepła, najlepiej w szklarni lub inspekcie.", "w": "Dużo wody, ale ostrożnie z zimną wodą i chłodną pogodą: korzenie są wrażliwe na zimno i nadmiar wilgoci.", "v": "Kompost lub na wpół rozłożony obornik przed uprawą i dokarmianie na początku kwitnienia. Nie przenawozić."},
   "rammenas": {"l": "Słońce, na przewiewnej glebie, nie za ciężkiej.", "w": "Latem w okresach suszy podlewaj regularnie. Od późnego lata rzodkiew dobrze znosi deszcz.", "v": "Mało wymagająca: wystarczy kompost lub dobrze rozłożony obornik przed uprawą. Bez świeżego obornika."},
   "pompoen": {"l": "Pełne słońce i dużo miejsca.", "w": "Dużo wody, zwłaszcza gdy rosną owoce.", "v": "Żarłoczna roślina: sadź w dołek z dużą ilością kompostu."},
   "stamslaboon": {"l": "Słońce i ciepłe, osłonięte miejsce.", "w": "Podlewaj głównie w czasie kwitnienia i zawiązywania strąków.", "v": "Fasola sama pobiera azot z powietrza. Nie dawaj nawozów bogatych w azot."},
@@ -3813,17 +3861,15 @@ LANGS.pl={
   "tl.shoot": "Pierwszy pęd",
   "tl.sprout": "Kiełkuje",
   "ad": "Tu pojawi się później reklama (AdMob w aplikacji na Androida).",
-  "shop": "Sklep z nasionami {n}",
   "seed.title": "Nasiona na najbliższe tygodnie",
   "seed.from": "siew od {d}",
   "seed.now": "siej teraz",
   "seed.find": "Szukaj nasion",
   "seed.aff": "Linki do sklepów internetowych to linki afiliacyjne: planer dostaje niewielką prowizję, jeśli coś kupisz. Nic cię to nie kosztuje.",
   "seed.sheet": "Szukaj nasion: {c}",
-  "seed.pick": "Wybierz sklep internetowy. Przejdziesz do wyników wyszukiwania dla {q}.",
-  "seed.q": "{c} nasiona",
+  "seed.pick": "Przejdziesz do wyników wyszukiwania dla {q}. Kupujesz w samym sklepie internetowym, nie w Sowly.",
+  "seed.at": "Zobacz w {shop}",
   "seed.afflabel": "(link afiliacyjny)",
-  "seed.example": "<b>Przykład:</b> prawdziwe przyciski sklepów z twoimi linkami Daisycon pojawią się tutaj, gdy twoje programy zostaną zatwierdzone. Każdy przycisk będzie wyraźnie oznaczony jako link afiliacyjny.",
   "m.prev": "Poprzedni miesiąc",
   "m.next": "Następny miesiąc",
   "frost.title": "Ostatni przymrozek: tydzień {w}",
@@ -4076,7 +4122,7 @@ const basilLeaf=(x,y,r,s,col)=>`<g transform="translate(${x} ${y}) rotate(${r}) 
 const TN={sla:['var(--leaf3)','var(--leaf)'],spinazie:['var(--spin)','var(--leafd)'],veldsla:['var(--veld)','var(--leaf)'],rucola:['var(--leaf3)','var(--leaf)'],pluksla:['var(--leaf3)','#B5523B'],postelein:['#7BCB6A','#4FA55A'],andijvie:['#B9E27F','#8FD35C'],snijbiet:['var(--leafd)','var(--leaf)'],};
 const TS={postelein:.8,veldsla:.75,rucola:.9,snijbiet:1.1};
 const TW={postelein:14,pluksla:13,spinazie:9,rucola:7,andijvie:10,snijbiet:13};
-const ROOTS={selderij:['#D9C89E',13],radijs:['var(--radish)',11],rammenas:['#4A4458',11],biet:['#A1244F',12],koolrabi:['#B8E08A',13],aardappel:['#C9A06B',12]};
+const ROOTS={selderij:['#D9C89E',13],radijs:['var(--radish)',11],rammenas:['#4A4458',11],raap:['#F6F1F7',12],biet:['#A1244F',12],koolrabi:['#B8E08A',13],aardappel:['#C9A06B',12]};
 
 const PLANTS={
  bush(s,c){
@@ -4095,6 +4141,7 @@ const PLANTS={
   if(s==3)o+=`<path d="M96 122q-3-13 6-19q9 6 7 19z" ${FL('var(--yel)')}/>`;
   if(s==4){
    if(['courgette','komkommer','augurk'].includes(c.fruit)){const kk=c.fruit!='courgette',au=c.fruit=='augurk';o+=`<g transform="rotate(-14 60 114)"><ellipse cx="60" cy="114" rx="${au?20:kk?30:27}" ry="${au?7:kk?8:10}" ${FL(kk?'var(--bean)':'var(--zuc)')}/><path d="M${au?46:38} ${kk?111:110}q${au?14:22}-5 ${au?28:44} 0" style="fill:none;stroke:#fff;stroke-width:2;opacity:.45"/><path d="M${au?78:kk?88:85} 109l9-2v6l-9-1z" ${FL('var(--leafd)')}/></g>`+eyes(55,113,.85)}
+   else if(c.fruit=='meloen')o+=`<circle cx="60" cy="110" r="15" ${FL('#E8C66A')}/><path d="M49 101l22 18M49 119l22-18M60 95v30M45 110h30" style="fill:none;stroke:#fff;stroke-width:1.4;opacity:.55"/>`+stemP('M58 96q0-7 5-8',3.5,'#8A5A2B')+eyes(60,112,1);
    else o+=`<circle cx="60" cy="108" r="17" ${FL('var(--pump)')}/><path d="M60 91q-9 17 0 34M60 91q9 17 0 34M60 91q-17 17 0 34" style="fill:none;stroke:#B8520E;stroke-width:1.8;opacity:.6"/>`+stemP('M58 92q0-8 5-9',4,'#8A5A2B')+eyes(60,110,1.1);
   }
   return o;
@@ -4142,6 +4189,7 @@ const PLANTS={
   let o=A.map((a,i)=>lf(60,120,a,k,i%2?'var(--leaf)':'var(--leafd)',26,12)).join('');
   if(s==4){
    if(f=='aardappel')o+=`<ellipse cx="53" cy="119" rx="11" ry="8" transform="rotate(-10 53 119)" ${FL(col)}/><ellipse cx="68" cy="121" rx="9" ry="7" ${FL(col)}/>`+eyes(53,119,.7);
+   else if(f=='raap')o+=`<circle cx="60" cy="117" r="${r}" ${FL(col)}/><path d="M49 112a12 12 0 0 1 22 0q-11 4 -22 0z" style="fill:#9B4F9E"/>`+eyes(60,119,.8);
    else if(f=='rammenas')o+=`<ellipse cx="60" cy="114" rx="${r}" ry="15" ${FL(col)}/><path d="M53 106q2-5 6-6" style="fill:none;stroke:#fff;stroke-width:2;opacity:.5"/>`+eyes(60,113,.8);
    else o+=`<circle cx="60" cy="${f=='koolrabi'?114:117}" r="${r}" ${FL(col)}/><path d="M52 ${f=='koolrabi'?108:112}q3-4 7-5" style="fill:none;stroke:#fff;stroke-width:2;opacity:.6"/>`+eyes(60,f=='koolrabi'?115:118,.8);
   }
@@ -4673,11 +4721,23 @@ const same=(a,b)=>a.crop==b.crop&&(!isOwn(a)||(a.name||'').toLowerCase()==(b.nam
 const dot=p=>{const L=S.plantings.filter(x=>same(x,p));return L.length<2?'':`<span class="tagdot" style="--tg:${TAGC[L.indexOf(p)%TAGC.length]}"></span>`};
 const nm=p=>cropOf(p).n+(p.label?' · '+esc(p.label):'');
 const taskPlant=(c,st)=>`<div class="pp">${plantSVG(c,st)}</div>`;
-/* ---- Zaad kopen (voorbeeld: affiliate-links nog niet actief) ---- */
-/* Zaad-knoppen en advertenties uit tot de KvK-inschrijving rond is (zie notes/openstaande-punten.md) */
-const COMMERCE=false;
-const adSlot=()=>COMMERCE?`<div class="ad">${tx('ad')}</div>`:'';
-const SHOPS=[{n:'',u:''},{n:'',u:''},{n:'',u:''}];/* n leeg: voorbeeldnaam uit de taal */
+/* ---- Zaad kopen: affiliate-links per land ---- */
+/* Advertenties pas met cookiebanner en bijgewerkte privacyverklaring (zie notes/openstaande-punten.md) */
+const ADS=false;
+const adSlot=()=>ADS?`<div class="ad">${tx('ad')}</div>`:'';
+/* bol Affiliate Programma, websitecode 1560075. Voorwaarden art. 3.16: alleen voor NL en BE, in het Nederlands, Frans of Engels.
+   Zoekterm altijd in het Nederlands: de producten op bol hebben Nederlandse namen. */
+const BOL_SITE='1560075';
+const bolLink=q=>{
+  const be=S.land=='BE',u=`https://www.bol.com/${be?'be':'nl'}/${be&&/^fr/.test(LANG)?'fr':'nl'}/s/?searchtext=${encodeURIComponent(q)}`;
+  return `https://partner.bol.com/click/click?p=1&t=url&s=${BOL_SITE}&f=TXL&url=${encodeURIComponent(u)}&name=${encodeURIComponent(q)}`;
+};
+/* Winkels per land; een land zonder winkel krijgt geen zaad-knoppen */
+const SHOPS=[{n:'bol.com',land:['NL','BE'],lang:/^(nl|fr|en)/,link:bolLink}];
+const shopsHere=()=>SHOPS.filter(s=>s.land.includes(S.land)&&s.lang.test(LANG));
+/* Gewassen die je poot (poten:true) koop je niet als zaad */
+const POOT_Q={'aardappel-vroeg':'pootaardappelen','aardappel-laat':'pootaardappelen',knoflook:'plantknoflook',sjalot:'plantsjalotten'};
+const seedQ=c=>POOT_Q[c.id]||((LANGS.nl.crops[c.id]||{}).n||c.n).replace(/\s*\(.*?\)/g,'').toLowerCase()+' zaden';
 function seedList(){
   const w=weekOf(TODAY),L=[];
   CROPS.forEach(c=>{
@@ -4689,11 +4749,11 @@ function seedList(){
 }
 function zaadCard(){
   const L=seedList();if(!L.length)return '';
-  return `<section class="card"><div class="sec-h"><h3>${tx('seed.title')}</h3><span class="pill soft">${tx('example')}</span></div>${L.map(({c,gap,a})=>`<div class="task"><div class="task-main" style="cursor:default">${taskPlant(c,3)}<span><b>${c.n}</b><span class="muted small">${gap?tx('seed.from',{d:fmt(dateOfDoy(Y0,(a-1)*7+1))}):tx('seed.now')}</span></span></div><button class="btn sm" data-a="seed" data-id="${c.id}">${tx('seed.find')}</button></div>`).join('')}<p class="muted small" style="margin:8px 0 0">${tx('seed.aff')}</p></section>`;
+  return `<section class="card"><div class="sec-h"><h3>${tx('seed.title')}</h3></div>${L.map(({c,gap,a})=>`<div class="task"><div class="task-main" style="cursor:default">${taskPlant(c,3)}<span><b>${c.n}</b><span class="muted small">${gap?tx('seed.from',{d:fmt(dateOfDoy(Y0,(a-1)*7+1))}):tx('seed.now')}</span></span></div><button class="btn sm" data-a="seed" data-id="${c.id}">${tx('seed.find')}</button></div>`).join('')}<p class="muted small" style="margin:8px 0 0">${tx('seed.aff')}</p></section>`;
 }
 function openSeed(id){
-  const c=CROP[id];
-  openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('seed.sheet',{c:c.n})}</h2><div class="bigplant"><div class="pp">${plantSVG(c,4)}</div></div><p style="margin:12px 0 8px">${tx('seed.pick',{q:`<b>${tx('seed.q',{c:lc(c.n)})}</b>`})}</p><div class="stack" style="gap:8px">${SHOPS.map((s,i)=>`<button class="btn" style="width:100%${s.u?'':';opacity:.75'}" ${s.u?'':'disabled'}>${s.n||tx('shop',{n:i+1})} <span class="small">${tx('seed.afflabel')}</span></button>`).join('')}</div><p class="muted small" style="margin:12px 0 0">${tx('seed.example')}</p>`);
+  const c=CROP[id],q=seedQ(c);
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('seed.sheet',{c:c.n})}</h2><div class="bigplant"><div class="pp">${plantSVG(c,4)}</div></div><p style="margin:12px 0 8px">${tx('seed.pick',{q:`<b>${esc(q)}</b>`})}</p><div class="stack" style="gap:8px">${shopsHere().map(s=>`<a class="btn shop" href="${esc(s.link(q))}" target="_blank" rel="sponsored noopener">${tx('seed.at',{shop:esc(s.n)})} <span class="small">${tx('seed.afflabel')}</span></a>`).join('')}</div><p class="muted small" style="margin:12px 0 0">${tx('seed.aff')}</p>`);
 }
 /* Laatste nachtvorst: in Deze maand en in de instellingen */
 function frostRow(fd){
@@ -4705,7 +4765,7 @@ function vMaand(){
   let h=`<div class="stack"><div class="monthnav"><button class="icon-btn" data-a="mprev" aria-label="${tx('m.prev')}">‹</button><h2>${cap(CAL.m[S.m])} ${S.y}</h2><button class="icon-btn" data-a="mnext" aria-label="${tx('m.next')}">›</button></div>`;
   h+=landBanner()+frostRow(fd);
   const cur=S.y==Y0&&S.m==TODAY.getMonth();
-  if(COMMERCE&&cur)h+=zaadCard();
+  if(cur&&shopsHere().length)h+=zaadCard();
   let n=0;
   order.forEach(k=>{
     const L=g[k];if(!L)return;n+=L.length;
@@ -4751,7 +4811,7 @@ function neighbourCard(){
 const byName=(a,b)=>a.n.localeCompare(b.n,LANG);
 function gridHTML(){
   const q=(S.q||'').trim().toLowerCase(),L=[...CROPS].sort(byName).filter(c=>c.n.toLowerCase().includes(q));
-  return L.length?L.map(c=>`<button class="crop" data-a="crop" data-id="${c.id}"><div class="pp">${plantSVG(c,4)}</div><h3>${c.n}</h3><span class="small muted">${tx('g.sow',{r:ranges(c,['binnen','glas','buiten'])})}<br>${tx('g.harvest',{r:ranges(c,['oogst'])})}</span><span class="seedrow">${COMMERCE?`<span class="seedlink" role="button" data-a="seed" data-id="${c.id}">${tx('seed.find')}</span>`:''}<span class="seedlink plant" role="button" data-a="add" data-id="${c.id}">${tx('g.plus')}</span></span></button>`).join(''):`<p class="muted">${tx('g.none',{q:esc(S.q)})}</p>`;
+  return L.length?L.map(c=>`<button class="crop" data-a="crop" data-id="${c.id}"><div class="pp">${plantSVG(c,4)}</div><h3>${c.n}</h3><span class="small muted">${tx('g.sow',{r:ranges(c,['binnen','glas','buiten'])})}<br>${tx('g.harvest',{r:ranges(c,['oogst'])})}</span><span class="seedrow">${shopsHere().length?`<span class="seedlink" role="button" data-a="seed" data-id="${c.id}">${tx('seed.find')}</span>`:''}<span class="seedlink plant" role="button" data-a="add" data-id="${c.id}">${tx('g.plus')}</span></span></button>`).join(''):`<p class="muted">${tx('g.none',{q:esc(S.q)})}</p>`;
 }
 function vGewassen(){
   return `<div class="stack"><div class="row"><h2 class="grow1">${tx('g.title')}</h2><span class="muted small">${tx('g.count',{n:CROPS.length})}</span></div>${landBanner()}<div class="field" style="margin:0"><label for="q">${tx('g.search')}</label><input id="q" type="search" value="${esc(S.q||'')}" placeholder="${tx('g.ph')}" autocomplete="off"></div><div class="grid" id="grid">${gridHTML()}</div></div>`;
@@ -4890,7 +4950,7 @@ function yearChart(c,mini){
 }
 function openCrop(id){
   const c=CROP[id];
-  openSheet(`<h2 id="sh-title" style="padding-right:48px">${c.n}</h2><div class="bigplant"><div class="pp" id="bigp">${plantSVG(c,4)}</div></div><div class="stages" role="group" aria-label="${tx('cs.stages')}">${STAGE_NAMES.map((n,i)=>`<button data-a="stage" data-s="${i}" data-id="${id}" aria-pressed="${i==4}">${n}</button>`).join('')}<button data-a="play" data-id="${id}">${tx('cs.play')}</button></div><p>${c.tip}</p>${careHTML(id)}<h3 style="margin-top:14px">${tx('cs.year')}</h3>${yearChart(c)}<p class="small muted">${tx('cs.today')}</p>${cropSrc(id)}<div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="add" data-id="${id}">${tx('cs.add')}</button>${COMMERCE?`<button class="btn ghost" data-a="seed" data-id="${id}">${tx('seed.find')}</button>`:''}</div>`);
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">${c.n}</h2><div class="bigplant"><div class="pp" id="bigp">${plantSVG(c,4)}</div></div><div class="stages" role="group" aria-label="${tx('cs.stages')}">${STAGE_NAMES.map((n,i)=>`<button data-a="stage" data-s="${i}" data-id="${id}" aria-pressed="${i==4}">${n}</button>`).join('')}<button data-a="play" data-id="${id}">${tx('cs.play')}</button></div><p>${c.tip}</p>${careHTML(id)}<h3 style="margin-top:14px">${tx('cs.year')}</h3>${yearChart(c)}<p class="small muted">${tx('cs.today')}</p>${cropSrc(id)}<div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="add" data-id="${id}">${tx('cs.add')}</button>${shopsHere().length?`<button class="btn ghost" data-a="seed" data-id="${id}">${tx('seed.find')}</button>`:''}</div>`);
 }
 function setStage(id,s){
   $('#bigp').innerHTML=plantSVG(CROP[id],s);
@@ -4953,7 +5013,7 @@ document.addEventListener('click',e=>{
   else if(a=='mnext'){S.m++;if(S.m>11){S.m=0;S.y++}render()}
   else if(a=='fminus'||a=='fplus'){S.frost=Math.max(14,Math.min(26,S.frost+(a=='fplus'?1:-1)));dbFrost();render()}
   else if(a=='crop')openCrop(id);
-  else if(a=='seed'&&COMMERCE)openSeed(id);
+  else if(a=='seed'&&shopsHere().length)openSeed(id);
   else if(a=='add')openAdd(id,t.dataset.m);
   else if(a=='edit')openEdit(id);
   else if(a=='stage'){clearInterval(playT);setStage(id,+t.dataset.s)}

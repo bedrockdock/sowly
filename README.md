@@ -73,9 +73,9 @@ Alle weken in `src/data.js` staan relatief aan week 20, de gebruikelijke laatste
 
 ## Affiliate-links
 
-Zaad-knoppen en advertentievakken staan uit tot de KvK-inschrijving rond is: `COMMERCE=false` in `src/app.js`. Zet die op `true` om ze weer te tonen.
+In `src/app.js` staat de lijst `SHOPS`: per winkel een naam, de landen, de talen en een functie die per zoekterm een affiliate-link maakt. Nu alleen bol.com (NL en BE). Een land zonder winkel krijgt geen zaad-knoppen. Elke knop is gemarkeerd als affiliate-link.
 
-In `src/app.js` staat de lijst `SHOPS` met drie voorbeeldwinkels zonder link. Zodra je goedgekeurde links hebt, vul je daar naam en link per winkel in. De knoppen worden dan actief. Markeer elke link duidelijk als affiliate-link.
+Advertentievakken staan uit (`ADS=false`) tot er een cookiebanner is.
 
 ## Lettertypes
 

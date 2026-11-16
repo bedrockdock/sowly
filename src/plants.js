@@ -35,7 +35,7 @@ const basilLeaf=(x,y,r,s,col)=>`<g transform="translate(${x} ${y}) rotate(${r}) 
 const TN={sla:['var(--leaf3)','var(--leaf)'],spinazie:['var(--spin)','var(--leafd)'],veldsla:['var(--veld)','var(--leaf)'],rucola:['var(--leaf3)','var(--leaf)'],pluksla:['var(--leaf3)','#B5523B'],postelein:['#7BCB6A','#4FA55A'],andijvie:['#B9E27F','#8FD35C'],snijbiet:['var(--leafd)','var(--leaf)'],};
 const TS={postelein:.8,veldsla:.75,rucola:.9,snijbiet:1.1};
 const TW={postelein:14,pluksla:13,spinazie:9,rucola:7,andijvie:10,snijbiet:13};
-const ROOTS={selderij:['#D9C89E',13],radijs:['var(--radish)',11],rammenas:['#4A4458',11],biet:['#A1244F',12],koolrabi:['#B8E08A',13],aardappel:['#C9A06B',12]};
+const ROOTS={selderij:['#D9C89E',13],radijs:['var(--radish)',11],rammenas:['#4A4458',11],raap:['#F6F1F7',12],biet:['#A1244F',12],koolrabi:['#B8E08A',13],aardappel:['#C9A06B',12]};
 
 const PLANTS={
  bush(s,c){
@@ -54,6 +54,7 @@ const PLANTS={
   if(s==3)o+=`<path d="M96 122q-3-13 6-19q9 6 7 19z" ${FL('var(--yel)')}/>`;
   if(s==4){
    if(['courgette','komkommer','augurk'].includes(c.fruit)){const kk=c.fruit!='courgette',au=c.fruit=='augurk';o+=`<g transform="rotate(-14 60 114)"><ellipse cx="60" cy="114" rx="${au?20:kk?30:27}" ry="${au?7:kk?8:10}" ${FL(kk?'var(--bean)':'var(--zuc)')}/><path d="M${au?46:38} ${kk?111:110}q${au?14:22}-5 ${au?28:44} 0" style="fill:none;stroke:#fff;stroke-width:2;opacity:.45"/><path d="M${au?78:kk?88:85} 109l9-2v6l-9-1z" ${FL('var(--leafd)')}/></g>`+eyes(55,113,.85)}
+   else if(c.fruit=='meloen')o+=`<circle cx="60" cy="110" r="15" ${FL('#E8C66A')}/><path d="M49 101l22 18M49 119l22-18M60 95v30M45 110h30" style="fill:none;stroke:#fff;stroke-width:1.4;opacity:.55"/>`+stemP('M58 96q0-7 5-8',3.5,'#8A5A2B')+eyes(60,112,1);
    else o+=`<circle cx="60" cy="108" r="17" ${FL('var(--pump)')}/><path d="M60 91q-9 17 0 34M60 91q9 17 0 34M60 91q-17 17 0 34" style="fill:none;stroke:#B8520E;stroke-width:1.8;opacity:.6"/>`+stemP('M58 92q0-8 5-9',4,'#8A5A2B')+eyes(60,110,1.1);
   }
   return o;
@@ -101,6 +102,7 @@ const PLANTS={
   let o=A.map((a,i)=>lf(60,120,a,k,i%2?'var(--leaf)':'var(--leafd)',26,12)).join('');
   if(s==4){
    if(f=='aardappel')o+=`<ellipse cx="53" cy="119" rx="11" ry="8" transform="rotate(-10 53 119)" ${FL(col)}/><ellipse cx="68" cy="121" rx="9" ry="7" ${FL(col)}/>`+eyes(53,119,.7);
+   else if(f=='raap')o+=`<circle cx="60" cy="117" r="${r}" ${FL(col)}/><path d="M49 112a12 12 0 0 1 22 0q-11 4 -22 0z" style="fill:#9B4F9E"/>`+eyes(60,119,.8);
    else if(f=='rammenas')o+=`<ellipse cx="60" cy="114" rx="${r}" ry="15" ${FL(col)}/><path d="M53 106q2-5 6-6" style="fill:none;stroke:#fff;stroke-width:2;opacity:.5"/>`+eyes(60,113,.8);
    else o+=`<circle cx="60" cy="${f=='koolrabi'?114:117}" r="${r}" ${FL(col)}/><path d="M52 ${f=='koolrabi'?108:112}q3-4 7-5" style="fill:none;stroke:#fff;stroke-width:2;opacity:.6"/>`+eyes(60,f=='koolrabi'?115:118,.8);
   }

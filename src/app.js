@@ -431,11 +431,23 @@ const same=(a,b)=>a.crop==b.crop&&(!isOwn(a)||(a.name||'').toLowerCase()==(b.nam
 const dot=p=>{const L=S.plantings.filter(x=>same(x,p));return L.length<2?'':`<span class="tagdot" style="--tg:${TAGC[L.indexOf(p)%TAGC.length]}"></span>`};
 const nm=p=>cropOf(p).n+(p.label?' · '+esc(p.label):'');
 const taskPlant=(c,st)=>`<div class="pp">${plantSVG(c,st)}</div>`;
-/* ---- Zaad kopen (voorbeeld: affiliate-links nog niet actief) ---- */
-/* Zaad-knoppen en advertenties uit tot de KvK-inschrijving rond is (zie notes/openstaande-punten.md) */
-const COMMERCE=false;
-const adSlot=()=>COMMERCE?`<div class="ad">${tx('ad')}</div>`:'';
-const SHOPS=[{n:'',u:''},{n:'',u:''},{n:'',u:''}];/* n leeg: voorbeeldnaam uit de taal */
+/* ---- Zaad kopen: affiliate-links per land ---- */
+/* Advertenties pas met cookiebanner en bijgewerkte privacyverklaring (zie notes/openstaande-punten.md) */
+const ADS=false;
+const adSlot=()=>ADS?`<div class="ad">${tx('ad')}</div>`:'';
+/* bol Affiliate Programma, websitecode 1560075. Voorwaarden art. 3.16: alleen voor NL en BE, in het Nederlands, Frans of Engels.
+   Zoekterm altijd in het Nederlands: de producten op bol hebben Nederlandse namen. */
+const BOL_SITE='1560075';
+const bolLink=q=>{
+  const be=S.land=='BE',u=`https://www.bol.com/${be?'be':'nl'}/${be&&/^fr/.test(LANG)?'fr':'nl'}/s/?searchtext=${encodeURIComponent(q)}`;
+  return `https://partner.bol.com/click/click?p=1&t=url&s=${BOL_SITE}&f=TXL&url=${encodeURIComponent(u)}&name=${encodeURIComponent(q)}`;
+};
+/* Winkels per land; een land zonder winkel krijgt geen zaad-knoppen */
+const SHOPS=[{n:'bol.com',land:['NL','BE'],lang:/^(nl|fr|en)/,link:bolLink}];
+const shopsHere=()=>SHOPS.filter(s=>s.land.includes(S.land)&&s.lang.test(LANG));
+/* Gewassen die je poot (poten:true) koop je niet als zaad */
+const POOT_Q={'aardappel-vroeg':'pootaardappelen','aardappel-laat':'pootaardappelen',knoflook:'plantknoflook',sjalot:'plantsjalotten'};
+const seedQ=c=>POOT_Q[c.id]||((LANGS.nl.crops[c.id]||{}).n||c.n).replace(/\s*\(.*?\)/g,'').toLowerCase()+' zaden';
 function seedList(){
   const w=weekOf(TODAY),L=[];
   CROPS.forEach(c=>{
@@ -447,11 +459,11 @@ function seedList(){
 }
 function zaadCard(){
   const L=seedList();if(!L.length)return '';
-  return `<section class="card"><div class="sec-h"><h3>${tx('seed.title')}</h3><span class="pill soft">${tx('example')}</span></div>${L.map(({c,gap,a})=>`<div class="task"><div class="task-main" style="cursor:default">${taskPlant(c,3)}<span><b>${c.n}</b><span class="muted small">${gap?tx('seed.from',{d:fmt(dateOfDoy(Y0,(a-1)*7+1))}):tx('seed.now')}</span></span></div><button class="btn sm" data-a="seed" data-id="${c.id}">${tx('seed.find')}</button></div>`).join('')}<p class="muted small" style="margin:8px 0 0">${tx('seed.aff')}</p></section>`;
+  return `<section class="card"><div class="sec-h"><h3>${tx('seed.title')}</h3></div>${L.map(({c,gap,a})=>`<div class="task"><div class="task-main" style="cursor:default">${taskPlant(c,3)}<span><b>${c.n}</b><span class="muted small">${gap?tx('seed.from',{d:fmt(dateOfDoy(Y0,(a-1)*7+1))}):tx('seed.now')}</span></span></div><button class="btn sm" data-a="seed" data-id="${c.id}">${tx('seed.find')}</button></div>`).join('')}<p class="muted small" style="margin:8px 0 0">${tx('seed.aff')}</p></section>`;
 }
 function openSeed(id){
-  const c=CROP[id];
-  openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('seed.sheet',{c:c.n})}</h2><div class="bigplant"><div class="pp">${plantSVG(c,4)}</div></div><p style="margin:12px 0 8px">${tx('seed.pick',{q:`<b>${tx('seed.q',{c:lc(c.n)})}</b>`})}</p><div class="stack" style="gap:8px">${SHOPS.map((s,i)=>`<button class="btn" style="width:100%${s.u?'':';opacity:.75'}" ${s.u?'':'disabled'}>${s.n||tx('shop',{n:i+1})} <span class="small">${tx('seed.afflabel')}</span></button>`).join('')}</div><p class="muted small" style="margin:12px 0 0">${tx('seed.example')}</p>`);
+  const c=CROP[id],q=seedQ(c);
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">${tx('seed.sheet',{c:c.n})}</h2><div class="bigplant"><div class="pp">${plantSVG(c,4)}</div></div><p style="margin:12px 0 8px">${tx('seed.pick',{q:`<b>${esc(q)}</b>`})}</p><div class="stack" style="gap:8px">${shopsHere().map(s=>`<a class="btn shop" href="${esc(s.link(q))}" target="_blank" rel="sponsored noopener">${tx('seed.at',{shop:esc(s.n)})} <span class="small">${tx('seed.afflabel')}</span></a>`).join('')}</div><p class="muted small" style="margin:12px 0 0">${tx('seed.aff')}</p>`);
 }
 /* Laatste nachtvorst: in Deze maand en in de instellingen */
 function frostRow(fd){
@@ -463,7 +475,7 @@ function vMaand(){
   let h=`<div class="stack"><div class="monthnav"><button class="icon-btn" data-a="mprev" aria-label="${tx('m.prev')}">‹</button><h2>${cap(CAL.m[S.m])} ${S.y}</h2><button class="icon-btn" data-a="mnext" aria-label="${tx('m.next')}">›</button></div>`;
   h+=landBanner()+frostRow(fd);
   const cur=S.y==Y0&&S.m==TODAY.getMonth();
-  if(COMMERCE&&cur)h+=zaadCard();
+  if(cur&&shopsHere().length)h+=zaadCard();
   let n=0;
   order.forEach(k=>{
     const L=g[k];if(!L)return;n+=L.length;
@@ -509,7 +521,7 @@ function neighbourCard(){
 const byName=(a,b)=>a.n.localeCompare(b.n,LANG);
 function gridHTML(){
   const q=(S.q||'').trim().toLowerCase(),L=[...CROPS].sort(byName).filter(c=>c.n.toLowerCase().includes(q));
-  return L.length?L.map(c=>`<button class="crop" data-a="crop" data-id="${c.id}"><div class="pp">${plantSVG(c,4)}</div><h3>${c.n}</h3><span class="small muted">${tx('g.sow',{r:ranges(c,['binnen','glas','buiten'])})}<br>${tx('g.harvest',{r:ranges(c,['oogst'])})}</span><span class="seedrow">${COMMERCE?`<span class="seedlink" role="button" data-a="seed" data-id="${c.id}">${tx('seed.find')}</span>`:''}<span class="seedlink plant" role="button" data-a="add" data-id="${c.id}">${tx('g.plus')}</span></span></button>`).join(''):`<p class="muted">${tx('g.none',{q:esc(S.q)})}</p>`;
+  return L.length?L.map(c=>`<button class="crop" data-a="crop" data-id="${c.id}"><div class="pp">${plantSVG(c,4)}</div><h3>${c.n}</h3><span class="small muted">${tx('g.sow',{r:ranges(c,['binnen','glas','buiten'])})}<br>${tx('g.harvest',{r:ranges(c,['oogst'])})}</span><span class="seedrow">${shopsHere().length?`<span class="seedlink" role="button" data-a="seed" data-id="${c.id}">${tx('seed.find')}</span>`:''}<span class="seedlink plant" role="button" data-a="add" data-id="${c.id}">${tx('g.plus')}</span></span></button>`).join(''):`<p class="muted">${tx('g.none',{q:esc(S.q)})}</p>`;
 }
 function vGewassen(){
   return `<div class="stack"><div class="row"><h2 class="grow1">${tx('g.title')}</h2><span class="muted small">${tx('g.count',{n:CROPS.length})}</span></div>${landBanner()}<div class="field" style="margin:0"><label for="q">${tx('g.search')}</label><input id="q" type="search" value="${esc(S.q||'')}" placeholder="${tx('g.ph')}" autocomplete="off"></div><div class="grid" id="grid">${gridHTML()}</div></div>`;
@@ -648,7 +660,7 @@ function yearChart(c,mini){
 }
 function openCrop(id){
   const c=CROP[id];
-  openSheet(`<h2 id="sh-title" style="padding-right:48px">${c.n}</h2><div class="bigplant"><div class="pp" id="bigp">${plantSVG(c,4)}</div></div><div class="stages" role="group" aria-label="${tx('cs.stages')}">${STAGE_NAMES.map((n,i)=>`<button data-a="stage" data-s="${i}" data-id="${id}" aria-pressed="${i==4}">${n}</button>`).join('')}<button data-a="play" data-id="${id}">${tx('cs.play')}</button></div><p>${c.tip}</p>${careHTML(id)}<h3 style="margin-top:14px">${tx('cs.year')}</h3>${yearChart(c)}<p class="small muted">${tx('cs.today')}</p>${cropSrc(id)}<div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="add" data-id="${id}">${tx('cs.add')}</button>${COMMERCE?`<button class="btn ghost" data-a="seed" data-id="${id}">${tx('seed.find')}</button>`:''}</div>`);
+  openSheet(`<h2 id="sh-title" style="padding-right:48px">${c.n}</h2><div class="bigplant"><div class="pp" id="bigp">${plantSVG(c,4)}</div></div><div class="stages" role="group" aria-label="${tx('cs.stages')}">${STAGE_NAMES.map((n,i)=>`<button data-a="stage" data-s="${i}" data-id="${id}" aria-pressed="${i==4}">${n}</button>`).join('')}<button data-a="play" data-id="${id}">${tx('cs.play')}</button></div><p>${c.tip}</p>${careHTML(id)}<h3 style="margin-top:14px">${tx('cs.year')}</h3>${yearChart(c)}<p class="small muted">${tx('cs.today')}</p>${cropSrc(id)}<div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-a="add" data-id="${id}">${tx('cs.add')}</button>${shopsHere().length?`<button class="btn ghost" data-a="seed" data-id="${id}">${tx('seed.find')}</button>`:''}</div>`);
 }
 function setStage(id,s){
   $('#bigp').innerHTML=plantSVG(CROP[id],s);
@@ -711,7 +723,7 @@ document.addEventListener('click',e=>{
   else if(a=='mnext'){S.m++;if(S.m>11){S.m=0;S.y++}render()}
   else if(a=='fminus'||a=='fplus'){S.frost=Math.max(14,Math.min(26,S.frost+(a=='fplus'?1:-1)));dbFrost();render()}
   else if(a=='crop')openCrop(id);
-  else if(a=='seed'&&COMMERCE)openSeed(id);
+  else if(a=='seed'&&shopsHere().length)openSeed(id);
   else if(a=='add')openAdd(id,t.dataset.m);
   else if(a=='edit')openEdit(id);
   else if(a=='stage'){clearInterval(playT);setStage(id,+t.dataset.s)}

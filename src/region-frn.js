@@ -7,7 +7,7 @@
 /* Aanvulling 15 november 2026: Vilmorin (zaadbedrijf, landelijk), productkaarten op eshop.vilmorin-jardin.fr met
    "Mois de semis" en "Mois de récolte" (alleen maanden, geen methode). Eén ras per gewas, zie notes/bronnen.md. Methode zoals
    de app het gewas zaait (direct gezaaid = buiten, voorgezaaid = binnen); uitplanten staat niet op de kaart: NL-weken. */
-REGIONS.frn={src:'GNIS (Jardiner Malin)',cs:{"knoflook": "Vilmorin", "prei": "Vilmorin", "doperwt": "Vilmorin", "boerenkool": "Vilmorin", "rucola": "Vilmorin", "snijbiet": "Vilmorin", "pastinaak": "Vilmorin", "peterselie": "Vilmorin", "basilicum": "Vilmorin", "koolrabi": "Vilmorin", "chinesekool": "Vilmorin", "peper": "Vilmorin", "sjalot": "Vilmorin", "pluksla": "Vilmorin"},s:{
+REGIONS.frn={src:'GNIS (Jardiner Malin)',cs:{"raap": "GNIS (Jardiner Malin)", "meloen": "GNIS (Jardiner Malin)", "knoflook": "Vilmorin", "prei": "Vilmorin", "doperwt": "Vilmorin", "boerenkool": "Vilmorin", "rucola": "Vilmorin", "snijbiet": "Vilmorin", "pastinaak": "Vilmorin", "peterselie": "Vilmorin", "basilicum": "Vilmorin", "koolrabi": "Vilmorin", "chinesekool": "Vilmorin", "peper": "Vilmorin", "sjalot": "Vilmorin", "pluksla": "Vilmorin"},s:{
   'knoflook':[["buiten", 40, 48, "teentjes"], ["oogst", 23, 30]],
   'prei':[["binnen", 6, 13], ["buiten", 9, 22], ["uitplant", 14, 28], ["oogst", 1, 13], ["oogst", 36, 52]],
   'doperwt':[["buiten", 9, 26], ["oogst", 23, 35]],
@@ -48,6 +48,8 @@ REGIONS.frn={src:'GNIS (Jardiner Malin)',cs:{"knoflook": "Vilmorin", "prei": "Vi
   'veldsla':[["buiten", 29, 43], ["oogst", 36, 52], ["oogst", 1, 13]],
   'mais':[["glas", 9, 22], ["buiten", 23, 30], ["oogst", 22, 47]],
   'ui':[["buiten", 5, 17], ["buiten", 33, 39], ["uitplant", 40, 52], ["uitplant", 1, 8], ["oogst", 27, 39], ["oogst", 14, 26]],
+  'raap':[["buiten", 10, 22], ["buiten", 27, 39], ["oogst", 18, 28], ["oogst", 36, 48]],
+  'meloen':[["binnen", 5, 17], ["buiten", 18, 22], ["uitplant", 16, 22], ["oogst", 23, 39]],
   'rammenas':[["buiten", 23, 35], ["oogst", 44, 52]],
   'radijs':[["buiten", 7, 39], ["oogst", 11, 48]],
   'aardappel-vroeg':[["buiten", 9, 17, "pootaardappelen"], ["oogst", 23, 35]],

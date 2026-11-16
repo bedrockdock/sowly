@@ -22,6 +22,14 @@ const LANGS={nl:{
    "n": "Radijs",
    "tip": "Het snelste gewas van de tuin: oogsten kan na vier tot zes weken. Zaai om de twee weken een stukje."
   },
+  "raap": {
+   "n": "Raap",
+   "tip": "Familie van de kool: zet raap in de vruchtwisseling bij de koolgewassen. Zaai direct op de plek, dun uit en oogst de rapen jong, op 6 tot 8 cm doorsnede."
+  },
+  "meloen": {
+   "n": "Meloen",
+   "tip": "Vraagt veel warmte: kweek meloen in een kas of koude bak. Top de hoofdscheut na het vierde of vijfde blad, want alleen de zijscheuten dragen vruchten. Een meloen is rijp als er een scheurtje ontstaat waar hij aan de steel vastzit."
+  },
   "rammenas": {
    "n": "Rammenas",
    "tip": "Familie van de kool: zet rammenas in de vruchtwisseling bij de koolgewassen. Insectengaas houdt de koolvlieg weg. Rammenas kan tegen kou en mag in de grond blijven tot de eerste vorst."
@@ -212,6 +220,16 @@ const LANGS={nl:{
    "l": "Volle zon. Zaai in de zomer vaker en houd de grond vochtig.",
    "w": "Gelijkmatig vochtig voor snelle, knapperige radijsjes.",
    "v": "Geen extra voeding nodig."
+  },
+  "raap": {
+   "l": "Zon tot halfschaduw.",
+   "w": "Gelijkmatig vochtig houden. In een droge zomer water geven, anders schieten de rapen door.",
+   "v": "Matig: compost vooraf is genoeg."
+  },
+  "meloen": {
+   "l": "Volle zon en veel warmte, bij voorkeur in een kas of koude bak.",
+   "w": "Veel water, maar voorzichtig met koud water en koel weer: de wortels zijn gevoelig voor kou en nattigheid.",
+   "v": "Compost of half verteerde stalmest vooraf en bijmesten bij het begin van de bloei. Niet te zwaar bemesten."
   },
   "rammenas": {
    "l": "Zon, op luchtige grond die niet te zwaar is.",
@@ -616,17 +634,15 @@ const LANGS={nl:{
   "tl.sprout": "Kiemt",
 
   "ad": "Hier komt later een advertentie (AdMob in de Android-app).",
-  "shop": "Zaadwinkel {n}",
   "seed.title": "Zaad halen voor de komende weken",
   "seed.from": "zaaien vanaf {d}",
   "seed.now": "nu zaaien",
   "seed.find": "Zaad zoeken",
   "seed.aff": "Links naar webwinkels zijn affiliate-links: de planner krijgt een kleine vergoeding als je koopt. Dat kost jou niets extra.",
   "seed.sheet": "Zaad zoeken: {c}",
-  "seed.pick": "Kies een webwinkel. Je gaat naar de zoekresultaten voor {q}.",
-  "seed.q": "{c}zaad",
+  "seed.pick": "Je gaat naar de zoekresultaten voor {q}. Je koopt bij de webwinkel zelf, niet bij Sowly.",
+  "seed.at": "Bekijk bij {shop}",
   "seed.afflabel": "(affiliate-link)",
-  "seed.example": "<b>Voorbeeld:</b> hier komen de echte winkelknoppen met jouw Daisycon-links zodra je programma's zijn goedgekeurd. Elke knop wordt zichtbaar gemarkeerd als affiliate-link.",
 
   "m.prev": "Vorige maand",
   "m.next": "Volgende maand",

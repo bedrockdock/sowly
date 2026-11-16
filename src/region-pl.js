@@ -22,7 +22,7 @@
    Gewassen zonder Poolse bron volgen de algemene gegevens (de app meldt dat). */
 REGIONS.pl={src:'KSOW Podlaskie',cs:{"veldsla": "PNOS Ożarów", "boerenkool": "PNOS Ożarów", "pastinaak": "PNOS Ożarów",
   "peterselie": "PNOS Ożarów", "basilicum": "PNOS Ożarów", "savooiekool": "PNOS Ożarów", "chinesekool": "PNOS Ożarów",
-  "mais": "PNOS Ożarów", "peper": "PNOS Ożarów", "knoflook": "SODR", "aardappel-vroeg": "COBORU", "aardappel-laat": "COBORU"},s:{
+  "mais": "PNOS Ożarów", "peper": "PNOS Ożarów", "knoflook": "SODR", "raap": "PNOS Ożarów", "meloen": "PNOS Ożarów", "aardappel-vroeg": "COBORU", "aardappel-laat": "COBORU"},s:{
   'veldsla':[["buiten", 9, 17], ["buiten", 27, 35], ["oogst", 5, 17], ["oogst", 40, 52]],
   'boerenkool':[["buiten", 19, 25], ["uitplant", 25, 29], ["oogst", 28, 45]],
   'pastinaak':[["buiten", 9, 17], ["oogst", 31, 43]],
@@ -40,6 +40,8 @@ REGIONS.pl={src:'KSOW Podlaskie',cs:{"veldsla": "PNOS Ożarów", "boerenkool": "
   'sla':[["binnen", 6, 12], ["glas", 5, 17], ["glas", 27, 35], ["buiten", 14, 26], ["uitplant", 18, 22], ["oogst", 18, 43]],
   'pluksla':[["glas", 5, 30], ["buiten", 14, 26], ["uitplant", 18, 22], ["oogst", 18, 39]],
   'wortel':[["buiten", 9, 26], ["oogst", 23, 43]],
+  'raap':[["buiten", 10, 17], ["buiten", 29, 32], ["oogst", 23, 30], ["oogst", 36, 43]],
+  'meloen':[["glas", 16, 17], ["uitplant", 21, 23], ["oogst", 31, 39]],
   'rammenas':[["buiten", 14, 30], ["oogst", 23, 43]],
   'radijs':[["buiten", 5, 39], ["oogst", 9, 39]],
   'pompoen':[["binnen", 15, 19], ["glas", 14, 17], ["buiten", 18, 22], ["uitplant", 18, 22], ["oogst", 36, 43]],
